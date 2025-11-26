@@ -6,226 +6,454 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="FinanzApp">
-    <meta name="theme-color" content="#667eea">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23667eea' width='100' height='100' rx='20'/><text x='50' y='65' font-size='40' text-anchor='middle' fill='white'>FA</text></svg>">
+    <meta name="theme-color" content="#1a1a2e">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%231a1a2e' width='100' height='100' rx='22'/><text x='50' y='62' font-size='36' text-anchor='middle' fill='%2300d4aa'>FA</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>FinanzApp</title>
     <style>
         :root {
-            --primary: #667eea;
-            --primary-dark: #5a67d8;
-            --secondary: #48bb78;
-            --danger: #f56565;
-            --warning: #ed8936;
-            --bg-light: #f8fafc;
-            --bg-card: #ffffff;
-            --text-primary: #1a202c;
-            --text-secondary: #718096;
-            --border: #e2e8f0;
-            --shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
+            --primary: #00d4aa;
+            --primary-dark: #00b894;
+            --secondary: #6c5ce7;
+            --accent: #fd79a8;
+            --danger: #ff6b6b;
+            --warning: #ffeaa7;
+            --success: #00d4aa;
+            --bg-dark: #0f0f1a;
+            --bg-card: #1a1a2e;
+            --bg-elevated: #252542;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --border: #2d2d44;
+            --glass: rgba(255,255,255,0.05);
+            --shadow: 0 8px 32px rgba(0,0,0,0.3);
+            --glow: 0 0 20px rgba(0,212,170,0.3);
         }
-        .dark-mode {
-            --bg-light: #1a202c;
-            --bg-card: #2d3748;
-            --text-primary: #f7fafc;
-            --text-secondary: #a0aec0;
-            --border: #4a5568;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        .light-mode {
+            --bg-dark: #f8f9fa;
+            --bg-card: #ffffff;
+            --bg-elevated: #f0f0f5;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6c6c7c;
+            --border: #e0e0e8;
+            --glass: rgba(0,0,0,0.02);
+            --shadow: 0 8px 32px rgba(0,0,0,0.08);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg-light);
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-dark);
             color: var(--text-primary);
             min-height: 100vh;
             padding-bottom: 100px;
+            -webkit-font-smoothing: antialiased;
         }
         .header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            padding: 15px 20px;
-            color: white;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-elevated) 100%);
+            padding: 20px;
             text-align: center;
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(20px);
         }
-        .header h1 { font-size: 20px; font-weight: 600; }
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
         .theme-toggle {
             position: absolute;
-            right: 15px;
+            right: 20px;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255,255,255,0.2);
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            font-size: 18px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            width: 44px;
+            height: 44px;
+            font-size: 20px;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .nav { display: flex; background: var(--bg-card); border-bottom: 1px solid var(--border); overflow-x: auto; }
+        .theme-toggle:hover { background: var(--bg-elevated); transform: translateY(-50%) scale(1.05); }
+        .nav {
+            display: flex;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 8px;
+            gap: 4px;
+            overflow-x: auto;
+        }
         .nav-item {
+            flex: 1;
+            padding: 14px 8px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            min-width: 70px;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: var(--glow);
+        }
+        .nav-item span { display: block; font-size: 22px; margin-bottom: 6px; }
+        .section { display: none; padding: 16px; }
+        .section.active { display: block; }
+        .card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+        .card:hover { transform: translateY(-2px); }
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .balance-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 50%, #1a1a2e 100%);
+            border: 1px solid var(--primary);
+            text-align: center;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,212,170,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .balance-card small { color: var(--text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: 2px; }
+        .balance-card h2 { font-size: 42px; margin-top: 8px; font-weight: 700; color: var(--primary); position: relative; }
+        .sub-tabs {
+            display: flex;
+            background: var(--bg-elevated);
+            border-radius: 16px;
+            padding: 6px;
+            margin-bottom: 16px;
+            gap: 6px;
+        }
+        .sub-tab {
             flex: 1;
             padding: 12px 8px;
             text-align: center;
+            border-radius: 12px;
             cursor: pointer;
-            border-bottom: 3px solid transparent;
-            font-size: 12px;
-            min-width: 80px;
-            transition: all 0.2s;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
         }
-        .nav-item.active { border-bottom-color: var(--primary); color: var(--primary); }
-        .nav-item span { display: block; font-size: 20px; margin-bottom: 4px; }
-        .section { display: none; padding: 15px; }
-        .section.active { display: block; }
-        .card { background: var(--bg-card); border-radius: 16px; padding: 20px; margin-bottom: 15px; box-shadow: var(--shadow); }
-        .card-title { font-size: 16px; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-        .balance-card { background: linear-gradient(135deg, var(--primary), #764ba2); color: white; text-align: center; padding: 30px; }
-        .balance-card small { opacity: 0.9; }
-        .balance-card h2 { font-size: 36px; margin-top: 8px; }
-        .ai-card { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .stat-card { text-align: center; padding: 20px; }
-        .stat-card h3 { font-size: 24px; margin-bottom: 5px; }
-        .stat-card.income h3 { color: var(--secondary); }
-        .stat-card.expense h3 { color: var(--danger); }
-        .sub-tabs { display: flex; background: var(--bg-light); border-radius: 12px; padding: 4px; margin-bottom: 15px; }
-        .sub-tab {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
+        .sub-tab.active {
+            background: var(--bg-card);
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
-        .sub-tab.active { background: var(--primary); color: white; }
         .sub-content { display: none; }
         .sub-content.active { display: block; }
-        .amount-display { background: var(--bg-light); border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 15px; }
-        .amount-display small { color: var(--text-secondary); }
-        .amount-display h3 { font-size: 32px; margin-top: 5px; }
+        .amount-display {
+            background: var(--bg-elevated);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+        }
+        .amount-display small { color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        .amount-display h3 { font-size: 36px; margin-top: 8px; font-weight: 700; }
         .amount-display.expense h3 { color: var(--danger); }
-        .amount-display.income h3 { color: var(--secondary); }
+        .amount-display.income h3 { color: var(--success); }
         input, select {
             width: 100%;
-            padding: 14px;
+            padding: 16px 20px;
             border: 2px solid var(--border);
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 16px;
-            margin-bottom: 15px;
-            background: var(--bg-card);
+            margin-bottom: 12px;
+            background: var(--bg-elevated);
             color: var(--text-primary);
+            font-family: inherit;
+            transition: all 0.3s ease;
         }
-        .btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
+        input:focus, select:focus { border-color: var(--primary); outline: none; box-shadow: var(--glow); }
+        input::placeholder { color: var(--text-secondary); }
+        .btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
         .btn-amount {
-            padding: 14px 8px;
+            padding: 16px 8px;
             border: 2px solid var(--border);
-            border-radius: 10px;
-            background: var(--bg-card);
+            border-radius: 14px;
+            background: var(--bg-elevated);
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             color: var(--text-primary);
+            font-family: inherit;
         }
         .btn-amount:active { transform: scale(0.95); }
-        .btn-clear {
-            grid-column: span 2;
-            background: var(--danger);
-            color: white;
-            border-color: var(--danger);
-        }
+        .btn-amount:hover { border-color: var(--primary); background: var(--bg-card); }
+        .btn-clear { grid-column: span 2; background: rgba(255,107,107,0.1); color: var(--danger); border-color: var(--danger); }
         .btn-save {
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
+            font-family: inherit;
+            transition: all 0.3s ease;
         }
-        .btn-save.expense { background: var(--danger); color: white; }
-        .btn-save.income { background: var(--secondary); color: white; }
-        .btn-save.primary { background: var(--primary); color: white; }
-        .wallet-card { display: flex; justify-content: space-between; align-items: center; padding: 15px; border: 2px solid var(--border); border-radius: 12px; margin-bottom: 10px; }
-        .wallet-name { font-weight: 600; }
-        .wallet-balance { font-size: 18px; color: var(--primary); font-weight: 600; }
-        .wallet-actions button { background: var(--danger); color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .calendar-header button { background: var(--primary); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 18px; cursor: pointer; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-        .calendar-day-name { text-align: center; font-size: 12px; font-weight: 600; color: var(--text-secondary); padding: 8px 0; }
+        .btn-save:hover { transform: translateY(-2px); box-shadow: var(--glow); }
+        .btn-save.expense { background: linear-gradient(135deg, var(--danger), #ee5a5a); color: white; }
+        .btn-save.income { background: linear-gradient(135deg, var(--success), var(--primary-dark)); color: white; }
+        .btn-save.primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .stat-card { text-align: center; padding: 24px 16px; }
+        .stat-card h3 { font-size: 28px; margin-bottom: 6px; font-weight: 700; }
+        .stat-card small { color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card.income h3 { color: var(--success); }
+        .stat-card.expense h3 { color: var(--danger); }
+        .wallet-card, .note-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-bottom: 12px;
+            background: var(--bg-elevated);
+            transition: all 0.3s ease;
+        }
+        .wallet-card:hover, .note-card:hover { border-color: var(--primary); }
+        .wallet-name, .note-title { font-weight: 600; font-size: 15px; }
+        .wallet-balance { font-size: 18px; color: var(--primary); font-weight: 700; }
+        .note-date { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+        .delete-btn {
+            background: rgba(255,107,107,0.1);
+            color: var(--danger);
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        .delete-btn:hover { background: var(--danger); color: white; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .calendar-header h3 { font-size: 18px; font-weight: 600; }
+        .calendar-header button {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .calendar-header button:hover { background: var(--primary); border-color: var(--primary); }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+        .calendar-day-name { text-align: center; font-size: 11px; font-weight: 600; color: var(--text-secondary); padding: 10px 0; text-transform: uppercase; }
         .calendar-day {
             aspect-ratio: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 14px;
-            position: relative;
-            border: 2px solid transparent;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: var(--bg-elevated);
+            border: 1px solid transparent;
         }
-        .calendar-day:hover { background: var(--bg-light); }
-        .calendar-day.today { border-color: var(--primary); }
-        .calendar-day.empty { cursor: default; }
-        .calendar-day.shift-morning { background: #3b82f6; color: white; }
-        .calendar-day.shift-afternoon { background: #10b981; color: white; }
-        .calendar-day.shift-night { background: #ef4444; color: white; }
-        .shift-label { font-size: 10px; font-weight: bold; }
-        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+        .calendar-day:hover { border-color: var(--primary); }
+        .calendar-day.today { border: 2px solid var(--primary); }
+        .calendar-day.empty { background: transparent; cursor: default; }
+        .calendar-day.shift-morning { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white; }
+        .calendar-day.shift-afternoon { background: linear-gradient(135deg, #10b981, #34d399); color: white; }
+        .calendar-day.shift-night { background: linear-gradient(135deg, #ef4444, #f87171); color: white; }
+        .shift-label { font-size: 9px; font-weight: 700; margin-top: 2px; }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
         .modal.active { display: flex; }
-        .modal-content { background: var(--bg-card); border-radius: 20px; padding: 25px; width: 100%; max-width: 350px; }
-        .modal-title { font-size: 18px; font-weight: 600; margin-bottom: 15px; text-align: center; }
-        .shift-options { display: flex; flex-direction: column; gap: 10px; }
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 28px;
+            width: 100%;
+            max-width: 380px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; text-align: center; }
+        .shift-options { display: flex; flex-direction: column; gap: 12px; }
         .shift-btn {
-            padding: 15px;
+            padding: 16px;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             color: white;
+            font-family: inherit;
+            transition: all 0.2s ease;
         }
-        .shift-btn.morning { background: #3b82f6; }
-        .shift-btn.afternoon { background: #10b981; }
-        .shift-btn.night { background: #ef4444; }
-        .shift-btn.remove { background: var(--text-secondary); }
+        .shift-btn:hover { transform: scale(1.02); }
+        .shift-btn.morning { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
+        .shift-btn.afternoon { background: linear-gradient(135deg, #10b981, #34d399); }
+        .shift-btn.night { background: linear-gradient(135deg, #ef4444, #f87171); }
+        .shift-btn.remove { background: var(--bg-elevated); color: var(--text-secondary); }
         .shift-btn.close { background: var(--border); color: var(--text-primary); }
-        .subscription-item, .birthday-item { display: flex; align-items: center; padding: 15px; border: 2px solid var(--border); border-radius: 12px; margin-bottom: 10px; gap: 15px; }
-        .subscription-info h4, .birthday-info h4 { font-weight: 600; }
-        .subscription-info small, .birthday-info small { color: var(--text-secondary); }
-        .birthday-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; }
-        .subscription-actions button { background: var(--danger); color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
-        .transaction-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .subscription-item, .birthday-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-bottom: 12px;
+            gap: 16px;
+            background: var(--bg-elevated);
+        }
+        .birthday-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .info-section { flex: 1; }
+        .info-section h4 { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+        .info-section small { color: var(--text-secondary); font-size: 12px; }
+        .notification-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(0,212,170,0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            background: var(--border);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .toggle-switch.active { background: var(--primary); }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .toggle-switch.active::after { left: 27px; }
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .setting-row:last-child { border-bottom: none; }
+        .setting-label { font-weight: 500; }
+        .setting-desc { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+        .chart-container { height: 180px; display: flex; align-items: flex-end; justify-content: space-around; padding-top: 20px; }
+        .chart-bar {
+            width: 36px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 8px 8px 0 0;
+            min-height: 4px;
+            transition: height 0.5s ease;
+        }
+        .chart-labels { display: flex; justify-content: space-around; margin-top: 12px; }
+        .chart-labels span { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
         .transaction-item:last-child { border-bottom: none; }
-        .transaction-name { font-weight: 500; }
-        .transaction-date { font-size: 12px; color: var(--text-secondary); }
-        .transaction-amount { font-weight: 600; }
-        .transaction-amount.income { color: var(--secondary); }
+        .transaction-name { font-weight: 500; font-size: 14px; }
+        .transaction-date { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+        .transaction-amount { font-weight: 700; font-size: 15px; }
+        .transaction-amount.income { color: var(--success); }
         .transaction-amount.expense { color: var(--danger); }
-        .chart-container { height: 200px; display: flex; align-items: flex-end; justify-content: space-around; padding-top: 20px; }
-        .chart-bar { width: 40px; background: var(--primary); border-radius: 8px 8px 0 0; min-height: 5px; transition: height 0.3s; }
-        .chart-labels { display: flex; justify-content: space-around; margin-top: 10px; }
-        .chart-labels span { font-size: 12px; color: var(--text-secondary); }
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-secondary); }
+        .empty-state span { font-size: 48px; display: block; margin-bottom: 12px; opacity: 0.5; }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>FinanzApp</h1>
-        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <button class="theme-toggle" onclick="toggleTheme()">☀️</button>
     </div>
-
     <nav class="nav">
         <div class="nav-item active" onclick="showSection('finanzas', this)"><span>💰</span>Finanzas</div>
         <div class="nav-item" onclick="showSection('transacciones', this)"><span>💳</span>Transacciones</div>
-        <div class="nav-item" onclick="showSection('carteras', this)"><span>🎒</span>Carteras</div>
+        <div class="nav-item" onclick="showSection('carteras', this)"><span>👛</span>Carteras</div>
         <div class="nav-item" onclick="showSection('turnos', this)"><span>📅</span>Turnos</div>
     </nav>
 
@@ -233,18 +461,18 @@
     <section id="finanzas" class="section active">
         <div class="card balance-card">
             <small>Balance Total</small>
-            <h2 id="totalBalance">0,00 EUR</h2>
-        </div>
-        <div class="card ai-card">
-            <div class="card-title">🤖 Recomendacion IA</div>
-            <p id="aiRecommendation">Comienza registrando tus ingresos y gastos para obtener recomendaciones personalizadas.</p>
+            <h2 id="totalBalance">0,00 €</h2>
         </div>
         <div class="stats-grid">
-            <div class="card stat-card income"><h3 id="totalIncome">0,00 EUR</h3><small>Ingresos</small></div>
-            <div class="card stat-card expense"><h3 id="totalExpense">0,00 EUR</h3><small>Gastos</small></div>
+            <div class="card stat-card income"><h3 id="totalIncome">0,00 €</h3><small>Ingresos</small></div>
+            <div class="card stat-card expense"><h3 id="totalExpense">0,00 €</h3><small>Gastos</small></div>
         </div>
         <div class="card">
-            <div class="card-title">📊 Grafico Mensual</div>
+            <div class="card-title">🤖 Recomendacion IA</div>
+            <p id="aiRecommendation" style="color:var(--text-secondary);line-height:1.6">Registra tus transacciones para obtener consejos personalizados.</p>
+        </div>
+        <div class="card">
+            <div class="card-title">📊 Gastos Mensuales</div>
             <div class="chart-container" id="chart"></div>
             <div class="chart-labels" id="chartLabels"></div>
         </div>
@@ -252,67 +480,72 @@
             <div class="card-title">📝 Ultimas Transacciones</div>
             <div id="transactionsList"></div>
         </div>
+        <div class="card">
+            <div class="card-title">🔔 Notificaciones</div>
+            <div class="setting-row">
+                <div><div class="setting-label">Resumen Semanal</div><div class="setting-desc">Recibe un resumen cada lunes</div></div>
+                <div class="toggle-switch" id="weeklyToggle" onclick="toggleNotification('weekly')"></div>
+            </div>
+            <div class="setting-row">
+                <div><div class="setting-label">Resumen Mensual</div><div class="setting-desc">Recibe un resumen el dia 1</div></div>
+                <div class="toggle-switch" id="monthlyToggle" onclick="toggleNotification('monthly')"></div>
+            </div>
+        </div>
     </section>
 
     <!-- TRANSACCIONES -->
     <section id="transacciones" class="section">
         <div class="sub-tabs">
-            <div class="sub-tab active" onclick="showTransactionTab('gasto')">🔴 Gasto</div>
-            <div class="sub-tab" onclick="showTransactionTab('ingreso')">🟢 Ingreso</div>
-            <div class="sub-tab" onclick="showTransactionTab('suscripciones')">🔔 Suscripciones</div>
+            <div class="sub-tab active" onclick="showTransactionTab('gasto')">Gasto</div>
+            <div class="sub-tab" onclick="showTransactionTab('ingreso')">Ingreso</div>
+            <div class="sub-tab" onclick="showTransactionTab('suscripciones')">Suscripciones</div>
         </div>
-        
         <div id="tab-gasto" class="sub-content active">
             <div class="card">
-                <div class="amount-display expense"><small>Importe actual</small><h3 id="expenseAmount">0,00 EUR</h3></div>
+                <div class="amount-display expense"><small>Importe</small><h3 id="expenseAmount">0,00 €</h3></div>
                 <input type="text" id="expenseName" placeholder="Nombre del gasto">
                 <div class="btn-grid">
                     <button class="btn-amount" onclick="addExpenseAmount(0.01)">0,01</button>
                     <button class="btn-amount" onclick="addExpenseAmount(0.05)">0,05</button>
                     <button class="btn-amount" onclick="addExpenseAmount(0.10)">0,10</button>
                     <button class="btn-amount" onclick="addExpenseAmount(0.50)">0,50</button>
-                    <button class="btn-amount" onclick="addExpenseAmount(1)">1 EUR</button>
-                    <button class="btn-amount" onclick="addExpenseAmount(2)">2 EUR</button>
-                    <button class="btn-amount" onclick="addExpenseAmount(5)">5 EUR</button>
-                    <button class="btn-amount" onclick="addExpenseAmount(10)">10 EUR</button>
-                    <button class="btn-amount" onclick="addExpenseAmount(20)">20 EUR</button>
-                    <button class="btn-amount" onclick="addExpenseAmount(50)">50 EUR</button>
-                    <button class="btn-amount btn-clear" onclick="clearExpenseAmount()">🗑️ Borrar</button>
+                    <button class="btn-amount" onclick="addExpenseAmount(1)">1€</button>
+                    <button class="btn-amount" onclick="addExpenseAmount(2)">2€</button>
+                    <button class="btn-amount" onclick="addExpenseAmount(5)">5€</button>
+                    <button class="btn-amount" onclick="addExpenseAmount(10)">10€</button>
+                    <button class="btn-amount" onclick="addExpenseAmount(20)">20€</button>
+                    <button class="btn-amount" onclick="addExpenseAmount(50)">50€</button>
+                    <button class="btn-amount btn-clear" onclick="clearExpenseAmount()">🗑 Borrar</button>
                 </div>
-                <button class="btn-save expense" onclick="saveExpense()">💾 Guardar Gasto</button>
+                <button class="btn-save expense" onclick="saveExpense()">Guardar Gasto</button>
             </div>
         </div>
-        
         <div id="tab-ingreso" class="sub-content">
             <div class="card">
-                <div class="amount-display income"><small>Importe actual</small><h3 id="incomeAmount">0,00 EUR</h3></div>
+                <div class="amount-display income"><small>Importe</small><h3 id="incomeAmount">0,00 €</h3></div>
                 <input type="text" id="incomeName" placeholder="Nombre del ingreso">
                 <div class="btn-grid">
-                    <button class="btn-amount" onclick="addIncomeAmount(1)">1 EUR</button>
-                    <button class="btn-amount" onclick="addIncomeAmount(5)">5 EUR</button>
-                    <button class="btn-amount" onclick="addIncomeAmount(20)">20 EUR</button>
-                    <button class="btn-amount" onclick="addIncomeAmount(50)">50 EUR</button>
-                    <button class="btn-amount" onclick="addIncomeAmount(100)">100 EUR</button>
-                    <button class="btn-amount" onclick="addIncomeAmount(500)">500 EUR</button>
-                    <button class="btn-amount" onclick="addIncomeAmount(1000)">1000 EUR</button>
-                    <button class="btn-amount btn-clear" onclick="clearIncomeAmount()">🗑️ Borrar</button>
+                    <button class="btn-amount" onclick="addIncomeAmount(1)">1€</button>
+                    <button class="btn-amount" onclick="addIncomeAmount(5)">5€</button>
+                    <button class="btn-amount" onclick="addIncomeAmount(20)">20€</button>
+                    <button class="btn-amount" onclick="addIncomeAmount(50)">50€</button>
+                    <button class="btn-amount" onclick="addIncomeAmount(100)">100€</button>
+                    <button class="btn-amount" onclick="addIncomeAmount(500)">500€</button>
+                    <button class="btn-amount" onclick="addIncomeAmount(1000)">1000€</button>
+                    <button class="btn-amount btn-clear" onclick="clearIncomeAmount()">🗑 Borrar</button>
                 </div>
-                <button class="btn-save income" onclick="saveIncome()">💾 Guardar Ingreso</button>
+                <button class="btn-save income" onclick="saveIncome()">Guardar Ingreso</button>
             </div>
         </div>
-        
         <div id="tab-suscripciones" class="sub-content">
             <div class="card">
                 <div class="card-title">➕ Nueva Suscripcion</div>
-                <input type="text" id="subName" placeholder="Nombre (Netflix, Spotify...)">
-                <input type="number" id="subAmount" placeholder="Importe mensual (EUR)" step="0.01">
+                <input type="text" id="subName" placeholder="Netflix, Spotify...">
+                <input type="number" id="subAmount" placeholder="Importe mensual" step="0.01">
                 <input type="date" id="subDate">
-                <button class="btn-save primary" onclick="addSubscription()">💾 Guardar Suscripcion</button>
+                <button class="btn-save primary" onclick="addSubscription()">Guardar</button>
             </div>
-            <div class="card">
-                <div class="card-title">📋 Mis Suscripciones</div>
-                <div id="subscriptionsList"></div>
-            </div>
+            <div class="card"><div class="card-title">📋 Mis Suscripciones</div><div id="subscriptionsList"></div></div>
         </div>
     </section>
 
@@ -321,51 +554,62 @@
         <div class="card">
             <div class="card-title">➕ Nueva Cartera</div>
             <input type="text" id="walletName" placeholder="Nombre de la cartera">
-            <input type="number" id="walletBalance" placeholder="Saldo inicial (EUR)" step="0.01">
-            <button class="btn-save primary" onclick="addWallet()">💾 Crear Cartera</button>
+            <input type="number" id="walletBalance" placeholder="Saldo inicial" step="0.01">
+            <button class="btn-save primary" onclick="addWallet()">Crear Cartera</button>
         </div>
+        <div class="card"><div class="card-title">👛 Mis Carteras</div><div id="walletsList"></div></div>
         <div class="card">
-            <div class="card-title">👛 Mis Carteras</div>
-            <div id="walletsList"></div>
-        </div>
-        <div class="card">
-            <div class="card-title">🔄 Transferir entre Carteras</div>
+            <div class="card-title">🔄 Transferencia</div>
             <select id="fromWallet"><option value="">Desde...</option></select>
             <select id="toWallet"><option value="">Hacia...</option></select>
-            <input type="number" id="transferAmount" placeholder="Cantidad (EUR)" step="0.01">
-            <button class="btn-save primary" onclick="transferBetweenWallets()">💸 Transferir</button>
+            <input type="number" id="transferAmount" placeholder="Cantidad" step="0.01">
+            <button class="btn-save primary" onclick="transferBetweenWallets()">Transferir</button>
         </div>
     </section>
 
     <!-- TURNOS -->
     <section id="turnos" class="section">
         <div class="sub-tabs">
-            <div class="sub-tab active" onclick="showTurnosTab('calendario')">📅 Calendario</div>
-            <div class="sub-tab" onclick="showTurnosTab('cumpleanos')">🎂 Cumpleanos</div>
+            <div class="sub-tab active" onclick="showTurnosTab('calendario')">Calendario</div>
+            <div class="sub-tab" onclick="showTurnosTab('cumpleanos')">Cumpleaños</div>
+            <div class="sub-tab" onclick="showTurnosTab('notas')">Notas</div>
         </div>
-        
         <div id="tab-calendario" class="sub-content active">
             <div class="card">
                 <div class="calendar-header">
                     <button onclick="prevMonth()">❮</button>
-                    <h3 id="currentMonth">Enero 2025</h3>
+                    <h3 id="currentMonth">Noviembre 2025</h3>
                     <button onclick="nextMonth()">❯</button>
                 </div>
                 <div class="calendar-grid" id="calendarGrid"></div>
             </div>
         </div>
-        
         <div id="tab-cumpleanos" class="sub-content">
             <div class="card">
-                <div class="card-title">➕ Nuevo Cumpleanos</div>
+                <div class="card-title">➕ Nuevo Cumpleaños</div>
                 <input type="text" id="birthdayName" placeholder="Nombre">
                 <input type="date" id="birthdayDate">
-                <button class="btn-save primary" onclick="addBirthday()">💾 Guardar</button>
+                <div class="setting-row">
+                    <div><div class="setting-label">Notificar 1 dia antes</div></div>
+                    <div class="toggle-switch active" id="birthdayNotifyToggle"></div>
+                </div>
+                <button class="btn-save primary" onclick="addBirthday()">Guardar</button>
             </div>
+            <div class="card"><div class="card-title">🎂 Proximos Cumpleaños</div><div id="birthdaysList"></div></div>
+        </div>
+        <div id="tab-notas" class="sub-content">
             <div class="card">
-                <div class="card-title">🎂 Proximos Cumpleanos</div>
-                <div id="birthdaysList"></div>
+                <div class="card-title">➕ Nueva Nota</div>
+                <input type="text" id="noteTitle" placeholder="Titulo de la nota">
+                <textarea id="noteContent" placeholder="Contenido..." style="width:100%;padding:16px;border:2px solid var(--border);border-radius:14px;background:var(--bg-elevated);color:var(--text-primary);font-family:inherit;min-height:100px;resize:none;margin-bottom:12px"></textarea>
+                <input type="datetime-local" id="noteReminder" style="margin-bottom:12px">
+                <div class="setting-row" style="padding:12px 0">
+                    <div><div class="setting-label">Activar recordatorio</div></div>
+                    <div class="toggle-switch" id="noteNotifyToggle" onclick="this.classList.toggle('active')"></div>
+                </div>
+                <button class="btn-save primary" onclick="addNote()">Guardar Nota</button>
             </div>
+            <div class="card"><div class="card-title">📝 Mis Notas</div><div id="notesList"></div></div>
         </div>
     </section>
 
@@ -374,10 +618,10 @@
         <div class="modal-content">
             <div class="modal-title" id="selectedDate">Seleccionar turno</div>
             <div class="shift-options">
-                <button class="shift-btn morning" onclick="setShift('morning')">Manana</button>
+                <button class="shift-btn morning" onclick="setShift('morning')">Mañana</button>
                 <button class="shift-btn afternoon" onclick="setShift('afternoon')">Tarde</button>
                 <button class="shift-btn night" onclick="setShift('night')">Noche</button>
-                <button class="shift-btn remove" onclick="removeShift()">Quitar turno</button>
+                <button class="shift-btn remove" onclick="removeShift()">Quitar</button>
                 <button class="shift-btn close" onclick="closeShiftModal()">Cerrar</button>
             </div>
         </div>
@@ -385,32 +629,21 @@
 
     <script>
         const state = {
-            transactions: [],
-            wallets: [],
-            subscriptions: [],
-            birthdays: [],
-            shifts: {},
-            currentExpenseAmount: 0,
-            currentIncomeAmount: 0,
-            currentYear: new Date().getFullYear(),
-            currentMonth: new Date().getMonth(),
-            selectedDay: null,
-            darkMode: false,
-            savedExpenseNames: [],
-            savedIncomeNames: []
+            transactions: [], wallets: [], subscriptions: [], birthdays: [], notes: [], shifts: {},
+            currentExpenseAmount: 0, currentIncomeAmount: 0,
+            currentYear: new Date().getFullYear(), currentMonth: new Date().getMonth(), selectedDay: null,
+            lightMode: false, weeklyNotify: false, monthlyNotify: false
         };
         const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
-        function formatCurrency(n) { return n.toLocaleString('es-ES', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' EUR'; }
-        function saveState() { localStorage.setItem('finanzapp', JSON.stringify(state)); }
-        function loadState() {
-            const s = localStorage.getItem('finanzapp');
-            if(s) Object.assign(state, JSON.parse(s));
-        }
+        function formatCurrency(n) { return n.toLocaleString('es-ES', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' \u20ac'; }
+        function saveState() { localStorage.setItem('finanzapp_v2', JSON.stringify(state)); }
+        function loadState() { const s = localStorage.getItem('finanzapp_v2'); if(s) Object.assign(state, JSON.parse(s)); }
+        
         function toggleTheme() {
-            state.darkMode = !state.darkMode;
-            document.body.classList.toggle('dark-mode', state.darkMode);
-            document.querySelector('.theme-toggle').textContent = state.darkMode ? '☀️' : '🌙';
+            state.lightMode = !state.lightMode;
+            document.body.classList.toggle('light-mode', state.lightMode);
+            document.querySelector('.theme-toggle').textContent = state.lightMode ? '\ud83c\udf19' : '\u2600\ufe0f';
             saveState();
         }
         function showSection(id, el) {
@@ -431,12 +664,47 @@
             document.getElementById('tab-' + tab).classList.add('active');
             event.currentTarget.classList.add('active');
         }
+        function toggleNotification(type) {
+            if(type === 'weekly') { state.weeklyNotify = !state.weeklyNotify; document.getElementById('weeklyToggle').classList.toggle('active', state.weeklyNotify); }
+            if(type === 'monthly') { state.monthlyNotify = !state.monthlyNotify; document.getElementById('monthlyToggle').classList.toggle('active', state.monthlyNotify); }
+            saveState(); requestNotificationPermission();
+        }
+        function requestNotificationPermission() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
+        function sendNotification(title, body) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, { body: body, icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%231a1a2e" width="100" height="100" rx="22"/><text x="50" y="62" font-size="36" text-anchor="middle" fill="%2300d4aa">FA</text></svg>' });
+            }
+        }
+        function checkBirthdayNotifications() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            state.birthdays.forEach(b => {
+                const bd = new Date(b.date);
+                if (bd.getDate() === tomorrow.getDate() && bd.getMonth() === tomorrow.getMonth() && b.notify) {
+                    sendNotification('\ud83c\udf82 Cumplea\u00f1os ma\u00f1ana!', b.name + ' cumple a\u00f1os ma\u00f1ana');
+                }
+            });
+        }
+        function checkNoteNotifications() {
+            const now = new Date();
+            state.notes.forEach(n => {
+                if (n.reminder && n.notify) {
+                    const rem = new Date(n.reminder);
+                    if (Math.abs(now - rem) < 60000) {
+                        sendNotification('\ud83d\udcdd Recordatorio', n.title);
+                    }
+                }
+            });
+        }
         function addExpenseAmount(n) { state.currentExpenseAmount += n; document.getElementById('expenseAmount').textContent = formatCurrency(state.currentExpenseAmount); }
         function clearExpenseAmount() { state.currentExpenseAmount = 0; document.getElementById('expenseAmount').textContent = formatCurrency(0); }
         function saveExpense() {
             const name = document.getElementById('expenseName').value.trim();
             if (!name || state.currentExpenseAmount <= 0) { alert('Introduce nombre e importe'); return; }
-            if (!state.savedExpenseNames.includes(name)) state.savedExpenseNames.push(name);
             state.transactions.push({ id: Date.now(), type: 'expense', name, amount: state.currentExpenseAmount, date: new Date().toISOString() });
             saveState(); clearExpenseAmount(); document.getElementById('expenseName').value = ''; updateUI(); alert('Gasto guardado');
         }
@@ -445,7 +713,6 @@
         function saveIncome() {
             const name = document.getElementById('incomeName').value.trim();
             if (!name || state.currentIncomeAmount <= 0) { alert('Introduce nombre e importe'); return; }
-            if (!state.savedIncomeNames.includes(name)) state.savedIncomeNames.push(name);
             state.transactions.push({ id: Date.now(), type: 'income', name, amount: state.currentIncomeAmount, date: new Date().toISOString() });
             saveState(); clearIncomeAmount(); document.getElementById('incomeName').value = ''; updateUI(); alert('Ingreso guardado');
         }
@@ -457,10 +724,7 @@
             state.subscriptions.push({ id: Date.now(), name, amount, date });
             saveState(); updateUI(); document.getElementById('subName').value = ''; document.getElementById('subAmount').value = ''; alert('Suscripcion guardada');
         }
-        function deleteSubscription(id) {
-            state.subscriptions = state.subscriptions.filter(s => s.id !== id);
-            saveState(); updateUI();
-        }
+        function deleteSubscription(id) { state.subscriptions = state.subscriptions.filter(s => s.id !== id); saveState(); updateUI(); }
         function addWallet() {
             const name = document.getElementById('walletName').value.trim();
             const balance = parseFloat(document.getElementById('walletBalance').value) || 0;
@@ -468,10 +732,7 @@
             state.wallets.push({ id: Date.now(), name, balance });
             saveState(); updateUI(); document.getElementById('walletName').value = ''; document.getElementById('walletBalance').value = ''; alert('Cartera creada');
         }
-        function deleteWallet(id) {
-            state.wallets = state.wallets.filter(w => w.id !== id);
-            saveState(); updateUI();
-        }
+        function deleteWallet(id) { state.wallets = state.wallets.filter(w => w.id !== id); saveState(); updateUI(); }
         function transferBetweenWallets() {
             const fromId = document.getElementById('fromWallet').value;
             const toId = document.getElementById('toWallet').value;
@@ -480,17 +741,32 @@
             const from = state.wallets.find(w => w.id == fromId);
             const to = state.wallets.find(w => w.id == toId);
             if (from.balance < amount) { alert('Saldo insuficiente'); return; }
-            from.balance -= amount;
-            to.balance += amount;
+            from.balance -= amount; to.balance += amount;
             saveState(); updateUI(); document.getElementById('transferAmount').value = ''; alert('Transferencia realizada');
         }
         function addBirthday() {
             const name = document.getElementById('birthdayName').value.trim();
             const date = document.getElementById('birthdayDate').value;
+            const notify = document.getElementById('birthdayNotifyToggle').classList.contains('active');
             if (!name || !date) { alert('Completa todos los campos'); return; }
-            state.birthdays.push({ id: Date.now(), name, date });
-            saveState(); updateUI(); document.getElementById('birthdayName').value = ''; document.getElementById('birthdayDate').value = ''; alert('Cumpleanos guardado');
+            state.birthdays.push({ id: Date.now(), name, date, notify });
+            saveState(); updateUI(); document.getElementById('birthdayName').value = ''; document.getElementById('birthdayDate').value = '';
+            if(notify) requestNotificationPermission();
+            alert('Cumpleanos guardado');
         }
+        function addNote() {
+            const title = document.getElementById('noteTitle').value.trim();
+            const content = document.getElementById('noteContent').value.trim();
+            const reminder = document.getElementById('noteReminder').value;
+            const notify = document.getElementById('noteNotifyToggle').classList.contains('active');
+            if (!title) { alert('Introduce un titulo'); return; }
+            state.notes.push({ id: Date.now(), title, content, reminder, notify, created: new Date().toISOString() });
+            saveState(); updateUI();
+            document.getElementById('noteTitle').value = ''; document.getElementById('noteContent').value = ''; document.getElementById('noteReminder').value = '';
+            if(notify) requestNotificationPermission();
+            alert('Nota guardada');
+        }
+        function deleteNote(id) { state.notes = state.notes.filter(n => n.id !== id); saveState(); updateUI(); }
         function renderCalendar() {
             const grid = document.getElementById('calendarGrid');
             grid.innerHTML = '';
@@ -516,7 +792,7 @@
         function nextMonth() { state.currentMonth++; if (state.currentMonth > 11) { state.currentMonth = 0; state.currentYear++; } renderCalendar(); }
         function openShiftModal(day) {
             state.selectedDay = day;
-            document.getElementById('selectedDate').textContent = day + ' de ' + monthNames[state.currentMonth] + ' ' + state.currentYear;
+            document.getElementById('selectedDate').textContent = day + ' de ' + monthNames[state.currentMonth];
             document.getElementById('shiftModal').classList.add('active');
         }
         function closeShiftModal() { document.getElementById('shiftModal').classList.remove('active'); }
@@ -534,52 +810,53 @@
             document.getElementById('totalBalance').textContent = formatCurrency(income - expense);
             document.getElementById('totalIncome').textContent = formatCurrency(income);
             document.getElementById('totalExpense').textContent = formatCurrency(expense);
-            document.getElementById('transactionsList').innerHTML = state.transactions.slice(-5).reverse().map(t =>
+            const txList = document.getElementById('transactionsList');
+            txList.innerHTML = state.transactions.slice(-5).reverse().map(t =>
                 '<div class="transaction-item"><div><div class="transaction-name">' + t.name + '</div><div class="transaction-date">' + new Date(t.date).toLocaleDateString('es-ES') + '</div></div><div class="transaction-amount ' + t.type + '">' + (t.type === 'income' ? '+' : '-') + formatCurrency(t.amount) + '</div></div>'
-            ).join('') || '<p style="text-align:center;color:var(--text-secondary)">Sin transacciones</p>';
-            document.getElementById('walletsList').innerHTML = state.wallets.map(w =>
-                '<div class="wallet-card"><div class="wallet-name">' + w.name + '</div><div class="wallet-balance">' + formatCurrency(w.balance) + '</div><div class="wallet-actions"><button onclick="deleteWallet(' + w.id + ')">X</button></div></div>'
-            ).join('') || '<p style="text-align:center;color:var(--text-secondary)">Sin carteras</p>';
+            ).join('') || '<div class="empty-state"><span>\ud83d\udcb8</span>Sin transacciones</div>';
+            const walletsList = document.getElementById('walletsList');
+            walletsList.innerHTML = state.wallets.map(w =>
+                '<div class="wallet-card"><div><div class="wallet-name">' + w.name + '</div></div><div class="wallet-balance">' + formatCurrency(w.balance) + '</div><button class="delete-btn" onclick="deleteWallet(' + w.id + ')">\u2715</button></div>'
+            ).join('') || '<div class="empty-state"><span>\ud83d\udc5b</span>Sin carteras</div>';
             const opts = '<option value="">Seleccionar</option>' + state.wallets.map(w => '<option value="' + w.id + '">' + w.name + '</option>').join('');
             document.getElementById('fromWallet').innerHTML = opts;
             document.getElementById('toWallet').innerHTML = opts;
             document.getElementById('subscriptionsList').innerHTML = state.subscriptions.map(s =>
-                '<div class="subscription-item"><div class="subscription-info"><h4>' + s.name + '</h4><small>Pago: ' + new Date(s.date).toLocaleDateString('es-ES') + ' - ' + formatCurrency(s.amount) + '</small></div><div class="subscription-actions"><button onclick="deleteSubscription(' + s.id + ')">X</button></div></div>'
-            ).join('') || '<p style="text-align:center;color:var(--text-secondary)">Sin suscripciones</p>';
+                '<div class="subscription-item"><div class="info-section"><h4>' + s.name + '</h4><small>' + formatCurrency(s.amount) + ' - ' + new Date(s.date).toLocaleDateString('es-ES') + '</small></div><button class="delete-btn" onclick="deleteSubscription(' + s.id + ')">\u2715</button></div>'
+            ).join('') || '<div class="empty-state"><span>\ud83d\udd14</span>Sin suscripciones</div>';
             document.getElementById('birthdaysList').innerHTML = state.birthdays.map(b => {
                 const d = new Date(b.date);
-                return '<div class="birthday-item"><div class="birthday-avatar">' + b.name.charAt(0).toUpperCase() + '</div><div class="birthday-info"><h4>' + b.name + '</h4><small>' + d.getDate() + '/' + (d.getMonth()+1) + '</small></div></div>';
-            }).join('') || '<p style="text-align:center;color:var(--text-secondary)">Sin cumpleanos</p>';
+                return '<div class="birthday-item"><div class="birthday-avatar">' + b.name.charAt(0).toUpperCase() + '</div><div class="info-section"><h4>' + b.name + '</h4><small>' + d.getDate() + '/' + (d.getMonth()+1) + (b.notify ? ' \ud83d\udd14' : '') + '</small></div></div>';
+            }).join('') || '<div class="empty-state"><span>\ud83c\udf82</span>Sin cumpleanos</div>';
+            document.getElementById('notesList').innerHTML = state.notes.map(n =>
+                '<div class="note-card"><div><div class="note-title">' + n.title + '</div><div class="note-date">' + new Date(n.created).toLocaleDateString('es-ES') + (n.notify ? ' \ud83d\udd14' : '') + '</div></div><button class="delete-btn" onclick="deleteNote(' + n.id + ')">\u2715</button></div>'
+            ).join('') || '<div class="empty-state"><span>\ud83d\udcdd</span>Sin notas</div>';
             // Chart
             const months = [];
-            for (let i = 5; i >= 0; i--) {
-                const d = new Date(); d.setMonth(d.getMonth() - i);
-                months.push({ m: d.getMonth(), y: d.getFullYear(), label: monthNames[d.getMonth()].substr(0,3) });
-            }
-            const chartData = months.map(m => {
-                return state.transactions.filter(t => {
-                    const td = new Date(t.date);
-                    return td.getMonth() === m.m && td.getFullYear() === m.y && t.type === 'expense';
-                }).reduce((s, t) => s + t.amount, 0);
-            });
+            for (let i = 5; i >= 0; i--) { const d = new Date(); d.setMonth(d.getMonth() - i); months.push({ m: d.getMonth(), y: d.getFullYear(), label: monthNames[d.getMonth()].substr(0,3) }); }
+            const chartData = months.map(m => state.transactions.filter(t => { const td = new Date(t.date); return td.getMonth() === m.m && td.getFullYear() === m.y && t.type === 'expense'; }).reduce((s, t) => s + t.amount, 0));
             const maxVal = Math.max(...chartData, 1);
-            document.getElementById('chart').innerHTML = chartData.map(v => '<div class="chart-bar" style="height:' + (v/maxVal*180) + 'px"></div>').join('');
+            document.getElementById('chart').innerHTML = chartData.map(v => '<div class="chart-bar" style="height:' + (v/maxVal*160) + 'px"></div>').join('');
             document.getElementById('chartLabels').innerHTML = months.map(m => '<span>' + m.label + '</span>').join('');
-            // AI Recommendation
-            let rec = 'Registra tus transacciones para obtener consejos.';
+            // AI
+            let rec = 'Registra tus transacciones para obtener consejos personalizados.';
             if (state.transactions.length > 0) {
-                if (income - expense < 0) rec = 'Atencion: Tus gastos superan tus ingresos.';
-                else if (expense > income * 0.8) rec = 'Gastas mas del 80%. Intenta ahorrar mas.';
-                else if (expense > income * 0.5) rec = 'Buen trabajo! Ahorras entre 20-50%.';
-                else rec = 'Excelente! Ahorras mas del 50%.';
+                if (income - expense < 0) rec = '\u26a0\ufe0f Atencion: Tus gastos superan tus ingresos.';
+                else if (expense > income * 0.8) rec = '\ud83d\udca1 Gastas mas del 80%. Intenta reducir gastos.';
+                else if (expense > income * 0.5) rec = '\ud83d\udc4d Buen trabajo! Ahorras entre 20-50%.';
+                else rec = '\ud83c\udf1f Excelente! Ahorras mas del 50%.';
             }
             document.getElementById('aiRecommendation').textContent = rec;
+            document.getElementById('weeklyToggle').classList.toggle('active', state.weeklyNotify);
+            document.getElementById('monthlyToggle').classList.toggle('active', state.monthlyNotify);
         }
         document.addEventListener('DOMContentLoaded', function() {
             loadState(); updateUI(); renderCalendar();
-            if (state.darkMode) document.body.classList.add('dark-mode');
-            document.querySelector('.theme-toggle').textContent = state.darkMode ? '☀️' : '🌙';
-            if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
+            if (state.lightMode) { document.body.classList.add('light-mode'); document.querySelector('.theme-toggle').textContent = '\ud83c\udf19'; }
+            requestNotificationPermission();
+            setInterval(checkBirthdayNotifications, 3600000);
+            setInterval(checkNoteNotifications, 60000);
+            checkBirthdayNotifications();
         });
     </script>
 </body>
