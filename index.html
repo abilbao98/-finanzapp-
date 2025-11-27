@@ -39,11 +39,7 @@
             --glass: rgba(0,0,0,0.02);
             --shadow: 0 8px 32px rgba(0,0,0,0.08);
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body {
             overflow: hidden;
             position: fixed;
@@ -71,7 +67,6 @@
             text-align: center;
             flex-shrink: 0;
             border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(20px);
             position: relative;
         }
         .header h1 {
@@ -94,7 +89,6 @@
             height: 36px;
             font-size: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
         .nav {
             display: flex;
@@ -113,39 +107,28 @@
             border-radius: 10px;
             font-size: 10px;
             font-weight: 500;
-            transition: all 0.3s ease;
             color: var(--text-secondary);
+            transition: all 0.3s;
         }
         .nav-item.active {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            box-shadow: var(--glow);
         }
-        .nav-item span {
-            display: block;
-            font-size: 18px;
-            margin-bottom: 4px;
-        }
+        .nav-item span { display: block; font-size: 18px; margin-bottom: 4px; }
         .main-content {
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
         }
-        .section {
-            display: none;
-            padding: 12px;
-        }
-        .section.active {
-            display: block;
-        }
+        .section { display: none; padding: 12px; }
+        .section.active { display: block; }
         .card {
             background: var(--bg-card);
             border-radius: 16px;
             padding: 16px;
             margin-bottom: 12px;
             border: 1px solid var(--border);
-            box-shadow: var(--shadow);
         }
         .card-title {
             font-size: 12px;
@@ -163,83 +146,15 @@
             border: 1px solid var(--primary);
             text-align: center;
             padding: 20px;
-            position: relative;
-            overflow: hidden;
         }
-        .balance-card small {
-            color: var(--text-secondary);
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .balance-card h2 {
-            font-size: 32px;
-            margin-top: 6px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        .stat-card {
-            text-align: center;
-            padding: 16px 12px;
-        }
-        .stat-card h3 {
-            font-size: 22px;
-            margin-bottom: 4px;
-            font-weight: 700;
-        }
-        .stat-card small {
-            color: var(--text-secondary);
-            font-size: 10px;
-            text-transform: uppercase;
-        }
+        .balance-card small { color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; }
+        .balance-card h2 { font-size: 32px; margin-top: 6px; font-weight: 700; color: var(--primary); }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat-card { text-align: center; padding: 16px 12px; }
+        .stat-card h3 { font-size: 22px; margin-bottom: 4px; font-weight: 700; }
+        .stat-card small { color: var(--text-secondary); font-size: 10px; text-transform: uppercase; }
         .stat-card.income h3 { color: var(--success); }
         .stat-card.expense h3 { color: var(--danger); }
-        /* Subfolder styles */
-        .subfolder {
-            background: var(--bg-elevated);
-            border-radius: 12px;
-            margin-bottom: 10px;
-            border: 1px solid var(--border);
-            overflow: hidden;
-        }
-        .subfolder-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .subfolder-header:hover {
-            background: var(--bg-card);
-        }
-        .subfolder-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-        .subfolder-arrow {
-            transition: transform 0.3s;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-        .subfolder.open .subfolder-arrow {
-            transform: rotate(180deg);
-        }
-        .subfolder-content {
-            display: none;
-            padding: 0 14px 14px;
-        }
-        .subfolder.open .subfolder-content {
-            display: block;
-        }
         .sub-tabs {
             display: flex;
             background: var(--bg-elevated);
@@ -247,27 +162,62 @@
             padding: 4px;
             margin-bottom: 12px;
             gap: 4px;
+            flex-wrap: wrap;
         }
         .sub-tab {
             flex: 1;
-            padding: 10px 6px;
+            min-width: 70px;
+            padding: 8px 6px;
             text-align: center;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
-            transition: all 0.3s ease;
             color: var(--text-secondary);
+            transition: all 0.3s;
         }
         .sub-tab.active {
             background: var(--bg-card);
             color: var(--primary);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
-        .sub-content {
+        .sub-content { display: none; }
+        .sub-content.active { display: block; }
+        .expandable-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .expandable-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            cursor: pointer;
+        }
+        .expandable-title {
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .expandable-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .expandable-content {
             display: none;
+            padding: 0 16px 16px;
         }
-        .sub-content.active {
+        .expandable-section.open .expandable-content {
             display: block;
         }
         .amount-display {
@@ -278,16 +228,8 @@
             margin-bottom: 12px;
             border: 1px solid var(--border);
         }
-        .amount-display small {
-            color: var(--text-secondary);
-            font-size: 10px;
-            text-transform: uppercase;
-        }
-        .amount-display h3 {
-            font-size: 28px;
-            margin-top: 6px;
-            font-weight: 700;
-        }
+        .amount-display small { color: var(--text-secondary); font-size: 10px; text-transform: uppercase; }
+        .amount-display h3 { font-size: 28px; margin-top: 6px; font-weight: 700; }
         .amount-display.expense h3 { color: var(--danger); }
         .amount-display.income h3 { color: var(--success); }
         input, select {
@@ -300,13 +242,8 @@
             background: var(--bg-elevated);
             color: var(--text-primary);
             font-family: inherit;
-            transition: all 0.3s ease;
         }
-        input:focus, select:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: var(--glow);
-        }
+        input:focus, select:focus { border-color: var(--primary); outline: none; }
         .btn-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -321,13 +258,10 @@
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
             color: var(--text-primary);
             font-family: inherit;
         }
-        .btn-amount:active {
-            transform: scale(0.95);
-        }
+        .btn-amount:active { transform: scale(0.95); }
         .btn-clear {
             grid-column: span 2;
             background: rgba(255,107,107,0.1);
@@ -347,20 +281,10 @@
             justify-content: center;
             gap: 8px;
             font-family: inherit;
-            transition: all 0.3s ease;
         }
-        .btn-save.expense {
-            background: linear-gradient(135deg, var(--danger), #ee5a5a);
-            color: white;
-        }
-        .btn-save.income {
-            background: linear-gradient(135deg, var(--success), var(--primary-dark));
-            color: white;
-        }
-        .btn-save.primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
+        .btn-save.expense { background: linear-gradient(135deg, var(--danger), #ee5a5a); color: white; }
+        .btn-save.income { background: linear-gradient(135deg, var(--success), var(--primary-dark)); color: white; }
+        .btn-save.primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
         .wallet-card, .note-card {
             display: flex;
             justify-content: space-between;
@@ -371,20 +295,9 @@
             margin-bottom: 10px;
             background: var(--bg-elevated);
         }
-        .wallet-name, .note-title {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .wallet-balance {
-            font-size: 16px;
-            color: var(--primary);
-            font-weight: 700;
-        }
-        .note-date {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
+        .wallet-name, .note-title { font-weight: 600; font-size: 14px; }
+        .wallet-balance { font-size: 16px; color: var(--primary); font-weight: 700; }
+        .note-date { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
         .delete-btn {
             background: rgba(255,107,107,0.1);
             color: var(--danger);
@@ -400,10 +313,7 @@
             align-items: center;
             margin-bottom: 16px;
         }
-        .calendar-header h3 {
-            font-size: 16px;
-            font-weight: 600;
-        }
+        .calendar-header h3 { font-size: 16px; font-weight: 600; }
         .calendar-header button {
             background: var(--bg-elevated);
             color: var(--text-primary);
@@ -439,47 +349,23 @@
             background: var(--bg-elevated);
             border: 1px solid transparent;
         }
-        .calendar-day.today {
-            border: 2px solid var(--primary);
-        }
-        .calendar-day.empty {
-            background: transparent;
-            cursor: default;
-        }
-        .calendar-day.shift-morning {
-            background: linear-gradient(135deg, #3b82f6, #60a5fa);
-            color: white;
-        }
-        .calendar-day.shift-afternoon {
-            background: linear-gradient(135deg, #10b981, #34d399);
-            color: white;
-        }
-        .calendar-day.shift-night {
-            background: linear-gradient(135deg, #ef4444, #f87171);
-            color: white;
-        }
-        .shift-label {
-            font-size: 8px;
-            font-weight: 700;
-            margin-top: 1px;
-        }
+        .calendar-day.today { border: 2px solid var(--primary); }
+        .calendar-day.empty { background: transparent; cursor: default; }
+        .calendar-day.shift-morning { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white; }
+        .calendar-day.shift-afternoon { background: linear-gradient(135deg, #10b981, #34d399); color: white; }
+        .calendar-day.shift-night { background: linear-gradient(135deg, #ef4444, #f87171); color: white; }
+        .shift-label { font-size: 8px; font-weight: 700; margin-top: 1px; }
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.8);
             z-index: 200;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            backdrop-filter: blur(8px);
         }
-        .modal.active {
-            display: flex;
-        }
+        .modal.active { display: flex; }
         .modal-content {
             background: var(--bg-card);
             border-radius: 20px;
@@ -488,17 +374,8 @@
             max-width: 340px;
             border: 1px solid var(--border);
         }
-        .modal-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            text-align: center;
-        }
-        .shift-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; text-align: center; }
+        .shift-options { display: flex; flex-direction: column; gap: 10px; }
         .shift-btn {
             padding: 14px;
             border: none;
@@ -536,18 +413,9 @@
             font-size: 16px;
             font-weight: 700;
         }
-        .info-section {
-            flex: 1;
-        }
-        .info-section h4 {
-            font-weight: 600;
-            font-size: 13px;
-            margin-bottom: 2px;
-        }
-        .info-section small {
-            color: var(--text-secondary);
-            font-size: 11px;
-        }
+        .info-section { flex: 1; }
+        .info-section h4 { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+        .info-section small { color: var(--text-secondary); font-size: 11px; }
         .toggle-switch {
             position: relative;
             width: 44px;
@@ -555,11 +423,8 @@
             background: var(--border);
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
-        .toggle-switch.active {
-            background: var(--primary);
-        }
+        .toggle-switch.active { background: var(--primary); }
         .toggle-switch::after {
             content: '';
             position: absolute;
@@ -569,11 +434,9 @@
             height: 20px;
             background: white;
             border-radius: 50%;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
-        .toggle-switch.active::after {
-            left: 22px;
-        }
+        .toggle-switch.active::after { left: 22px; }
         .setting-row {
             display: flex;
             justify-content: space-between;
@@ -581,35 +444,12 @@
             padding: 12px 0;
             border-bottom: 1px solid var(--border);
         }
-        .setting-row:last-child {
-            border-bottom: none;
-        }
-        .setting-label {
-            font-weight: 500;
-            font-size: 13px;
-        }
-        .chart-container {
-            height: 120px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            padding-top: 16px;
-        }
-        .chart-bar {
-            width: 28px;
-            background: linear-gradient(180deg, var(--primary), var(--secondary));
-            border-radius: 6px 6px 0 0;
-            min-height: 4px;
-        }
-        .chart-labels {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 8px;
-        }
-        .chart-labels span {
-            font-size: 10px;
-            color: var(--text-secondary);
-        }
+        .setting-row:last-child { border-bottom: none; }
+        .setting-label { font-weight: 500; font-size: 13px; }
+        .chart-container { height: 120px; display: flex; align-items: flex-end; justify-content: space-around; padding-top: 16px; }
+        .chart-bar { width: 28px; background: linear-gradient(180deg, var(--primary), var(--secondary)); border-radius: 6px 6px 0 0; min-height: 4px; }
+        .chart-labels { display: flex; justify-content: space-around; margin-top: 8px; }
+        .chart-labels span { font-size: 10px; color: var(--text-secondary); }
         .transaction-item {
             display: flex;
             justify-content: space-between;
@@ -617,40 +457,15 @@
             padding: 10px 0;
             border-bottom: 1px solid var(--border);
         }
-        .transaction-item:last-child {
-            border-bottom: none;
-        }
-        .transaction-name {
-            font-weight: 500;
-            font-size: 13px;
-        }
-        .transaction-date {
-            font-size: 10px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-        .transaction-amount {
-            font-weight: 700;
-            font-size: 13px;
-        }
+        .transaction-item:last-child { border-bottom: none; }
+        .transaction-name { font-weight: 500; font-size: 13px; }
+        .transaction-date { font-size: 10px; color: var(--text-secondary); margin-top: 2px; }
+        .transaction-amount { font-weight: 700; font-size: 13px; }
         .transaction-amount.income { color: var(--success); }
         .transaction-amount.expense { color: var(--danger); }
-        .empty-state {
-            text-align: center;
-            padding: 24px 16px;
-            color: var(--text-secondary);
-        }
-        .empty-state span {
-            font-size: 36px;
-            display: block;
-            margin-bottom: 8px;
-            opacity: 0.5;
-        }
-        .ai-text {
-            font-size: 13px;
-            line-height: 1.5;
-            color: var(--text-secondary);
-        }
+        .empty-state { text-align: center; padding: 24px 16px; color: var(--text-secondary); }
+        .empty-state span { font-size: 36px; display: block; margin-bottom: 8px; opacity: 0.5; }
+        .ai-text { font-size: 13px; line-height: 1.5; color: var(--text-secondary); }
     </style>
 </head>
 <body>
@@ -668,7 +483,7 @@
         </nav>
 
         <div class="main-content">
-            <!-- SECCION FINANZAS con subcarpetas -->
+            <!-- SECCION FINANZAS con tabs horizontales -->
             <section id="finanzas" class="section">
                 <div class="card balance-card">
                     <small>Balance Total</small>
@@ -685,60 +500,51 @@
                     </div>
                 </div>
                 
-                <!-- Subcarpeta: Recomendacion IA -->
-                <div class="subfolder" onclick="toggleSubfolder(this)">
-                    <div class="subfolder-header">
-                        <div class="subfolder-title">🤖 Recomendacion IA</div>
-                        <span class="subfolder-arrow">▼</span>
-                    </div>
-                    <div class="subfolder-content">
+                <div class="sub-tabs">
+                    <div class="sub-tab active" onclick="showFinanzasTab('ia')'">🤖 IA</div>
+                    <div class="sub-tab" onclick="showFinanzasTab('gastos')">📊 Gastos</div>
+                    <div class="sub-tab" onclick="showFinanzasTab('ultimas')">📝 Ultimas</div>
+                    <div class="sub-tab" onclick="showFinanzasTab('notif')">🔔 Notif</div>
+                </div>
+                
+                <div id="tab-ia" class="sub-content active">
+                    <div class="card">
+                        <div class="card-title">🤖 Recomendacion IA</div>
                         <p class="ai-text" id="aiRecommendation">Registra tus transacciones para obtener consejos personalizados.</p>
                     </div>
                 </div>
                 
-                <!-- Subcarpeta: Gastos Mensuales -->
-                <div class="subfolder" onclick="toggleSubfolder(this)">
-                    <div class="subfolder-header">
-                        <div class="subfolder-title">📊 Gastos Mensuales</div>
-                        <span class="subfolder-arrow">▼</span>
-                    </div>
-                    <div class="subfolder-content">
+                <div id="tab-gastos" class="sub-content">
+                    <div class="card">
+                        <div class="card-title">📊 Gastos Mensuales</div>
                         <div class="chart-container" id="chart"></div>
                         <div class="chart-labels" id="chartLabels"></div>
                     </div>
                 </div>
                 
-                <!-- Subcarpeta: Ultimas Transacciones -->
-                <div class="subfolder" onclick="toggleSubfolder(this)">
-                    <div class="subfolder-header">
-                        <div class="subfolder-title">📝 Ultimas Transacciones</div>
-                        <span class="subfolder-arrow">▼</span>
-                    </div>
-                    <div class="subfolder-content">
+                <div id="tab-ultimas" class="sub-content">
+                    <div class="card">
+                        <div class="card-title">📝 Ultimas Transacciones</div>
                         <div id="transactionsList"></div>
                     </div>
                 </div>
                 
-                <!-- Subcarpeta: Notificaciones -->
-                <div class="subfolder" onclick="toggleSubfolder(this)">
-                    <div class="subfolder-header">
-                        <div class="subfolder-title">🔔 Notificaciones</div>
-                        <span class="subfolder-arrow">▼</span>
-                    </div>
-                    <div class="subfolder-content">
+                <div id="tab-notif" class="sub-content">
+                    <div class="card">
+                        <div class="card-title">🔔 Notificaciones</div>
                         <div class="setting-row">
                             <div>
                                 <div class="setting-label">Resumen Semanal</div>
-                                <small style="color:var(--text-secondary);font-size:11px">Recibe un resumen cada lunes</small>
+                                <small style="color:var(--text-secondary);font-size:11px">Cada lunes</small>
                             </div>
-                            <div class="toggle-switch" id="weeklyToggle" onclick="event.stopPropagation();toggleNotification('weekly')"></div>
+                            <div class="toggle-switch" id="weeklyToggle" onclick="toggleNotification('weekly')"></div>
                         </div>
                         <div class="setting-row">
                             <div>
                                 <div class="setting-label">Resumen Mensual</div>
-                                <small style="color:var(--text-secondary);font-size:11px">Recibe un resumen el dia 1</small>
+                                <small style="color:var(--text-secondary);font-size:11px">El dia 1</small>
                             </div>
-                            <div class="toggle-switch" id="monthlyToggle" onclick="event.stopPropagation();toggleNotification('monthly')"></div>
+                            <div class="toggle-switch" id="monthlyToggle" onclick="toggleNotification('monthly')"></div>
                         </div>
                     </div>
                 </div>
@@ -794,12 +600,17 @@
                 </div>
                 
                 <div id="tab-suscripciones" class="sub-content">
-                    <div class="card">
-                        <div class="card-title">➕ Nueva Suscripcion</div>
-                        <input type="text" id="subName" placeholder="Netflix, Spotify...">
-                        <input type="number" id="subAmount" placeholder="Importe mensual" step="0.01">
-                        <input type="date" id="subDate">
-                        <button class="btn-save primary" onclick="addSubscription()">Guardar</button>
+                    <div class="expandable-section" id="newSubSection">
+                        <div class="expandable-header" onclick="toggleExpandable('newSubSection')">
+                            <div class="expandable-title">➕ Nueva Suscripcion</div>
+                            <button class="expandable-btn">Anadir</button>
+                        </div>
+                        <div class="expandable-content">
+                            <input type="text" id="subName" placeholder="Netflix, Spotify...">
+                            <input type="number" id="subAmount" placeholder="Importe mensual" step="0.01">
+                            <input type="date" id="subDate">
+                            <button class="btn-save primary" onclick="addSubscription()">Guardar</button>
+                        </div>
                     </div>
                     <div class="card">
                         <div class="card-title">📋 Mis Suscripciones</div>
@@ -808,24 +619,39 @@
                 </div>
             </section>
 
-            <!-- SECCION CARTERAS -->
+            <!-- SECCION CARTERAS con nuevo orden -->
             <section id="carteras" class="section">
-                <div class="card">
-                    <div class="card-title">➕ Nueva Cartera</div>
-                    <input type="text" id="walletName" placeholder="Nombre de la cartera">
-                    <input type="number" id="walletBalance" placeholder="Saldo inicial" step="0.01">
-                    <button class="btn-save primary" onclick="addWallet()">Crear Cartera</button>
-                </div>
+                <!-- Primero: Mis Carteras -->
                 <div class="card">
                     <div class="card-title">👛 Mis Carteras</div>
                     <div id="walletsList"></div>
                 </div>
-                <div class="card">
-                    <div class="card-title">🔄 Transferencia</div>
-                    <select id="fromWallet"><option value="">Desde...</option></select>
-                    <select id="toWallet"><option value="">Hacia...</option></select>
-                    <input type="number" id="transferAmount" placeholder="Cantidad" step="0.01">
-                    <button class="btn-save primary" onclick="transferBetweenWallets()">Transferir</button>
+                
+                <!-- Segundo: Crear Nueva Cartera (desplegable) -->
+                <div class="expandable-section" id="newWalletSection">
+                    <div class="expandable-header" onclick="toggleExpandable('newWalletSection')">
+                        <div class="expandable-title">➕ Nueva Cartera</div>
+                        <button class="expandable-btn">Crear</button>
+                    </div>
+                    <div class="expandable-content">
+                        <input type="text" id="walletName" placeholder="Nombre de la cartera">
+                        <input type="number" id="walletBalance" placeholder="Saldo inicial" step="0.01">
+                        <button class="btn-save primary" onclick="addWallet()">Crear Cartera</button>
+                    </div>
+                </div>
+                
+                <!-- Tercero: Transferencia (desplegable) -->
+                <div class="expandable-section" id="transferSection">
+                    <div class="expandable-header" onclick="toggleExpandable('transferSection')">
+                        <div class="expandable-title">🔄 Transferencia</div>
+                        <button class="expandable-btn">Nueva</button>
+                    </div>
+                    <div class="expandable-content">
+                        <select id="fromWallet"><option value="">Desde...</option></select>
+                        <select id="toWallet"><option value="">Hacia...</option></select>
+                        <input type="number" id="transferAmount" placeholder="Cantidad" step="0.01">
+                        <button class="btn-save primary" onclick="transferBetweenWallets()">Transferir</button>
+                    </div>
                 </div>
             </section>
 
@@ -849,15 +675,20 @@
                 </div>
                 
                 <div id="tab-cumples" class="sub-content">
-                    <div class="card">
-                        <div class="card-title">➕ Nuevo Cumpleaños</div>
-                        <input type="text" id="birthdayName" placeholder="Nombre">
-                        <input type="date" id="birthdayDate">
-                        <div class="setting-row">
-                            <span class="setting-label">Notificar 1 dia antes</span>
-                            <div class="toggle-switch" id="birthdayNotifyToggle" onclick="this.classList.toggle('active')"></div>
+                    <div class="expandable-section" id="newBirthdaySection">
+                        <div class="expandable-header" onclick="toggleExpandable('newBirthdaySection')">
+                            <div class="expandable-title">➕ Nuevo Cumpleaños</div>
+                            <button class="expandable-btn">Anadir</button>
                         </div>
-                        <button class="btn-save primary" onclick="addBirthday()">Guardar</button>
+                        <div class="expandable-content">
+                            <input type="text" id="birthdayName" placeholder="Nombre">
+                            <input type="date" id="birthdayDate">
+                            <div class="setting-row">
+                                <span class="setting-label">Notificar 1 dia antes</span>
+                                <div class="toggle-switch" id="birthdayNotifyToggle" onclick="this.classList.toggle('active')"></div>
+                            </div>
+                            <button class="btn-save primary" onclick="addBirthday()">Guardar</button>
+                        </div>
                     </div>
                     <div class="card">
                         <div class="card-title">🎂 Proximos Cumpleaños</div>
@@ -866,15 +697,20 @@
                 </div>
                 
                 <div id="tab-notas" class="sub-content">
-                    <div class="card">
-                        <div class="card-title">➕ Nueva Nota</div>
-                        <input type="text" id="noteTitle" placeholder="Titulo de la nota">
-                        <input type="datetime-local" id="noteReminder">
-                        <div class="setting-row">
-                            <span class="setting-label">Activar recordatorio</span>
-                            <div class="toggle-switch" id="noteNotifyToggle" onclick="this.classList.toggle('active')"></div>
+                    <div class="expandable-section" id="newNoteSection">
+                        <div class="expandable-header" onclick="toggleExpandable('newNoteSection')">
+                            <div class="expandable-title">➕ Nueva Nota</div>
+                            <button class="expandable-btn">Anadir</button>
                         </div>
-                        <button class="btn-save primary" onclick="addNote()">Guardar Nota</button>
+                        <div class="expandable-content">
+                            <input type="text" id="noteTitle" placeholder="Titulo de la nota">
+                            <input type="datetime-local" id="noteReminder">
+                            <div class="setting-row">
+                                <span class="setting-label">Activar recordatorio</span>
+                                <div class="toggle-switch" id="noteNotifyToggle" onclick="this.classList.toggle('active')"></div>
+                            </div>
+                            <button class="btn-save primary" onclick="addNote()">Guardar Nota</button>
+                        </div>
                     </div>
                     <div class="card">
                         <div class="card-title">📝 Mis Notas</div>
@@ -939,8 +775,8 @@
             saveState();
         }
         
-        function toggleSubfolder(el) {
-            el.classList.toggle('open');
+        function toggleExpandable(id) {
+            document.getElementById(id).classList.toggle('open');
         }
         
         function showSection(id, el) {
@@ -948,6 +784,13 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             el.classList.add('active');
+        }
+        
+        function showFinanzasTab(tab) {
+            document.querySelectorAll('#finanzas .sub-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('#finanzas .sub-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            event.currentTarget.classList.add('active');
         }
         
         function showTransactionTab(tab) {
@@ -974,19 +817,6 @@
                 document.getElementById('monthlyToggle').classList.toggle('active', state.monthlyNotify);
             }
             saveState();
-            requestNotificationPermission();
-        }
-        
-        function requestNotificationPermission() {
-            if ('Notification' in window && Notification.permission === 'default') {
-                Notification.requestPermission();
-            }
-        }
-        
-        function sendNotification(title, body) {
-            if ('Notification' in window && Notification.permission === 'granted') {
-                new Notification(title, { body: body });
-            }
         }
         
         function addExpenseAmount(n) {
@@ -1001,17 +831,8 @@
         
         function saveExpense() {
             const name = document.getElementById('expenseName').value.trim();
-            if (!name || state.currentExpenseAmount <= 0) {
-                alert('Introduce nombre e importe');
-                return;
-            }
-            state.transactions.push({
-                id: Date.now(),
-                type: 'expense',
-                name,
-                amount: state.currentExpenseAmount,
-                date: new Date().toISOString()
-            });
+            if (!name || state.currentExpenseAmount <= 0) { alert('Introduce nombre e importe'); return; }
+            state.transactions.push({ id: Date.now(), type: 'expense', name, amount: state.currentExpenseAmount, date: new Date().toISOString() });
             saveState();
             clearExpenseAmount();
             document.getElementById('expenseName').value = '';
@@ -1031,17 +852,8 @@
         
         function saveIncome() {
             const name = document.getElementById('incomeName').value.trim();
-            if (!name || state.currentIncomeAmount <= 0) {
-                alert('Introduce nombre e importe');
-                return;
-            }
-            state.transactions.push({
-                id: Date.now(),
-                type: 'income',
-                name,
-                amount: state.currentIncomeAmount,
-                date: new Date().toISOString()
-            });
+            if (!name || state.currentIncomeAmount <= 0) { alert('Introduce nombre e importe'); return; }
+            state.transactions.push({ id: Date.now(), type: 'income', name, amount: state.currentIncomeAmount, date: new Date().toISOString() });
             saveState();
             clearIncomeAmount();
             document.getElementById('incomeName').value = '';
@@ -1053,15 +865,13 @@
             const name = document.getElementById('subName').value.trim();
             const amount = parseFloat(document.getElementById('subAmount').value);
             const date = document.getElementById('subDate').value;
-            if (!name || !amount || !date) {
-                alert('Completa todos los campos');
-                return;
-            }
+            if (!name || !amount || !date) { alert('Completa todos los campos'); return; }
             state.subscriptions.push({ id: Date.now(), name, amount, date });
             saveState();
             updateUI();
             document.getElementById('subName').value = '';
             document.getElementById('subAmount').value = '';
+            toggleExpandable('newSubSection');
             alert('Suscripcion guardada');
         }
         
@@ -1074,15 +884,13 @@
         function addWallet() {
             const name = document.getElementById('walletName').value.trim();
             const balance = parseFloat(document.getElementById('walletBalance').value) || 0;
-            if (!name) {
-                alert('Introduce nombre');
-                return;
-            }
+            if (!name) { alert('Introduce nombre'); return; }
             state.wallets.push({ id: Date.now(), name, balance });
             saveState();
             updateUI();
             document.getElementById('walletName').value = '';
             document.getElementById('walletBalance').value = '';
+            toggleExpandable('newWalletSection');
             alert('Cartera creada');
         }
         
@@ -1096,21 +904,16 @@
             const fromId = document.getElementById('fromWallet').value;
             const toId = document.getElementById('toWallet').value;
             const amount = parseFloat(document.getElementById('transferAmount').value);
-            if (!fromId || !toId || !amount || fromId === toId) {
-                alert('Selecciona carteras diferentes y cantidad');
-                return;
-            }
+            if (!fromId || !toId || !amount || fromId === toId) { alert('Selecciona carteras diferentes y cantidad'); return; }
             const from = state.wallets.find(w => w.id == fromId);
             const to = state.wallets.find(w => w.id == toId);
-            if (from.balance < amount) {
-                alert('Saldo insuficiente');
-                return;
-            }
+            if (from.balance < amount) { alert('Saldo insuficiente'); return; }
             from.balance -= amount;
             to.balance += amount;
             saveState();
             updateUI();
             document.getElementById('transferAmount').value = '';
+            toggleExpandable('transferSection');
             alert('Transferencia realizada');
         }
         
@@ -1118,16 +921,13 @@
             const name = document.getElementById('birthdayName').value.trim();
             const date = document.getElementById('birthdayDate').value;
             const notify = document.getElementById('birthdayNotifyToggle').classList.contains('active');
-            if (!name || !date) {
-                alert('Completa todos los campos');
-                return;
-            }
+            if (!name || !date) { alert('Completa todos los campos'); return; }
             state.birthdays.push({ id: Date.now(), name, date, notify });
             saveState();
             updateUI();
             document.getElementById('birthdayName').value = '';
             document.getElementById('birthdayDate').value = '';
-            if(notify) requestNotificationPermission();
+            toggleExpandable('newBirthdaySection');
             alert('Cumpleanos guardado');
         }
         
@@ -1135,16 +935,13 @@
             const title = document.getElementById('noteTitle').value.trim();
             const reminder = document.getElementById('noteReminder').value;
             const notify = document.getElementById('noteNotifyToggle').classList.contains('active');
-            if (!title) {
-                alert('Introduce un titulo');
-                return;
-            }
+            if (!title) { alert('Introduce un titulo'); return; }
             state.notes.push({ id: Date.now(), title, reminder, notify, created: new Date().toISOString() });
             saveState();
             updateUI();
             document.getElementById('noteTitle').value = '';
             document.getElementById('noteReminder').value = '';
-            if(notify) requestNotificationPermission();
+            toggleExpandable('newNoteSection');
             alert('Nota guardada');
         }
         
@@ -1285,7 +1082,6 @@
                 document.body.classList.add('light-mode');
                 document.querySelector('.theme-toggle').textContent = '\ud83c\udf19';
             }
-            requestNotificationPermission();
         });
     </script>
 </body>
