@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="FinanzApp">
     <meta name="theme-color" content="#1a1a2e">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%231a1a2e' width='100' height='100' rx='22'/><text x='50' y='62' font-size='36' text-anchor='middle' fill='%2300d4aa'>FA</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%231a1a2e' width='100' height='100' rx='22'/><text x='50' y='62' font-family='Arial' font-size='40' font-weight='bold' fill='%2300d4aa' text-anchor='middle'>F</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>FinanzApp</title>
     <style>
@@ -34,94 +34,93 @@
             --bg-card: #ffffff;
             --bg-elevated: #f0f0f5;
             --text-primary: #1a1a2e;
-            --text-secondary: #6c6c7c;
+            --text-secondary: #666680;
             --border: #e0e0e8;
-            --glass: rgba(0,0,0,0.02);
-            --shadow: 0 8px 32px rgba(0,0,0,0.08);
+            --glass: rgba(0,0,0,0.05);
+            --shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body {
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            overscroll-behavior: none;
-            touch-action: manipulation;
-        }
+        html, body { height: 100%; overflow: hidden; }
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-dark);
             color: var(--text-primary);
-            -webkit-font-smoothing: antialiased;
-        }
-        .app-container {
+            min-height: 100dvh;
+            max-height: 100dvh;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            height: 100dvh;
             overflow: hidden;
         }
-        .header {
-            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-elevated) 100%);
-            padding: 12px 20px;
-            text-align: center;
-            flex-shrink: 0;
-            border-bottom: 1px solid var(--border);
-            position: relative;
-        }
-        .header h1 {
-            font-size: 20px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .theme-toggle {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--glass);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            width: 36px;
-            height: 36px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .nav {
-            display: flex;
+        header {
             background: var(--bg-card);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             border-bottom: 1px solid var(--border);
-            padding: 6px;
-            gap: 4px;
             flex-shrink: 0;
-            overflow: hidden;
         }
-        .nav-item {
-            flex: 1;
-            padding: 10px 6px;
-            text-align: center;
-            cursor: pointer;
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo-icon {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-radius: 10px;
-            font-size: 10px;
-            font-weight: 500;
-            color: var(--text-secondary);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 16px; color: white;
+        }
+        .logo h1 { font-size: 18px; font-weight: 700; }
+        .header-actions { display: flex; gap: 8px; }
+        .icon-btn {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            border: none;
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
             transition: all 0.3s;
         }
-        .nav-item.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
+        .icon-btn:hover { background: var(--primary); transform: scale(1.05); }
+        nav {
+            display: flex;
+            background: var(--bg-card);
+            padding: 8px;
+            gap: 6px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+            overflow-x: auto;
         }
-        .nav-item span { display: block; font-size: 18px; margin-bottom: 4px; }
-        .main-content {
+        .nav-btn {
+            flex: 1;
+            padding: 10px 8px;
+            border: none;
+            border-radius: 12px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            min-width: 70px;
+        }
+        .nav-btn span { font-size: 18px; }
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: var(--glow);
+        }
+        main {
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
+            padding: 12px;
         }
-        .section { display: none; padding: 12px; }
+        .section { display: none; }
         .section.active { display: block; }
         .card {
             background: var(--bg-card);
@@ -130,23 +129,14 @@
             margin-bottom: 12px;
             border: 1px solid var(--border);
         }
-        .card-title {
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 12px;
+        .card-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: 12px;
         }
-        .balance-card {
-            background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 50%, #1a1a2e 100%);
-            border: 1px solid var(--primary);
-            text-align: center;
-            padding: 20px;
-        }
+        .card-title { font-size: 14px; font-weight: 600; color: var(--text-secondary); }
+        .balance-card { text-align: center; padding: 20px; }
         .balance-card small { color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; }
         .balance-card h2 { font-size: 32px; margin-top: 6px; font-weight: 700; color: var(--primary); }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -166,15 +156,17 @@
         }
         .sub-tab {
             flex: 1;
-            min-width: 70px;
+            min-width: 60px;
             padding: 8px 6px;
             text-align: center;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             color: var(--text-secondary);
             transition: all 0.3s;
+            border: none;
+            background: transparent;
         }
         .sub-tab.active {
             background: var(--bg-card);
@@ -182,906 +174,828 @@
         }
         .sub-content { display: none; }
         .sub-content.active { display: block; }
-        .expandable-section {
-            background: var(--bg-card);
-            border-radius: 16px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border);
-            overflow: hidden;
-        }
         .expandable-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 14px 16px;
+            background: var(--bg-card);
+            border-radius: 12px;
             cursor: pointer;
-        }
-        .expandable-title {
-            font-size: 13px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .expandable-btn {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .expandable-content {
-            display: none;
-            padding: 0 16px 16px;
-        }
-        .expandable-section.open .expandable-content {
-            display: block;
-        }
-        .amount-display {
-            background: var(--bg-elevated);
-            border-radius: 14px;
-            padding: 16px;
-            text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             border: 1px solid var(--border);
         }
-        .amount-display small { color: var(--text-secondary); font-size: 10px; text-transform: uppercase; }
-        .amount-display h3 { font-size: 28px; margin-top: 6px; font-weight: 700; }
-        .amount-display.expense h3 { color: var(--danger); }
-        .amount-display.income h3 { color: var(--success); }
-        input, select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--border);
+        .expandable-header h3 { font-size: 14px; font-weight: 600; }
+        .expandable-content {
+            display: none;
+            padding: 16px;
+            background: var(--bg-card);
             border-radius: 12px;
-            font-size: 14px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+        .expandable-content.active { display: block; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
             background: var(--bg-elevated);
             color: var(--text-primary);
-            font-family: inherit;
+            font-size: 14px;
         }
-        input:focus, select:focus { border-color: var(--primary); outline: none; }
-        .btn-grid {
+        .btn {
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-secondary { background: var(--bg-elevated); color: var(--text-primary); }
+        .amount-display {
+            text-align: center;
+            padding: 20px;
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+        .amount-display h2 { font-size: 36px; font-weight: 700; }
+        .amount-display.expense h2 { color: var(--danger); }
+        .amount-display.income h2 { color: var(--success); }
+        .quick-amounts {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 8px;
             margin-bottom: 12px;
         }
-        .btn-amount {
-            padding: 12px 6px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            background: var(--bg-elevated);
+        .quick-amount {
+            padding: 10px;
+            text-align: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
             font-size: 13px;
             font-weight: 600;
-            cursor: pointer;
             color: var(--text-primary);
-            font-family: inherit;
-        }
-        .btn-amount:active { transform: scale(0.95); }
-        .btn-clear {
-            grid-column: span 2;
-            background: rgba(255,107,107,0.1);
-            color: var(--danger);
-            border-color: var(--danger);
-        }
-        .btn-save {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-family: inherit;
-        }
-        .btn-save.expense { background: linear-gradient(135deg, var(--danger), #ee5a5a); color: white; }
-        .btn-save.income { background: linear-gradient(135deg, var(--success), var(--primary-dark)); color: white; }
-        .btn-save.primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
-        .wallet-card, .note-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            margin-bottom: 10px;
-            background: var(--bg-elevated);
-        }
-        .wallet-name, .note-title { font-weight: 600; font-size: 14px; }
-        .wallet-balance { font-size: 16px; color: var(--primary); font-weight: 700; }
-        .note-date { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
-        .delete-btn {
-            background: rgba(255,107,107,0.1);
-            color: var(--danger);
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        .calendar-header h3 { font-size: 16px; font-weight: 600; }
-        .calendar-header button {
-            background: var(--bg-elevated);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-        }
-        .calendar-day-name {
-            text-align: center;
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            padding: 8px 0;
-        }
-        .calendar-day {
-            aspect-ratio: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 500;
-            background: var(--bg-elevated);
-            border: 1px solid transparent;
-        }
-        .calendar-day.today { border: 2px solid var(--primary); }
-        .calendar-day.empty { background: transparent; cursor: default; }
-        .calendar-day.shift-morning { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white; }
-        .calendar-day.shift-afternoon { background: linear-gradient(135deg, #10b981, #34d399); color: white; }
-        .calendar-day.shift-night { background: linear-gradient(135deg, #ef4444, #f87171); color: white; }
-        .shift-label { font-size: 8px; font-weight: 700; margin-top: 1px; }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .modal.active { display: flex; }
-        .modal-content {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 24px;
-            width: 100%;
-            max-width: 340px;
-            border: 1px solid var(--border);
-        }
-        .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; text-align: center; }
-        .shift-options { display: flex; flex-direction: column; gap: 10px; }
-        .shift-btn {
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            color: white;
-            font-family: inherit;
-        }
-        .shift-btn.morning { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
-        .shift-btn.afternoon { background: linear-gradient(135deg, #10b981, #34d399); }
-        .shift-btn.night { background: linear-gradient(135deg, #ef4444, #f87171); }
-        .shift-btn.remove { background: var(--bg-elevated); color: var(--text-secondary); }
-        .shift-btn.close { background: var(--border); color: var(--text-primary); }
-        .subscription-item, .birthday-item {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            margin-bottom: 10px;
-            gap: 12px;
-            background: var(--bg-elevated);
-        }
-        .birthday-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--secondary), var(--accent));
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            font-weight: 700;
-        }
-        .info-section { flex: 1; }
-        .info-section h4 { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
-        .info-section small { color: var(--text-secondary); font-size: 11px; }
-        .toggle-switch {
-            position: relative;
-            width: 44px;
-            height: 24px;
-            background: var(--border);
-            border-radius: 12px;
-            cursor: pointer;
-        }
-        .toggle-switch.active { background: var(--primary); }
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
             transition: all 0.3s;
         }
-        .toggle-switch.active::after { left: 22px; }
-        .setting-row {
+        .quick-amount:hover, .quick-amount.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .category-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .category-btn {
+            padding: 10px 8px;
+            text-align: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+        .category-btn:hover, .category-btn.selected {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        .category-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
+            padding: 10px 12px;
+            background: var(--bg-elevated);
+            border-radius: 8px;
+            margin-bottom: 8px;
         }
-        .setting-row:last-child { border-bottom: none; }
-        .setting-label { font-weight: 500; font-size: 13px; }
-        .chart-container { height: 120px; display: flex; align-items: flex-end; justify-content: space-around; padding-top: 16px; }
-        .chart-bar { width: 28px; background: linear-gradient(180deg, var(--primary), var(--secondary)); border-radius: 6px 6px 0 0; min-height: 4px; }
-        .chart-labels { display: flex; justify-content: space-around; margin-top: 8px; }
-        .chart-labels span { font-size: 10px; color: var(--text-secondary); }
+        .category-item span { font-size: 13px; }
+        .category-item-actions { display: flex; gap: 8px; }
+        .category-item-actions button {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .wallet-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 10px;
+            color: white;
+        }
+        .wallet-card h4 { font-size: 14px; margin-bottom: 8px; opacity: 0.9; }
+        .wallet-card h3 { font-size: 24px; font-weight: 700; }
         .transaction-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border);
+            padding: 12px;
+            background: var(--bg-elevated);
+            border-radius: 10px;
+            margin-bottom: 8px;
         }
-        .transaction-item:last-child { border-bottom: none; }
-        .transaction-name { font-weight: 500; font-size: 13px; }
-        .transaction-date { font-size: 10px; color: var(--text-secondary); margin-top: 2px; }
-        .transaction-amount { font-weight: 700; font-size: 13px; }
-        .transaction-amount.income { color: var(--success); }
+        .transaction-info h4 { font-size: 14px; margin-bottom: 2px; }
+        .transaction-info small { color: var(--text-secondary); font-size: 11px; }
+        .transaction-amount { font-weight: 700; font-size: 15px; }
         .transaction-amount.expense { color: var(--danger); }
-        .empty-state { text-align: center; padding: 24px 16px; color: var(--text-secondary); }
-        .empty-state span { font-size: 36px; display: block; margin-bottom: 8px; opacity: 0.5; }
-        .ai-text { font-size: 13px; line-height: 1.5; color: var(--text-secondary); }
+        .transaction-amount.income { color: var(--success); }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            background: var(--bg-elevated);
+        }
+        .calendar-day.today { background: var(--primary); color: white; }
+        .calendar-day.has-event { border: 2px solid var(--accent); }
+        .notification-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: var(--bg-elevated);
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+        .notification-item .info h4 { font-size: 13px; margin-bottom: 2px; }
+        .notification-item .info small { color: var(--text-secondary); font-size: 11px; }
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: var(--border);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .toggle-switch.active { background: var(--primary); }
+        .toggle-switch::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s;
+        }
+        .toggle-switch.active::after { left: 22px; }
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+        }
+        .empty-state span { font-size: 40px; display: block; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <header class="header">
+    <header>
+        <div class="logo">
+            <div class="logo-icon">F</div>
             <h1>FinanzApp</h1>
-            <button class="theme-toggle" onclick="toggleTheme()">☀️</button>
-        </header>
-        
-        <nav class="nav">
-            <div class="nav-item" onclick="showSection('finanzas', this)"><span>💰</span>Finanzas</div>
-            <div class="nav-item active" onclick="showSection('transacciones', this)"><span>💳</span>Transacciones</div>
-            <div class="nav-item" onclick="showSection('carteras', this)"><span>👛</span>Carteras</div>
-            <div class="nav-item" onclick="showSection('turnos', this)"><span>📅</span>Turnos</div>
-        </nav>
-
-        <div class="main-content">
-            <!-- SECCION FINANZAS con tabs horizontales -->
-            <section id="finanzas" class="section">
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="toggleTheme()">🌙</button>
+        </div>
+    </header>
+    <nav>
+        <button class="nav-btn" onclick="showSection('finanzas', this)"><span>📊</span>Finanzas</button>
+        <button class="nav-btn active" onclick="showSection('transacciones', this)"><span>💰</span>Transacciones</button>
+        <button class="nav-btn" onclick="showSection('carteras', this)"><span>💳</span>Carteras</button>
+        <button class="nav-btn" onclick="showSection('turnos', this)"><span>📅</span>Turnos</button>
+    </nav>
+    <main>
+        <!-- FINANZAS SECTION -->
+        <section id="finanzas" class="section">
+            <div class="sub-tabs">
+                <button class="sub-tab active" onclick="showFinanzasTab('ia')">🤖 IA</button>
+                <button class="sub-tab" onclick="showFinanzasTab('gastos')">📊 Gastos</button>
+                <button class="sub-tab" onclick="showFinanzasTab('ultimas')">📝 Últimas</button>
+                <button class="sub-tab" onclick="showFinanzasTab('ajustes')">⚙️ Ajustes</button>
+            </div>
+            <div id="finanzas-ia" class="sub-content active">
                 <div class="card balance-card">
                     <small>Balance Total</small>
-                    <h2 id="totalBalance">0,00 €</h2>
+                    <h2 id="total-balance">€0.00</h2>
                 </div>
-                <div class="card stats-grid">
-                    <div class="stat-card income">
-                        <h3 id="totalIncome">0,00 €</h3>
+                <div class="stats-grid">
+                    <div class="card stat-card income">
+                        <h3 id="total-income">€0</h3>
                         <small>Ingresos</small>
                     </div>
-                    <div class="stat-card expense">
-                        <h3 id="totalExpense">0,00 €</h3>
+                    <div class="card stat-card expense">
+                        <h3 id="total-expense">€0</h3>
                         <small>Gastos</small>
                     </div>
                 </div>
-                
-                <div class="sub-tabs">
-                    <div class="sub-tab active" onclick="showFinanzasTab('ia')'">🤖 IA</div>
-                    <div class="sub-tab" onclick="showFinanzasTab('gastos')">📊 Gastos</div>
-                    <div class="sub-tab" onclick="showFinanzasTab('ultimas')">📝 Ultimas</div>
-                    <div class="sub-tab" onclick="showFinanzasTab('notif')">🔔 Notif</div>
-                </div>
-                
-                <div id="tab-ia" class="sub-content active">
-                    <div class="card">
-                        <div class="card-title">🤖 Recomendacion IA</div>
-                        <p class="ai-text" id="aiRecommendation">Registra tus transacciones para obtener consejos personalizados.</p>
-                    </div>
-                </div>
-                
-                <div id="tab-gastos" class="sub-content">
-                    <div class="card">
-                        <div class="card-title">📊 Gastos Mensuales</div>
-                        <div class="chart-container" id="chart"></div>
-                        <div class="chart-labels" id="chartLabels"></div>
-                    </div>
-                </div>
-                
-                <div id="tab-ultimas" class="sub-content">
-                    <div class="card">
-                        <div class="card-title">📝 Ultimas Transacciones</div>
-                        <div id="transactionsList"></div>
-                    </div>
-                </div>
-                
-                <div id="tab-notif" class="sub-content">
-                    <div class="card">
-                        <div class="card-title">🔔 Notificaciones</div>
-                        <div class="setting-row">
-                            <div>
-                                <div class="setting-label">Resumen Semanal</div>
-                                <small style="color:var(--text-secondary);font-size:11px">Cada lunes</small>
-                            </div>
-                            <div class="toggle-switch" id="weeklyToggle" onclick="toggleNotification('weekly')"></div>
-                        </div>
-                        <div class="setting-row">
-                            <div>
-                                <div class="setting-label">Resumen Mensual</div>
-                                <small style="color:var(--text-secondary);font-size:11px">El dia 1</small>
-                            </div>
-                            <div class="toggle-switch" id="monthlyToggle" onclick="toggleNotification('monthly')"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SECCION TRANSACCIONES -->
-            <section id="transacciones" class="section active">
-                <div class="sub-tabs">
-                    <div class="sub-tab active" onclick="showTransactionTab('gasto')">Gasto</div>
-                    <div class="sub-tab" onclick="showTransactionTab('ingreso')">Ingreso</div>
-                    <div class="sub-tab" onclick="showTransactionTab('suscripciones')">Suscripciones</div>
-                </div>
-                
-                <div id="tab-gasto" class="sub-content active">
-                    <div class="amount-display expense">
-                        <small>Importe</small>
-                        <h3 id="expenseAmount">0,00 €</h3>
-                    </div>
-                    <input type="text" id="expenseName" placeholder="Nombre del gasto">
-                    <div class="btn-grid">
-                        <button class="btn-amount" onclick="addExpenseAmount(0.01)">0,01</button>
-                        <button class="btn-amount" onclick="addExpenseAmount(0.05)">0,05</button>
-                        <button class="btn-amount" onclick="addExpenseAmount(0.10)">0,10</button>
-                        <button class="btn-amount" onclick="addExpenseAmount(0.50)">0,50</button>
-                        <button class="btn-amount" onclick="addExpenseAmount(1)">1€</button>
-                        <button class="btn-amount" onclick="addExpenseAmount(2)">2€</button>
-                        <button class="btn-amount" onclick="addExpenseAmount(5)">5€</button>
-                        <button class="btn-amount" onclick="addExpenseAmount(10)">10€</button>
-                        <button class="btn-amount" onclick="addExpenseAmount(20)">20€</button>
-                        <button class="btn-amount" onclick="addExpenseAmount(50)">50€</button>
-                        <button class="btn-amount btn-clear" onclick="clearExpenseAmount()">🗑 Borrar</button>
-                    </div>
-                    <button class="btn-save expense" onclick="saveExpense()">Guardar Gasto</button>
-                </div>
-                
-                <div id="tab-ingreso" class="sub-content">
-                    <div class="amount-display income">
-                        <small>Importe</small>
-                        <h3 id="incomeAmount">0,00 €</h3>
-                    </div>
-                    <input type="text" id="incomeName" placeholder="Nombre del ingreso">
-                    <div class="btn-grid">
-                        <button class="btn-amount" onclick="addIncomeAmount(1)">1€</button>
-                        <button class="btn-amount" onclick="addIncomeAmount(5)">5€</button>
-                        <button class="btn-amount" onclick="addIncomeAmount(20)">20€</button>
-                        <button class="btn-amount" onclick="addIncomeAmount(50)">50€</button>
-                        <button class="btn-amount" onclick="addIncomeAmount(100)">100€</button>
-                        <button class="btn-amount" onclick="addIncomeAmount(500)">500€</button>
-                        <button class="btn-amount" onclick="addIncomeAmount(1000)">1000€</button>
-                        <button class="btn-amount btn-clear" onclick="clearIncomeAmount()">🗑 Borrar</button>
-                    </div>
-                    <button class="btn-save income" onclick="saveIncome()">Guardar Ingreso</button>
-                </div>
-                
-                <div id="tab-suscripciones" class="sub-content">
-                    <div class="expandable-section" id="newSubSection">
-                        <div class="expandable-header" onclick="toggleExpandable('newSubSection')">
-                            <div class="expandable-title">➕ Nueva Suscripcion</div>
-                            <button class="expandable-btn">Anadir</button>
-                        </div>
-                        <div class="expandable-content">
-                            <input type="text" id="subName" placeholder="Netflix, Spotify...">
-                            <input type="number" id="subAmount" placeholder="Importe mensual" step="0.01">
-                            <input type="date" id="subDate">
-                            <button class="btn-save primary" onclick="addSubscription()">Guardar</button>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">📋 Mis Suscripciones</div>
-                        <div id="subscriptionsList"></div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SECCION CARTERAS con nuevo orden -->
-            <section id="carteras" class="section">
-                <!-- Primero: Mis Carteras -->
                 <div class="card">
-                    <div class="card-title">👛 Mis Carteras</div>
-                    <div id="walletsList"></div>
+                    <h3 style="font-size:14px;margin-bottom:10px;">💡 Recomendación IA</h3>
+                    <p id="ia-recommendation" style="font-size:13px;color:var(--text-secondary);">Añade transacciones para recibir recomendaciones personalizadas.</p>
                 </div>
-                
-                <!-- Segundo: Crear Nueva Cartera (desplegable) -->
-                <div class="expandable-section" id="newWalletSection">
-                    <div class="expandable-header" onclick="toggleExpandable('newWalletSection')">
-                        <div class="expandable-title">➕ Nueva Cartera</div>
-                        <button class="expandable-btn">Crear</button>
-                    </div>
-                    <div class="expandable-content">
-                        <input type="text" id="walletName" placeholder="Nombre de la cartera">
-                        <input type="number" id="walletBalance" placeholder="Saldo inicial" step="0.01">
-                        <button class="btn-save primary" onclick="addWallet()">Crear Cartera</button>
-                    </div>
-                </div>
-                
-                <!-- Tercero: Transferencia (desplegable) -->
-                <div class="expandable-section" id="transferSection">
-                    <div class="expandable-header" onclick="toggleExpandable('transferSection')">
-                        <div class="expandable-title">🔄 Transferencia</div>
-                        <button class="expandable-btn">Nueva</button>
-                    </div>
-                    <div class="expandable-content">
-                        <select id="fromWallet"><option value="">Desde...</option></select>
-                        <select id="toWallet"><option value="">Hacia...</option></select>
-                        <input type="number" id="transferAmount" placeholder="Cantidad" step="0.01">
-                        <button class="btn-save primary" onclick="transferBetweenWallets()">Transferir</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SECCION TURNOS -->
-            <section id="turnos" class="section">
-                <div class="sub-tabs">
-                    <div class="sub-tab active" onclick="showTurnosTab('calendario')">Calendario</div>
-                    <div class="sub-tab" onclick="showTurnosTab('cumples')">Cumpleaños</div>
-                    <div class="sub-tab" onclick="showTurnosTab('notas')">Notas</div>
-                </div>
-                
-                <div id="tab-calendario" class="sub-content active">
-                    <div class="card">
-                        <div class="calendar-header">
-                            <button onclick="prevMonth()">❮</button>
-                            <h3 id="currentMonth">Noviembre 2025</h3>
-                            <button onclick="nextMonth()">❯</button>
-                        </div>
-                        <div class="calendar-grid" id="calendarGrid"></div>
-                    </div>
-                </div>
-                
-                <div id="tab-cumples" class="sub-content">
-                    <div class="expandable-section" id="newBirthdaySection">
-                        <div class="expandable-header" onclick="toggleExpandable('newBirthdaySection')">
-                            <div class="expandable-title">➕ Nuevo Cumpleaños</div>
-                            <button class="expandable-btn">Anadir</button>
-                        </div>
-                        <div class="expandable-content">
-                            <input type="text" id="birthdayName" placeholder="Nombre">
-                            <input type="date" id="birthdayDate">
-                            <div class="setting-row">
-                                <span class="setting-label">Notificar 1 dia antes</span>
-                                <div class="toggle-switch" id="birthdayNotifyToggle" onclick="this.classList.toggle('active')"></div>
-                            </div>
-                            <button class="btn-save primary" onclick="addBirthday()">Guardar</button>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">🎂 Proximos Cumpleaños</div>
-                        <div id="birthdaysList"></div>
-                    </div>
-                </div>
-                
-                <div id="tab-notas" class="sub-content">
-                    <div class="expandable-section" id="newNoteSection">
-                        <div class="expandable-header" onclick="toggleExpandable('newNoteSection')">
-                            <div class="expandable-title">➕ Nueva Nota</div>
-                            <button class="expandable-btn">Anadir</button>
-                        </div>
-                        <div class="expandable-content">
-                            <input type="text" id="noteTitle" placeholder="Titulo de la nota">
-                            <input type="datetime-local" id="noteReminder">
-                            <div class="setting-row">
-                                <span class="setting-label">Activar recordatorio</span>
-                                <div class="toggle-switch" id="noteNotifyToggle" onclick="this.classList.toggle('active')"></div>
-                            </div>
-                            <button class="btn-save primary" onclick="addNote()">Guardar Nota</button>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">📝 Mis Notas</div>
-                        <div id="notesList"></div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-
-    <!-- Modal Turnos -->
-    <div class="modal" id="shiftModal">
-        <div class="modal-content">
-            <h3 class="modal-title">Seleccionar turno<br><small id="selectedDate"></small></h3>
-            <div class="shift-options">
-                <button class="shift-btn morning" onclick="setShift('morning')">Mañana</button>
-                <button class="shift-btn afternoon" onclick="setShift('afternoon')">Tarde</button>
-                <button class="shift-btn night" onclick="setShift('night')">Noche</button>
-                <button class="shift-btn remove" onclick="removeShift()">Quitar</button>
-                <button class="shift-btn close" onclick="closeShiftModal()">Cerrar</button>
             </div>
-        </div>
-    </div>
-
+            <div id="finanzas-gastos" class="sub-content">
+                <div class="card">
+                    <h3 style="font-size:14px;margin-bottom:12px;">📊 Gastos por Categoría</h3>
+                    <div id="category-breakdown"></div>
+                </div>
+            </div>
+            <div id="finanzas-ultimas" class="sub-content">
+                <div class="card">
+                    <h3 style="font-size:14px;margin-bottom:12px;">📝 Últimas Transacciones</h3>
+                    <div id="recent-transactions"></div>
+                </div>
+            </div>
+            <div id="finanzas-ajustes" class="sub-content">
+                <div class="card">
+                    <h3 style="font-size:14px;margin-bottom:12px;">📂 Categorías de Gastos</h3>
+                    <div id="expense-categories-list"></div>
+                    <div class="form-group" style="margin-top:12px;">
+                        <input type="text" id="new-expense-category" placeholder="Nueva categoría...">
+                    </div>
+                    <button class="btn btn-primary" onclick="addCategory('expense')">➕ Añadir Categoría</button>
+                </div>
+                <div class="card">
+                    <h3 style="font-size:14px;margin-bottom:12px;">💵 Categorías de Ingresos</h3>
+                    <div id="income-categories-list"></div>
+                    <div class="form-group" style="margin-top:12px;">
+                        <input type="text" id="new-income-category" placeholder="Nueva categoría...">
+                    </div>
+                    <button class="btn btn-primary" onclick="addCategory('income')">➕ Añadir Categoría</button>
+                </div>
+                <div class="card">
+                    <h3 style="font-size:14px;margin-bottom:12px;">🔔 Notificaciones</h3>
+                    <div id="notifications-list"></div>
+                    <div class="expandable-header" onclick="toggleExpandable('add-notification')">
+                        <h3>➕ Nueva Notificación</h3>
+                        <span>▼</span>
+                    </div>
+                    <div id="add-notification" class="expandable-content">
+                        <div class="form-group">
+                            <label>Título</label>
+                            <input type="text" id="notif-title" placeholder="Título...">
+                        </div>
+                        <div class="form-group">
+                            <label>Hora</label>
+                            <input type="time" id="notif-time">
+                        </div>
+                        <button class="btn btn-primary" onclick="addNotification()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- TRANSACCIONES SECTION -->
+        <section id="transacciones" class="section active">
+            <div class="sub-tabs">
+                <button class="sub-tab active" onclick="showTransactionTab('gasto')">Gasto</button>
+                <button class="sub-tab" onclick="showTransactionTab('ingreso')">Ingreso</button>
+                <button class="sub-tab" onclick="showTransactionTab('suscripciones')">Suscripciones</button>
+            </div>
+            <div id="trans-gasto" class="sub-content active">
+                <div class="amount-display expense">
+                    <h2 id="expense-amount">€0.00</h2>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="expense-name" placeholder="Nombre del gasto...">
+                </div>
+                <div class="quick-amounts">
+                    <div class="quick-amount" onclick="addQuickAmount('expense', 5)">+5€</div>
+                    <div class="quick-amount" onclick="addQuickAmount('expense', 10)">+10€</div>
+                    <div class="quick-amount" onclick="addQuickAmount('expense', 20)">+20€</div>
+                    <div class="quick-amount" onclick="addQuickAmount('expense', 50)">+50€</div>
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <div id="expense-category-buttons" class="category-buttons"></div>
+                </div>
+                <input type="hidden" id="expense-category" value="">
+                <button class="btn btn-danger" onclick="saveExpense()">💸 Guardar Gasto</button>
+            </div>
+            <div id="trans-ingreso" class="sub-content">
+                <div class="amount-display income">
+                    <h2 id="income-amount">€0.00</h2>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="income-name" placeholder="Nombre del ingreso...">
+                </div>
+                <div class="quick-amounts">
+                    <div class="quick-amount" onclick="addQuickAmount('income', 50)">+50€</div>
+                    <div class="quick-amount" onclick="addQuickAmount('income', 100)">+100€</div>
+                    <div class="quick-amount" onclick="addQuickAmount('income', 200)">+200€</div>
+                    <div class="quick-amount" onclick="addQuickAmount('income', 500)">+500€</div>
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <div id="income-category-buttons" class="category-buttons"></div>
+                </div>
+                <input type="hidden" id="income-category" value="">
+                <button class="btn btn-primary" onclick="saveIncome()">💰 Guardar Ingreso</button>
+            </div>
+            <div id="trans-suscripciones" class="sub-content">
+                <div class="card">
+                    <h3 style="font-size:14px;margin-bottom:12px;">🔄 Suscripciones Activas</h3>
+                    <div id="subscriptions-list"></div>
+                </div>
+                <div class="expandable-header" onclick="toggleExpandable('add-subscription')">
+                    <h3>➕ Nueva Suscripción</h3>
+                    <span>▼</span>
+                </div>
+                <div id="add-subscription" class="expandable-content">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="sub-name" placeholder="Netflix, Spotify...">
+                    </div>
+                    <div class="form-group">
+                        <label>Importe mensual (€)</label>
+                        <input type="number" id="sub-amount" placeholder="9.99">
+                    </div>
+                    <div class="form-group">
+                        <label>Día de cobro</label>
+                        <input type="number" id="sub-day" min="1" max="31" placeholder="15">
+                    </div>
+                    <button class="btn btn-primary" onclick="addSubscription()">Guardar</button>
+                </div>
+            </div>
+        </section>
+        <!-- CARTERAS SECTION -->
+        <section id="carteras" class="section">
+            <div class="card">
+                <h3 style="font-size:14px;margin-bottom:12px;">💳 Mis Carteras</h3>
+                <div id="wallets-list"></div>
+            </div>
+            <div class="expandable-header" onclick="toggleExpandable('new-wallet')">
+                <h3>➕ Nueva Cartera</h3>
+                <span>▼</span>
+            </div>
+            <div id="new-wallet" class="expandable-content">
+                <div class="form-group">
+                    <label>Nombre de la cartera</label>
+                    <input type="text" id="wallet-name" placeholder="Mi cartera...">
+                </div>
+                <div class="form-group">
+                    <label>Saldo inicial (€)</label>
+                    <input type="number" id="wallet-balance" placeholder="0.00">
+                </div>
+                <button class="btn btn-primary" onclick="addWallet()">Crear Cartera</button>
+            </div>
+            <div class="expandable-header" onclick="toggleExpandable('transfer')">
+                <h3>🔄 Transferencia</h3>
+                <span>▼</span>
+            </div>
+            <div id="transfer" class="expandable-content">
+                <div class="form-group">
+                    <label>Desde</label>
+                    <select id="transfer-from"></select>
+                </div>
+                <div class="form-group">
+                    <label>Hacia</label>
+                    <select id="transfer-to"></select>
+                </div>
+                <div class="form-group">
+                    <label>Cantidad (€)</label>
+                    <input type="number" id="transfer-amount" placeholder="0.00">
+                </div>
+                <button class="btn btn-primary" onclick="makeTransfer()">Transferir</button>
+            </div>
+        </section>
+        <!-- TURNOS SECTION -->
+        <section id="turnos" class="section">
+            <div class="sub-tabs">
+                <button class="sub-tab active" onclick="showTurnosTab('calendario')">Calendario</button>
+                <button class="sub-tab" onclick="showTurnosTab('cumples')">Cumpleaños</button>
+                <button class="sub-tab" onclick="showTurnosTab('notas')">Notas</button>
+            </div>
+            <div id="turnos-calendario" class="sub-content active">
+                <div class="card">
+                    <h3 id="calendar-month" style="font-size:14px;margin-bottom:12px;text-align:center;"></h3>
+                    <div class="calendar-grid" id="calendar-grid"></div>
+                </div>
+                <div class="expandable-header" onclick="toggleExpandable('add-event')">
+                    <h3>➕ Nuevo Evento</h3>
+                    <span>▼</span>
+                </div>
+                <div id="add-event" class="expandable-content">
+                    <div class="form-group">
+                        <label>Título</label>
+                        <input type="text" id="event-title" placeholder="Evento...">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" id="event-date">
+                    </div>
+                    <button class="btn btn-primary" onclick="addEvent()">Guardar</button>
+                </div>
+            </div>
+            <div id="turnos-cumples" class="sub-content">
+                <div class="card">
+                    <h3 style="font-size:14px;margin-bottom:12px;">🎂 Próximos Cumpleaños</h3>
+                    <div id="birthdays-list"></div>
+                </div>
+                <div class="expandable-header" onclick="toggleExpandable('add-birthday')">
+                    <h3>➕ Nuevo Cumpleaños</h3>
+                    <span>▼</span>
+                </div>
+                <div id="add-birthday" class="expandable-content">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="birthday-name" placeholder="Nombre...">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" id="birthday-date">
+                    </div>
+                    <button class="btn btn-primary" onclick="addBirthday()">Guardar</button>
+                </div>
+            </div>
+            <div id="turnos-notas" class="sub-content">
+                <div class="card">
+                    <h3 style="font-size:14px;margin-bottom:12px;">📝 Mis Notas</h3>
+                    <div id="notes-list"></div>
+                </div>
+                <div class="expandable-header" onclick="toggleExpandable('add-note')">
+                    <h3>➕ Nueva Nota</h3>
+                    <span>▼</span>
+                </div>
+                <div id="add-note" class="expandable-content">
+                    <div class="form-group">
+                        <label>Título</label>
+                        <input type="text" id="note-title" placeholder="Título...">
+                    </div>
+                    <div class="form-group">
+                        <label>Contenido</label>
+                        <textarea id="note-content" rows="3" placeholder="Escribe aquí..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="addNote()">Guardar</button>
+                </div>
+            </div>
+        </section>
+    </main>
     <script>
-        const state = {
+        let state = {
+            balance: 0,
             transactions: [],
             wallets: [],
             subscriptions: [],
+            events: [],
             birthdays: [],
             notes: [],
-            shifts: {},
+            notifications: [],
+            expenseCategories: ['Comida', 'Transporte', 'Salud', 'Ocio', 'Hogar', 'Otros'],
+            incomeCategories: ['Salario', 'Freelance', 'Inversiones', 'Regalos', 'Otros'],
             currentExpenseAmount: 0,
             currentIncomeAmount: 0,
-            currentYear: new Date().getFullYear(),
-            currentMonth: new Date().getMonth(),
-            selectedDay: null,
-            lightMode: false,
-            weeklyNotify: false,
-            monthlyNotify: false
+            selectedExpenseCategory: '',
+            selectedIncomeCategory: '',
+            darkMode: true
         };
-        
-        const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-        
-        function formatCurrency(n) {
-            return n.toLocaleString('es-ES', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' \u20ac';
-        }
-        
-        function saveState() {
-            localStorage.setItem('finanzapp_v2', JSON.stringify(state));
-        }
-        
         function loadState() {
-            const s = localStorage.getItem('finanzapp_v2');
-            if(s) Object.assign(state, JSON.parse(s));
+            const saved = localStorage.getItem('finanzAppState');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                state = { ...state, ...parsed };
+            }
         }
-        
+        function saveState() {
+            localStorage.setItem('finanzAppState', JSON.stringify(state));
+        }
         function toggleTheme() {
-            state.lightMode = !state.lightMode;
-            document.body.classList.toggle('light-mode', state.lightMode);
-            document.querySelector('.theme-toggle').textContent = state.lightMode ? '\ud83c\udf19' : '\u2600\ufe0f';
+            state.darkMode = !state.darkMode;
+            document.body.classList.toggle('light-mode', !state.darkMode);
             saveState();
         }
-        
-        function toggleExpandable(id) {
-            document.getElementById(id).classList.toggle('open');
-        }
-        
-        function showSection(id, el) {
+        function showSection(sectionId, btn) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            el.classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            btn.classList.add('active');
         }
-        
         function showFinanzasTab(tab) {
-            document.querySelectorAll('#finanzas .sub-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('#finanzas .sub-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('tab-' + tab).classList.add('active');
-            event.currentTarget.classList.add('active');
+            document.querySelectorAll('#finanzas .sub-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('finanzas-' + tab).classList.add('active');
         }
-        
         function showTransactionTab(tab) {
-            document.querySelectorAll('#transacciones .sub-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('#transacciones .sub-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('tab-' + tab).classList.add('active');
-            event.currentTarget.classList.add('active');
+            document.querySelectorAll('#transacciones .sub-content').forEach(c => c.classList.remove('active'));
+            if(event && event.target) event.target.classList.add('active');
+            else document.querySelector('#transacciones .sub-tab').classList.add('active');
+            document.getElementById('trans-' + tab).classList.add('active');
         }
-        
         function showTurnosTab(tab) {
-            document.querySelectorAll('#turnos .sub-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('#turnos .sub-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('tab-' + tab).classList.add('active');
-            event.currentTarget.classList.add('active');
+            document.querySelectorAll('#turnos .sub-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('turnos-' + tab).classList.add('active');
         }
-        
-        function toggleNotification(type) {
-            if(type === 'weekly') {
-                state.weeklyNotify = !state.weeklyNotify;
-                document.getElementById('weeklyToggle').classList.toggle('active', state.weeklyNotify);
+        function toggleExpandable(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('active');
+        }
+        function addQuickAmount(type, amount) {
+            if (type === 'expense') {
+                state.currentExpenseAmount += amount;
+                document.getElementById('expense-amount').textContent = '€' + state.currentExpenseAmount.toFixed(2);
+            } else {
+                state.currentIncomeAmount += amount;
+                document.getElementById('income-amount').textContent = '€' + state.currentIncomeAmount.toFixed(2);
             }
-            if(type === 'monthly') {
-                state.monthlyNotify = !state.monthlyNotify;
-                document.getElementById('monthlyToggle').classList.toggle('active', state.monthlyNotify);
+        }
+        function selectCategory(type, category) {
+            if (type === 'expense') {
+                state.selectedExpenseCategory = category;
+                document.getElementById('expense-category').value = category;
+                document.querySelectorAll('#expense-category-buttons .category-btn').forEach(btn => {
+                    btn.classList.toggle('selected', btn.textContent === category);
+                });
+            } else {
+                state.selectedIncomeCategory = category;
+                document.getElementById('income-category').value = category;
+                document.querySelectorAll('#income-category-buttons .category-btn').forEach(btn => {
+                    btn.classList.toggle('selected', btn.textContent === category);
+                });
+            }
+        }
+        function addCategory(type) {
+            const input = document.getElementById('new-' + type + '-category');
+            const name = input.value.trim();
+            if (!name) return;
+            if (type === 'expense') {
+                if (!state.expenseCategories.includes(name)) {
+                    state.expenseCategories.push(name);
+                }
+            } else {
+                if (!state.incomeCategories.includes(name)) {
+                    state.incomeCategories.push(name);
+                }
+            }
+            input.value = '';
+            saveState();
+            updateUI();
+        }
+        function deleteCategory(type, category) {
+            if (type === 'expense') {
+                state.expenseCategories = state.expenseCategories.filter(c => c !== category);
+            } else {
+                state.incomeCategories = state.incomeCategories.filter(c => c !== category);
             }
             saveState();
+            updateUI();
         }
-        
-        function addExpenseAmount(n) {
-            state.currentExpenseAmount += n;
-            document.getElementById('expenseAmount').textContent = formatCurrency(state.currentExpenseAmount);
-        }
-        
-        function clearExpenseAmount() {
-            state.currentExpenseAmount = 0;
-            document.getElementById('expenseAmount').textContent = formatCurrency(0);
-        }
-        
         function saveExpense() {
-            const name = document.getElementById('expenseName').value.trim();
-            if (!name || state.currentExpenseAmount <= 0) { alert('Introduce nombre e importe'); return; }
-            state.transactions.push({ id: Date.now(), type: 'expense', name, amount: state.currentExpenseAmount, date: new Date().toISOString() });
+            if (state.currentExpenseAmount <= 0) return;
+            const name = document.getElementById('expense-name').value || 'Gasto';
+            const category = state.selectedExpenseCategory || 'Otros';
+            state.transactions.push({
+                id: Date.now(),
+                type: 'expense',
+                amount: state.currentExpenseAmount,
+                name: name,
+                category: category,
+                date: new Date().toISOString()
+            });
+            state.balance -= state.currentExpenseAmount;
+            state.currentExpenseAmount = 0;
+            state.selectedExpenseCategory = '';
+            document.getElementById('expense-amount').textContent = '€0.00';
+            document.getElementById('expense-name').value = '';
+            document.getElementById('expense-category').value = '';
             saveState();
-            clearExpenseAmount();
-            document.getElementById('expenseName').value = '';
             updateUI();
-            alert('Gasto guardado');
         }
-        
-        function addIncomeAmount(n) {
-            state.currentIncomeAmount += n;
-            document.getElementById('incomeAmount').textContent = formatCurrency(state.currentIncomeAmount);
-        }
-        
-        function clearIncomeAmount() {
-            state.currentIncomeAmount = 0;
-            document.getElementById('incomeAmount').textContent = formatCurrency(0);
-        }
-        
         function saveIncome() {
-            const name = document.getElementById('incomeName').value.trim();
-            if (!name || state.currentIncomeAmount <= 0) { alert('Introduce nombre e importe'); return; }
-            state.transactions.push({ id: Date.now(), type: 'income', name, amount: state.currentIncomeAmount, date: new Date().toISOString() });
-            saveState();
-            clearIncomeAmount();
-            document.getElementById('incomeName').value = '';
-            updateUI();
-            alert('Ingreso guardado');
-        }
-        
-        function addSubscription() {
-            const name = document.getElementById('subName').value.trim();
-            const amount = parseFloat(document.getElementById('subAmount').value);
-            const date = document.getElementById('subDate').value;
-            if (!name || !amount || !date) { alert('Completa todos los campos'); return; }
-            state.subscriptions.push({ id: Date.now(), name, amount, date });
-            saveState();
-            updateUI();
-            document.getElementById('subName').value = '';
-            document.getElementById('subAmount').value = '';
-            toggleExpandable('newSubSection');
-            alert('Suscripcion guardada');
-        }
-        
-        function deleteSubscription(id) {
-            state.subscriptions = state.subscriptions.filter(s => s.id !== id);
+            if (state.currentIncomeAmount <= 0) return;
+            const name = document.getElementById('income-name').value || 'Ingreso';
+            const category = state.selectedIncomeCategory || 'Otros';
+            state.transactions.push({
+                id: Date.now(),
+                type: 'income',
+                amount: state.currentIncomeAmount,
+                name: name,
+                category: category,
+                date: new Date().toISOString()
+            });
+            state.balance += state.currentIncomeAmount;
+            state.currentIncomeAmount = 0;
+            state.selectedIncomeCategory = '';
+            document.getElementById('income-amount').textContent = '€0.00';
+            document.getElementById('income-name').value = '';
+            document.getElementById('income-category').value = '';
             saveState();
             updateUI();
         }
-        
         function addWallet() {
-            const name = document.getElementById('walletName').value.trim();
-            const balance = parseFloat(document.getElementById('walletBalance').value) || 0;
-            if (!name) { alert('Introduce nombre'); return; }
+            const name = document.getElementById('wallet-name').value;
+            const balance = parseFloat(document.getElementById('wallet-balance').value) || 0;
+            if (!name) return;
             state.wallets.push({ id: Date.now(), name, balance });
-            saveState();
-            updateUI();
-            document.getElementById('walletName').value = '';
-            document.getElementById('walletBalance').value = '';
-            toggleExpandable('newWalletSection');
-            alert('Cartera creada');
-        }
-        
-        function deleteWallet(id) {
-            state.wallets = state.wallets.filter(w => w.id !== id);
+            document.getElementById('wallet-name').value = '';
+            document.getElementById('wallet-balance').value = '';
+            toggleExpandable('new-wallet');
             saveState();
             updateUI();
         }
-        
-        function transferBetweenWallets() {
-            const fromId = document.getElementById('fromWallet').value;
-            const toId = document.getElementById('toWallet').value;
-            const amount = parseFloat(document.getElementById('transferAmount').value);
-            if (!fromId || !toId || !amount || fromId === toId) { alert('Selecciona carteras diferentes y cantidad'); return; }
-            const from = state.wallets.find(w => w.id == fromId);
-            const to = state.wallets.find(w => w.id == toId);
-            if (from.balance < amount) { alert('Saldo insuficiente'); return; }
-            from.balance -= amount;
-            to.balance += amount;
+        function makeTransfer() {
+            const from = document.getElementById('transfer-from').value;
+            const to = document.getElementById('transfer-to').value;
+            const amount = parseFloat(document.getElementById('transfer-amount').value) || 0;
+            if (!from || !to || from === to || amount <= 0) return;
+            const fromWallet = state.wallets.find(w => w.id == from);
+            const toWallet = state.wallets.find(w => w.id == to);
+            if (fromWallet && toWallet && fromWallet.balance >= amount) {
+                fromWallet.balance -= amount;
+                toWallet.balance += amount;
+                document.getElementById('transfer-amount').value = '';
+                toggleExpandable('transfer');
+                saveState();
+                updateUI();
+            }
+        }
+        function addSubscription() {
+            const name = document.getElementById('sub-name').value;
+            const amount = parseFloat(document.getElementById('sub-amount').value) || 0;
+            const day = parseInt(document.getElementById('sub-day').value) || 1;
+            if (!name || amount <= 0) return;
+            state.subscriptions.push({ id: Date.now(), name, amount, day, active: true });
+            document.getElementById('sub-name').value = '';
+            document.getElementById('sub-amount').value = '';
+            document.getElementById('sub-day').value = '';
+            toggleExpandable('add-subscription');
             saveState();
             updateUI();
-            document.getElementById('transferAmount').value = '';
-            toggleExpandable('transferSection');
-            alert('Transferencia realizada');
         }
-        
+        function addNotification() {
+            const title = document.getElementById('notif-title').value;
+            const time = document.getElementById('notif-time').value;
+            if (!title) return;
+            state.notifications.push({ id: Date.now(), title, time, active: true });
+            document.getElementById('notif-title').value = '';
+            document.getElementById('notif-time').value = '';
+            toggleExpandable('add-notification');
+            saveState();
+            updateUI();
+        }
+        function toggleNotification(id) {
+            const notif = state.notifications.find(n => n.id === id);
+            if (notif) notif.active = !notif.active;
+            saveState();
+            updateUI();
+        }
+        function deleteNotification(id) {
+            state.notifications = state.notifications.filter(n => n.id !== id);
+            saveState();
+            updateUI();
+        }
+        function addEvent() {
+            const title = document.getElementById('event-title').value;
+            const date = document.getElementById('event-date').value;
+            if (!title || !date) return;
+            state.events.push({ id: Date.now(), title, date });
+            document.getElementById('event-title').value = '';
+            document.getElementById('event-date').value = '';
+            toggleExpandable('add-event');
+            saveState();
+            updateUI();
+        }
         function addBirthday() {
-            const name = document.getElementById('birthdayName').value.trim();
-            const date = document.getElementById('birthdayDate').value;
-            const notify = document.getElementById('birthdayNotifyToggle').classList.contains('active');
-            if (!name || !date) { alert('Completa todos los campos'); return; }
-            state.birthdays.push({ id: Date.now(), name, date, notify });
+            const name = document.getElementById('birthday-name').value;
+            const date = document.getElementById('birthday-date').value;
+            if (!name || !date) return;
+            state.birthdays.push({ id: Date.now(), name, date });
+            document.getElementById('birthday-name').value = '';
+            document.getElementById('birthday-date').value = '';
+            toggleExpandable('add-birthday');
             saveState();
             updateUI();
-            document.getElementById('birthdayName').value = '';
-            document.getElementById('birthdayDate').value = '';
-            toggleExpandable('newBirthdaySection');
-            alert('Cumpleanos guardado');
         }
-        
         function addNote() {
-            const title = document.getElementById('noteTitle').value.trim();
-            const reminder = document.getElementById('noteReminder').value;
-            const notify = document.getElementById('noteNotifyToggle').classList.contains('active');
-            if (!title) { alert('Introduce un titulo'); return; }
-            state.notes.push({ id: Date.now(), title, reminder, notify, created: new Date().toISOString() });
-            saveState();
-            updateUI();
-            document.getElementById('noteTitle').value = '';
-            document.getElementById('noteReminder').value = '';
-            toggleExpandable('newNoteSection');
-            alert('Nota guardada');
-        }
-        
-        function deleteNote(id) {
-            state.notes = state.notes.filter(n => n.id !== id);
+            const title = document.getElementById('note-title').value;
+            const content = document.getElementById('note-content').value;
+            if (!title) return;
+            state.notes.push({ id: Date.now(), title, content });
+            document.getElementById('note-title').value = '';
+            document.getElementById('note-content').value = '';
+            toggleExpandable('add-note');
             saveState();
             updateUI();
         }
-        
         function renderCalendar() {
-            const grid = document.getElementById('calendarGrid');
-            grid.innerHTML = '';
-            ['Lun','Mar','Mie','Jue','Vie','Sab','Dom'].forEach(d => grid.innerHTML += '<div class="calendar-day-name">' + d + '</div>');
-            const firstDay = new Date(state.currentYear, state.currentMonth, 1);
-            let startDay = firstDay.getDay() - 1;
-            if (startDay < 0) startDay = 6;
-            const daysInMonth = new Date(state.currentYear, state.currentMonth + 1, 0).getDate();
-            const today = new Date();
-            for (let i = 0; i < startDay; i++) grid.innerHTML += '<div class="calendar-day empty"></div>';
-            for (let day = 1; day <= daysInMonth; day++) {
-                const key = state.currentYear + '-' + String(state.currentMonth + 1).padStart(2,'0') + '-' + String(day).padStart(2,'0');
-                const shift = state.shifts[key];
-                let cls = '', lbl = '';
-                if (shift === 'morning') { cls = 'shift-morning'; lbl = 'M'; }
-                if (shift === 'afternoon') { cls = 'shift-afternoon'; lbl = 'T'; }
-                if (shift === 'night') { cls = 'shift-night'; lbl = 'N'; }
-                const isToday = day === today.getDate() && state.currentMonth === today.getMonth() && state.currentYear === today.getFullYear();
-                grid.innerHTML += '<div class="calendar-day ' + cls + (isToday ? ' today' : '') + '" onclick="openShiftModal(' + day + ')">' + day + (lbl ? '<span class="shift-label">' + lbl + '</span>' : '') + '</div>';
+            const now = new Date();
+            const month = now.toLocaleString('es', { month: 'long', year: 'numeric' });
+            document.getElementById('calendar-month').textContent = month.charAt(0).toUpperCase() + month.slice(1);
+            const grid = document.getElementById('calendar-grid');
+            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+            const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            const days = ['L','M','X','J','V','S','D'];
+            grid.innerHTML = days.map(d => `<div style="font-size:10px;color:var(--text-secondary);text-align:center;">${d}</div>`).join('');
+            let startDay = firstDay.getDay() || 7;
+            for (let i = 1; i < startDay; i++) grid.innerHTML += '<div></div>';
+            for (let d = 1; d <= lastDay.getDate(); d++) {
+                const isToday = d === now.getDate();
+                const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                const hasEvent = state.events.some(e => e.date === dateStr);
+                grid.innerHTML += `<div class="calendar-day ${isToday?'today':''} ${hasEvent?'has-event':''}">${d}</div>`;
             }
-            document.getElementById('currentMonth').textContent = monthNames[state.currentMonth] + ' ' + state.currentYear;
         }
-        
-        function prevMonth() {
-            state.currentMonth--;
-            if (state.currentMonth < 0) { state.currentMonth = 11; state.currentYear--; }
-            renderCalendar();
-        }
-        
-        function nextMonth() {
-            state.currentMonth++;
-            if (state.currentMonth > 11) { state.currentMonth = 0; state.currentYear++; }
-            renderCalendar();
-        }
-        
-        function openShiftModal(day) {
-            state.selectedDay = day;
-            document.getElementById('selectedDate').textContent = day + ' de ' + monthNames[state.currentMonth];
-            document.getElementById('shiftModal').classList.add('active');
-        }
-        
-        function closeShiftModal() {
-            document.getElementById('shiftModal').classList.remove('active');
-        }
-        
-        function setShift(shift) {
-            const key = state.currentYear + '-' + String(state.currentMonth + 1).padStart(2,'0') + '-' + String(state.selectedDay).padStart(2,'0');
-            state.shifts[key] = shift;
-            saveState();
-            closeShiftModal();
-            renderCalendar();
-        }
-        
-        function removeShift() {
-            const key = state.currentYear + '-' + String(state.currentMonth + 1).padStart(2,'0') + '-' + String(state.selectedDay).padStart(2,'0');
-            delete state.shifts[key];
-            saveState();
-            closeShiftModal();
-            renderCalendar();
-        }
-        
         function updateUI() {
-            const income = state.transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
-            const expense = state.transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
-            document.getElementById('totalBalance').textContent = formatCurrency(income - expense);
-            document.getElementById('totalIncome').textContent = formatCurrency(income);
-            document.getElementById('totalExpense').textContent = formatCurrency(expense);
-            
-            const txList = document.getElementById('transactionsList');
-            txList.innerHTML = state.transactions.slice(-5).reverse().map(t =>
-                '<div class="transaction-item"><div><div class="transaction-name">' + t.name + '</div><div class="transaction-date">' + new Date(t.date).toLocaleDateString('es-ES') + '</div></div><div class="transaction-amount ' + t.type + '">' + (t.type === 'income' ? '+' : '-') + formatCurrency(t.amount) + '</div></div>'
-            ).join('') || '<div class="empty-state"><span>\ud83d\udcb8</span>Sin transacciones</div>';
-            
-            const walletsList = document.getElementById('walletsList');
-            walletsList.innerHTML = state.wallets.map(w =>
-                '<div class="wallet-card"><div><div class="wallet-name">' + w.name + '</div></div><div class="wallet-balance">' + formatCurrency(w.balance) + '</div><button class="delete-btn" onclick="deleteWallet(' + w.id + ')">\u2715</button></div>'
-            ).join('') || '<div class="empty-state"><span>\ud83d\udc5b</span>Sin carteras</div>';
-            
-            const opts = '<option value="">Seleccionar</option>' + state.wallets.map(w => '<option value="' + w.id + '">' + w.name + '</option>').join('');
-            document.getElementById('fromWallet').innerHTML = opts;
-            document.getElementById('toWallet').innerHTML = opts;
-            
-            document.getElementById('subscriptionsList').innerHTML = state.subscriptions.map(s =>
-                '<div class="subscription-item"><div class="info-section"><h4>' + s.name + '</h4><small>' + formatCurrency(s.amount) + ' - ' + new Date(s.date).toLocaleDateString('es-ES') + '</small></div><button class="delete-btn" onclick="deleteSubscription(' + s.id + ')">\u2715</button></div>'
-            ).join('') || '<div class="empty-state"><span>\ud83d\udd14</span>Sin suscripciones</div>';
-            
-            document.getElementById('birthdaysList').innerHTML = state.birthdays.map(b => {
-                const d = new Date(b.date);
-                return '<div class="birthday-item"><div class="birthday-avatar">' + b.name.charAt(0).toUpperCase() + '</div><div class="info-section"><h4>' + b.name + '</h4><small>' + d.getDate() + '/' + (d.getMonth()+1) + (b.notify ? ' \ud83d\udd14' : '') + '</small></div></div>';
-            }).join('') || '<div class="empty-state"><span>\ud83c\udf82</span>Sin cumpleanos</div>';
-            
-            document.getElementById('notesList').innerHTML = state.notes.map(n =>
-                '<div class="note-card"><div><div class="note-title">' + n.title + '</div><div class="note-date">' + new Date(n.created).toLocaleDateString('es-ES') + (n.notify ? ' \ud83d\udd14' : '') + '</div></div><button class="delete-btn" onclick="deleteNote(' + n.id + ')">\u2715</button></div>'
-            ).join('') || '<div class="empty-state"><span>\ud83d\udcdd</span>Sin notas</div>';
-            
-            // Chart
-            const months = [];
-            for (let i = 5; i >= 0; i--) {
-                const d = new Date();
-                d.setMonth(d.getMonth() - i);
-                months.push({ m: d.getMonth(), y: d.getFullYear(), label: monthNames[d.getMonth()].substr(0,3) });
-            }
-            const chartData = months.map(m => state.transactions.filter(t => {
-                const td = new Date(t.date);
-                return td.getMonth() === m.m && td.getFullYear() === m.y && t.type === 'expense';
-            }).reduce((s, t) => s + t.amount, 0));
-            const maxVal = Math.max(...chartData, 1);
-            document.getElementById('chart').innerHTML = chartData.map(v => '<div class="chart-bar" style="height:' + (v/maxVal*100) + 'px"></div>').join('');
-            document.getElementById('chartLabels').innerHTML = months.map(m => '<span>' + m.label + '</span>').join('');
-            
-            // AI
-            let rec = 'Registra tus transacciones para obtener consejos personalizados.';
-            if (state.transactions.length > 0) {
-                if (income - expense < 0) rec = '\u26a0\ufe0f Atencion: Tus gastos superan tus ingresos.';
-                else if (expense > income * 0.8) rec = '\ud83d\udca1 Gastas mas del 80%. Intenta reducir gastos.';
-                else if (expense > income * 0.5) rec = '\ud83d\udc4d Buen trabajo! Ahorras entre 20-50%.';
-                else rec = '\ud83c\udf1f Excelente! Ahorras mas del 50%.';
-            }
-            document.getElementById('aiRecommendation').textContent = rec;
-            document.getElementById('weeklyToggle').classList.toggle('active', state.weeklyNotify);
-            document.getElementById('monthlyToggle').classList.toggle('active', state.monthlyNotify);
+            const totalIncome = state.transactions.filter(t => t.type === 'income').reduce((s,t) => s + t.amount, 0);
+            const totalExpense = state.transactions.filter(t => t.type === 'expense').reduce((s,t) => s + t.amount, 0);
+            document.getElementById('total-balance').textContent = '€' + state.balance.toFixed(2);
+            document.getElementById('total-income').textContent = '€' + totalIncome.toFixed(0);
+            document.getElementById('total-expense').textContent = '€' + totalExpense.toFixed(0);
+            // Category buttons for expense
+            const expCatBtns = document.getElementById('expense-category-buttons');
+            expCatBtns.innerHTML = state.expenseCategories.map(c => 
+                `<div class="category-btn ${state.selectedExpenseCategory===c?'selected':''}" onclick="selectCategory('expense','${c}')">${c}</div>`
+            ).join('');
+            // Category buttons for income
+            const incCatBtns = document.getElementById('income-category-buttons');
+            incCatBtns.innerHTML = state.incomeCategories.map(c => 
+                `<div class="category-btn ${state.selectedIncomeCategory===c?'selected':''}" onclick="selectCategory('income','${c}')">${c}</div>`
+            ).join('');
+            // Categories list in Ajustes
+            document.getElementById('expense-categories-list').innerHTML = state.expenseCategories.map(c => 
+                `<div class="category-item"><span>${c}</span><div class="category-item-actions"><button style="background:var(--danger);color:white;" onclick="deleteCategory('expense','${c}')">Borrar</button></div></div>`
+            ).join('') || '<p style="color:var(--text-secondary);font-size:12px;">Sin categorías</p>';
+            document.getElementById('income-categories-list').innerHTML = state.incomeCategories.map(c => 
+                `<div class="category-item"><span>${c}</span><div class="category-item-actions"><button style="background:var(--danger);color:white;" onclick="deleteCategory('income','${c}')">Borrar</button></div></div>`
+            ).join('') || '<p style="color:var(--text-secondary);font-size:12px;">Sin categorías</p>';
+            // Notifications list
+            document.getElementById('notifications-list').innerHTML = state.notifications.map(n => 
+                `<div class="notification-item"><div class="info"><h4>${n.title}</h4><small>${n.time || 'Sin hora'}</small></div><div class="toggle-switch ${n.active?'active':''}" onclick="toggleNotification(${n.id})"></div></div>`
+            ).join('') || '<p style="color:var(--text-secondary);font-size:12px;">Sin notificaciones</p>';
+            // Recent transactions
+            const recent = state.transactions.slice(-5).reverse();
+            document.getElementById('recent-transactions').innerHTML = recent.map(t => 
+                `<div class="transaction-item"><div class="transaction-info"><h4>${t.name}</h4><small>${t.category} • ${new Date(t.date).toLocaleDateString('es')}</small></div><span class="transaction-amount ${t.type}">${t.type==='expense'?'-':'+'}$${t.amount.toFixed(2)}</span></div>`
+            ).join('') || '<div class="empty-state"><span>💸</span><p>Sin transacciones</p></div>';
+            // Category breakdown
+            const expenseByCategory = {};
+            state.transactions.filter(t => t.type === 'expense').forEach(t => {
+                expenseByCategory[t.category] = (expenseByCategory[t.category] || 0) + t.amount;
+            });
+            document.getElementById('category-breakdown').innerHTML = Object.entries(expenseByCategory).map(([cat, amt]) => 
+                `<div class="transaction-item"><span>${cat}</span><span class="transaction-amount expense">-€${amt.toFixed(2)}</span></div>`
+            ).join('') || '<div class="empty-state"><span>📊</span><p>Sin datos</p></div>';
+            // Wallets
+            document.getElementById('wallets-list').innerHTML = state.wallets.map(w => 
+                `<div class="wallet-card"><h4>${w.name}</h4><h3>€${w.balance.toFixed(2)}</h3></div>`
+            ).join('') || '<div class="empty-state"><span>💳</span><p>Sin carteras</p></div>';
+            // Transfer selects
+            const walletOptions = state.wallets.map(w => `<option value="${w.id}">${w.name}</option>`).join('');
+            document.getElementById('transfer-from').innerHTML = '<option value="">Seleccionar...</option>' + walletOptions;
+            document.getElementById('transfer-to').innerHTML = '<option value="">Seleccionar...</option>' + walletOptions;
+            // Subscriptions
+            document.getElementById('subscriptions-list').innerHTML = state.subscriptions.map(s => 
+                `<div class="transaction-item"><div class="transaction-info"><h4>${s.name}</h4><small>Día ${s.day} de cada mes</small></div><span class="transaction-amount expense">-€${s.amount.toFixed(2)}</span></div>`
+            ).join('') || '<div class="empty-state"><span>🔄</span><p>Sin suscripciones</p></div>';
+            // Birthdays
+            document.getElementById('birthdays-list').innerHTML = state.birthdays.map(b => 
+                `<div class="transaction-item"><div class="transaction-info"><h4>🎂 ${b.name}</h4><small>${new Date(b.date).toLocaleDateString('es', {day:'numeric',month:'long'})}</small></div></div>`
+            ).join('') || '<div class="empty-state"><span>🎂</span><p>Sin cumpleaños</p></div>';
+            // Notes
+            document.getElementById('notes-list').innerHTML = state.notes.map(n => 
+                `<div class="card" style="padding:12px;margin-bottom:8px;"><h4 style="font-size:13px;margin-bottom:4px;">${n.title}</h4><p style="font-size:12px;color:var(--text-secondary);">${n.content}</p></div>`
+            ).join('') || '<div class="empty-state"><span>📝</span><p>Sin notas</p></div>';
+            renderCalendar();
         }
-        
+        // Initialize app - DEFAULT TO GASTO TAB
         document.addEventListener('DOMContentLoaded', function() {
             loadState();
+            document.body.classList.toggle('light-mode', !state.darkMode);
             updateUI();
-            renderCalendar();
-            if (state.lightMode) {
-                document.body.classList.add('light-mode');
-                document.querySelector('.theme-toggle').textContent = '\ud83c\udf19';
-            }
+            // Set default to Transacciones > Gasto
+            showSection('transacciones', document.querySelectorAll('.nav-btn')[1]);
+            showTransactionTab('gasto');
         });
     </script>
 </body>
