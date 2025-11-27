@@ -99,13 +99,6 @@
         .btn-primary { background: var(--accent); color: white; width: 100%; }
         .btn-danger { background: var(--danger); color: white; }
         .btn-success { background: var(--success); color: white; }
-        .amount-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-        .amount-btn { padding: 10px 16px; background: var(--bg-primary); border: 1px solid var(--bg-card); border-radius: 8px; color: var(--text-primary); font-size: 14px; cursor: pointer; }
-        .amount-btn:active { background: var(--accent); }
-        .current-amount { font-size: 28px; font-weight: 700; text-align: center; padding: 15px; background: var(--bg-primary); border-radius: 8px; margin-bottom: 12px; }
-        .category-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-        .category-btn { padding: 8px 16px; background: var(--bg-primary); border: 2px solid var(--bg-card); border-radius: 20px; color: var(--text-primary); font-size: 14px; cursor: pointer; }
-        .category-btn.selected { border-color: var(--accent); background: var(--accent); color: white; }
         .transaction-item, .wallet-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-primary); border-radius: 8px; margin-bottom: 8px; }
         .transaction-item .info, .wallet-item .info { display: flex; flex-direction: column; }
         .transaction-item .name, .wallet-item .name { font-weight: 600; }
@@ -185,12 +178,10 @@
         <button class="nav-btn" onclick="showSection('turnos', this)"><span>📅</span>Turnos</button>
     </nav>
     <main>
-        <!-- FINANZAS -->
+        <!-- FINANZAS - Solo IA y Ajustes -->
         <section id="finanzas" class="section">
             <div class="sub-tabs">
                 <button class="sub-tab active" onclick="showFinanzasTab('ia')">IA</button>
-                <button class="sub-tab" onclick="showFinanzasTab('gastos')">Gastos</button>
-                <button class="sub-tab" onclick="showFinanzasTab('ultimas')">Ultimas</button>
                 <button class="sub-tab" onclick="showFinanzasTab('ajustes')">Ajustes</button>
             </div>
             <div id="finanzas-ia" class="sub-content active">
@@ -201,53 +192,24 @@
                 </div>
                 <div class="card"><h3 style="font-size:14px;margin-bottom:10px;">💡 Recomendación IA</h3><p id="ia-recommendation" style="font-size:13px;color:var(--text-secondary);">Añade transacciones para ver recomendaciones.</p></div>
             </div>
-            <div id="finanzas-gastos" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">📊 Gastos por Categoría</h3><div id="category-breakdown"></div></div></div>
-            <div id="finanzas-ultimas" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">📈 Últimas Transacciones</h3><div id="recent-transactions"></div></div></div>
             <div id="finanzas-ajustes" class="sub-content">
                 <div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🟥 Categorías de Gastos</h3><div id="expense-categories-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="new-expense-category" placeholder="Nueva categoría..."></div><button class="btn btn-primary" onclick="addCategory('expense')">Añadir</button></div>
                 <div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🟩 Categorías de Ingresos</h3><div id="income-categories-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="new-income-category" placeholder="Nueva categoría..."></div><button class="btn btn-primary" onclick="addCategory('income')">Añadir</button></div>
                 <div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🔔 Notificaciones</h3><div id="notifications-list"></div></div>
             </div>
         </section>
-        <!-- TRANSACCIONES -->
+        <!-- TRANSACCIONES - Nueva estructura: Gastos, Últimas, Suscripciones -->
         <section id="transacciones" class="section active">
             <div class="sub-tabs">
-                <button class="sub-tab active" onclick="showTransactionTab('gasto', event)">Gasto</button>
-                <button class="sub-tab" onclick="showTransactionTab('ingreso', event)">Ingreso</button>
-                <button class="sub-tab" onclick="showTransactionTab('suscripciones', event)">Suscripciones</button>
+                <button class="sub-tab active" onclick="showTransactionTab('gastos')">Gastos</button>
+                <button class="sub-tab" onclick="showTransactionTab('ultimas')">Ultimas</button>
+                <button class="sub-tab" onclick="showTransactionTab('suscripciones')">Suscripciones</button>
             </div>
-            <div id="trans-gasto" class="sub-content active">
-                <div class="card">
-                    <div class="current-amount expense" id="expense-amount">€0.00</div>
-                    <div class="amount-buttons">
-                        <button class="amount-btn" onclick="addQuickAmount('expense', 1)">+1€</button>
-                        <button class="amount-btn" onclick="addQuickAmount('expense', 5)">+5€</button>
-                        <button class="amount-btn" onclick="addQuickAmount('expense', 10)">+10€</button>
-                        <button class="amount-btn" onclick="addQuickAmount('expense', 20)">+20€</button>
-                        <button class="amount-btn" onclick="addQuickAmount('expense', 50)">+50€</button>
-                        <button class="amount-btn" onclick="addQuickAmount('expense', 100)">+100€</button>
-                    </div>
-                    <div id="expense-category-buttons" class="category-buttons"></div>
-                    <div class="form-group"><label>Descripción</label><input type="text" id="expense-desc" placeholder="Descripción..."></div>
-                    <div class="form-group"><label>Cartera</label><select id="expense-wallet"></select></div>
-                    <button class="btn btn-danger" onclick="saveExpense()" style="width:100%">Guardar Gasto</button>
-                </div>
+            <div id="trans-gastos" class="sub-content active">
+                <div class="card"><h3 style="font-size:14px;margin-bottom:12px;">📊 Gastos por Categoría</h3><div id="category-breakdown"></div></div>
             </div>
-            <div id="trans-ingreso" class="sub-content">
-                <div class="card">
-                    <div class="current-amount income" id="income-amount">€0.00</div>
-                    <div class="amount-buttons">
-                        <button class="amount-btn" onclick="addQuickAmount('income', 10)">+10€</button>
-                        <button class="amount-btn" onclick="addQuickAmount('income', 50)">+50€</button>
-                        <button class="amount-btn" onclick="addQuickAmount('income', 100)">+100€</button>
-                        <button class="amount-btn" onclick="addQuickAmount('income', 500)">+500€</button>
-                        <button class="amount-btn" onclick="addQuickAmount('income', 1000)">+1000€</button>
-                    </div>
-                    <div id="income-category-buttons" class="category-buttons"></div>
-                    <div class="form-group"><label>Descripción</label><input type="text" id="income-desc" placeholder="Descripción..."></div>
-                    <div class="form-group"><label>Cartera</label><select id="income-wallet"></select></div>
-                    <button class="btn btn-success" onclick="saveIncome()" style="width:100%">Guardar Ingreso</button>
-                </div>
+            <div id="trans-ultimas" class="sub-content">
+                <div class="card"><h3 style="font-size:14px;margin-bottom:12px;">📈 Últimas Transacciones</h3><div id="recent-transactions"></div></div>
             </div>
             <div id="trans-suscripciones" class="sub-content">
                 <div class="card">
@@ -332,10 +294,6 @@
             notes: [],
             expenseCategories: ['Comida', 'Transporte', 'Ocio', 'Salud', 'Otros'],
             incomeCategories: ['Salario', 'Freelance', 'Inversiones', 'Otros'],
-            currentExpenseAmount: 0,
-            currentIncomeAmount: 0,
-            selectedExpenseCategory: null,
-            selectedIncomeCategory: null,
             quickType: 'expense',
             quickAmount: '0',
             quickCategory: null
@@ -355,11 +313,10 @@
             event.target.classList.add('active');
             document.getElementById('finanzas-' + tab).classList.add('active');
         }
-        function showTransactionTab(tab, event) {
+        function showTransactionTab(tab) {
             document.querySelectorAll('#transacciones .sub-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('#transacciones .sub-content').forEach(c => c.classList.remove('active'));
             if(event && event.target) event.target.classList.add('active');
-            else document.querySelector('#transacciones .sub-tab').classList.add('active');
             document.getElementById('trans-' + tab).classList.add('active');
         }
         function showTurnosTab(tab) {
@@ -418,7 +375,7 @@
         function quickSave() {
             const amt = parseFloat(state.quickAmount) || 0;
             if (amt <= 0) return;
-            const cat = state.quickCategory || (state.quickType === 'expense' ? 'Otros' : 'Otros');
+            const cat = state.quickCategory || 'Otros';
             const trans = {
                 type: state.quickType,
                 amount: amt,
@@ -444,15 +401,7 @@
             success.classList.add('show');
             setTimeout(() => success.classList.remove('show'), 1500);
         }
-        // Main App Functions
-        function addQuickAmount(type, amount) {
-            if (type === 'expense') { state.currentExpenseAmount += amount; document.getElementById('expense-amount').textContent = '€' + state.currentExpenseAmount.toFixed(2); }
-            else { state.currentIncomeAmount += amount; document.getElementById('income-amount').textContent = '€' + state.currentIncomeAmount.toFixed(2); }
-        }
-        function selectCategory(type, cat) {
-            if (type === 'expense') { state.selectedExpenseCategory = cat; document.querySelectorAll('#expense-category-buttons .category-btn').forEach(b => b.classList.toggle('selected', b.textContent === cat)); }
-            else { state.selectedIncomeCategory = cat; document.querySelectorAll('#income-category-buttons .category-btn').forEach(b => b.classList.toggle('selected', b.textContent === cat)); }
-        }
+        // Category Functions
         function addCategory(type) {
             const input = document.getElementById('new-' + type + '-category');
             const name = input.value.trim();
@@ -466,32 +415,7 @@
             else state.incomeCategories = state.incomeCategories.filter(c => c !== cat);
             saveState(); updateUI();
         }
-        function saveExpense() {
-            if (state.currentExpenseAmount <= 0) return;
-            const wallet = document.getElementById('expense-wallet').value;
-            const walletObj = state.wallets.find(w => w.name === wallet);
-            state.transactions.unshift({ type: 'expense', amount: state.currentExpenseAmount, category: state.selectedExpenseCategory || 'Otros', description: document.getElementById('expense-desc').value || 'Gasto', wallet: wallet, date: new Date().toISOString() });
-            state.totalExpense += state.currentExpenseAmount;
-            if (walletObj) walletObj.balance -= state.currentExpenseAmount;
-            state.balance = state.totalIncome - state.totalExpense;
-            state.currentExpenseAmount = 0; state.selectedExpenseCategory = null;
-            document.getElementById('expense-amount').textContent = '€0.00';
-            document.getElementById('expense-desc').value = '';
-            saveState(); updateUI();
-        }
-        function saveIncome() {
-            if (state.currentIncomeAmount <= 0) return;
-            const wallet = document.getElementById('income-wallet').value;
-            const walletObj = state.wallets.find(w => w.name === wallet);
-            state.transactions.unshift({ type: 'income', amount: state.currentIncomeAmount, category: state.selectedIncomeCategory || 'Otros', description: document.getElementById('income-desc').value || 'Ingreso', wallet: wallet, date: new Date().toISOString() });
-            state.totalIncome += state.currentIncomeAmount;
-            if (walletObj) walletObj.balance += state.currentIncomeAmount;
-            state.balance = state.totalIncome - state.totalExpense;
-            state.currentIncomeAmount = 0; state.selectedIncomeCategory = null;
-            document.getElementById('income-amount').textContent = '€0.00';
-            document.getElementById('income-desc').value = '';
-            saveState(); updateUI();
-        }
+        // Wallet Functions
         function addWallet() {
             const name = document.getElementById('wallet-name').value.trim();
             const balance = parseFloat(document.getElementById('wallet-balance').value) || 0;
@@ -570,22 +494,11 @@
             document.getElementById('calendar-grid').innerHTML = html;
         }
         function updateUI() {
-            // Balance
             document.getElementById('total-balance').textContent = '€' + state.balance.toFixed(2);
             document.getElementById('total-income').textContent = '€' + state.totalIncome.toFixed(0);
             document.getElementById('total-expense').textContent = '€' + state.totalExpense.toFixed(0);
-            // Category buttons for expense
-            document.getElementById('expense-category-buttons').innerHTML = state.expenseCategories.map(c => 
-                `<button class="category-btn${state.selectedExpenseCategory === c ? ' selected' : ''}" onclick="selectCategory('expense', '${c}')">${c}</button>`
-            ).join('');
-            // Category buttons for income
-            document.getElementById('income-category-buttons').innerHTML = state.incomeCategories.map(c => 
-                `<button class="category-btn${state.selectedIncomeCategory === c ? ' selected' : ''}" onclick="selectCategory('income', '${c}')">${c}</button>`
-            ).join('');
             // Wallet selects
             const walletOptions = state.wallets.map(w => `<option value="${w.name}">${w.name}</option>`).join('');
-            document.getElementById('expense-wallet').innerHTML = walletOptions;
-            document.getElementById('income-wallet').innerHTML = walletOptions;
             document.getElementById('transfer-from').innerHTML = walletOptions;
             document.getElementById('transfer-to').innerHTML = walletOptions;
             // Wallets list
@@ -621,22 +534,19 @@
             document.getElementById('notes-list').innerHTML = state.notes.map(n => 
                 `<div class="card" style="margin-bottom:8px;padding:10px;"><strong>${n.title}</strong><p style="font-size:13px;color:var(--text-secondary);margin-top:4px;">${n.content}</p></div>`
             ).join('') || '<p style="color:var(--text-secondary);font-size:13px;">Sin notas</p>';
-            // Notifications placeholder
             document.getElementById('notifications-list').innerHTML = '<p style="color:var(--text-secondary);font-size:13px;">Sin notificaciones activas</p>';
-            // Calendar
             renderCalendar();
-            // IA Recommendation
             if (state.transactions.length > 0) {
                 const avgExpense = state.totalExpense / Math.max(state.transactions.filter(t => t.type === 'expense').length, 1);
                 document.getElementById('ia-recommendation').textContent = `Tu gasto promedio es de €${avgExpense.toFixed(2)}. ${state.totalExpense > state.totalIncome ? 'Cuidado: tus gastos superan tus ingresos.' : 'Buen trabajo manteniendo el balance positivo.'}`;
             }
         }
-        // Initialize
+        // Initialize - ABRE DIRECTAMENTE EL MODO RÁPIDO
         document.addEventListener('DOMContentLoaded', () => {
             loadState();
             if (localStorage.getItem('theme') === 'light') document.body.dataset.theme = 'light';
-            showTransactionTab('gasto');
             updateUI();
+            enterQuickMode(); // Abrir modo rápido al iniciar
         });
     </script>
 </body>
