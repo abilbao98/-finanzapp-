@@ -615,6 +615,47 @@
                 enterQuickMode();
             }
         });
+
+    // ============ SERVICE WORKER Y NOTIFICACIONES ============
+    // Registrar Service Worker para notificaciones push en iOS
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+            .then(function(registration) {
+                console.log('Service Worker registrado con exito:', registration.scope);
+            })
+            .catch(function(error) {
+                console.log('Error al registrar Service Worker:', error);
+            });
+    }
+
+    // Funcion para solicitar permiso de notificaciones
+    async function solicitarPermisoNotificaciones() {
+        if ('Notification' in window) {
+            const permiso = await Notification.requestPermission();
+            if (permiso === 'granted') {
+                console.log('Permiso de notificaciones concedido');
+                // Mostrar notificacion de prueba
+                if (navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.ready.then(function(registration) {
+                        registration.showNotification('FinanzApp', {
+                            body: 'Notificaciones activadas correctamente',
+                            icon: 'icon-192.png'
+                        });
+                    });
+                }
+            }
+            return permiso;
+        }
+        return 'not-supported';
+    }
+
+    // Solicitar permiso automaticamente al cargar (solo si no se ha pedido antes)
+    if ('Notification' in window && Notification.permission === 'default') {
+        // Esperar 3 segundos antes de pedir permiso para mejor UX
+        setTimeout(() => {
+            solicitarPermisoNotificaciones();
+        }, 3000);
+    }
     </script>
 </body>
 </html>
