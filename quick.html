@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="QuickAdd">
+    <meta name="theme-color" content="#1a1a2e">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%231a1a2e' width='100' height='100' rx='22'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='%2300d4aa'>+</text></svg>">
+    <title>Quick Add</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; overflow: hidden; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            min-height: 100dvh;
+        }
+        .container {
+            width: 100%;
+            max-width: 340px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .type-toggle {
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 4px;
+        }
+        .type-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: transparent;
+            color: rgba(255,255,255,0.5);
+        }
+        .type-btn.active.expense {
+            background: #ff6b6b;
+            color: white;
+        }
+        .type-btn.active.income {
+            background: #00d4aa;
+            color: white;
+        }
+        .amount-display {
+            text-align: center;
+            padding: 24px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .amount-display h1 {
+            font-size: 48px;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+        .amount-display.expense h1 { color: #ff6b6b; }
+        .amount-display.income h1 { color: #00d4aa; }
+        .name-input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 16px;
+            text-align: center;
+        }
+        .name-input::placeholder { color: rgba(255,255,255,0.4); }
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .quick-btn {
+            padding: 16px 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quick-btn:active {
+            transform: scale(0.95);
+            background: rgba(255,255,255,0.15);
+        }
+        .save-btn {
+            padding: 18px;
+            border-radius: 16px;
+            border: none;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .save-btn.expense {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+            color: white;
+        }
+        .save-btn.income {
+            background: linear-gradient(135deg, #00d4aa, #00b894);
+            color: white;
+        }
+        .save-btn:active { transform: scale(0.98); }
+        .reset-btn {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .success-msg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: #00d4aa;
+            color: white;
+            padding: 20px 40px;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        .success-msg.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        .link-main {
+            margin-top: 12px;
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="type-toggle">
+            <button class="type-btn active expense" onclick="setType('expense')">Gasto</button>
+            <button class="type-btn income" onclick="setType('income')">Ingreso</button>
+        </div>
+        <div class="amount-display expense" id="amountDisplay">
+            <h1 id="amount">€0</h1>
+        </div>
+        <input type="text" class="name-input" id="nameInput" placeholder="Descripción (opcional)">
+        <div class="quick-grid">
+            <button class="quick-btn" onclick="addAmount(1)">+1€</button>
+            <button class="quick-btn" onclick="addAmount(2)">+2€</button>
+            <button class="quick-btn" onclick="addAmount(5)">+5€</button>
+            <button class="quick-btn" onclick="addAmount(10)">+10€</button>
+            <button class="quick-btn" onclick="addAmount(20)">+20€</button>
+            <button class="quick-btn" onclick="addAmount(50)">+50€</button>
+            <button class="quick-btn" onclick="addAmount(100)">+100</button>
+            <button class="quick-btn" onclick="addAmount(200)">+200</button>
+        </div>
+        <button class="save-btn expense" id="saveBtn" onclick="save()">
+            <span>✓</span> Guardar Gasto
+        </button>
+        <button class="reset-btn" onclick="reset()">Borrar</button>
+        <a href="index.html" class="link-main">← Abrir app completa</a>
+    </div>
+    <div class="success-msg" id="successMsg">✓ Guardado</div>
+    <script>
+        let currentType = 'expense';
+        let currentAmount = 0;
+        function setType(type) {
+            currentType = type;
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase().includes(type === 'expense' ? 'gasto' : 'ingreso')) {
+                    btn.classList.add('active');
+                }
+            });
+            const display = document.getElementById('amountDisplay');
+            const saveBtn = document.getElementById('saveBtn');
+            display.className = 'amount-display ' + type;
+            saveBtn.className = 'save-btn ' + type;
+            saveBtn.innerHTML = '<span>✓</span> Guardar ' + (type === 'expense' ? 'Gasto' : 'Ingreso');
+        }
+        function addAmount(val) {
+            currentAmount += val;
+            document.getElementById('amount').textContent = '€' + currentAmount;
+        }
+        function reset() {
+            currentAmount = 0;
+            document.getElementById('amount').textContent = '€0';
+            document.getElementById('nameInput').value = '';
+        }
+        function save() {
+            if (currentAmount <= 0) return;
+            try {
+                let state = JSON.parse(localStorage.getItem('finanzAppState') || '{}');
+                if (!state.transactions) state.transactions = [];
+                if (typeof state.balance !== 'number') state.balance = 0;
+                const name = document.getElementById('nameInput').value || (currentType === 'expense' ? 'Gasto rápido' : 'Ingreso rápido');
+                state.transactions.push({
+                    id: Date.now(),
+                    type: currentType,
+                    amount: currentAmount,
+                    name: name,
+                    category: 'Otros',
+                    date: new Date().toISOString()
+                });
+                state.balance += (currentType === 'expense' ? -currentAmount : currentAmount);
+                localStorage.setItem('finanzAppState', JSON.stringify(state));
+                const msg = document.getElementById('successMsg');
+                msg.classList.add('show');
+                msg.style.background = currentType === 'expense' ? '#ff6b6b' : '#00d4aa';
+                setTimeout(() => msg.classList.remove('show'), 1500);
+                reset();
+            } catch (e) {
+                alert('Error al guardar');
+            }
+        }
+    </script>
+</body>
+</html>
