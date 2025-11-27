@@ -79,6 +79,7 @@
         .btn-danger { background: var(--danger); color: white; }
         .btn-success { background: var(--success); color: white; }
         .btn-secondary { background: var(--bg-primary); color: var(--text-primary); }
+        .btn-warning { background: var(--warning); color: black; }
         .transaction-item, .notification-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-primary); border-radius: 8px; margin-bottom: 8px; }
         .transaction-item .info, .notification-item .info { display: flex; flex-direction: column; flex: 1; }
         .transaction-item .name, .notification-item .title { font-weight: 600; }
@@ -90,6 +91,7 @@
         .actions button { padding: 5px 8px; font-size: 12px; border: none; border-radius: 4px; cursor: pointer; }
         .edit-btn { background: var(--accent); color: white; }
         .delete-btn { background: var(--danger); color: white; }
+        .export-btn { background: var(--warning); color: black; }
         .wallet-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-primary); border-radius: 8px; margin-bottom: 8px; }
         .wallet-item .info { display: flex; flex-direction: column; }
         .wallet-item .name { font-weight: 600; }
@@ -100,16 +102,13 @@
         .calendar-grid .day.today { background: var(--accent); color: white; }
         .calendar-grid .day.has-event { position: relative; }
         .calendar-grid .day.has-event::after { content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: var(--warning); border-radius: 50%; }
-        .expandable-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .expandable-content { display: none; padding-top: 12px; }
-        .expandable-content.active { display: block; }
         .categories-list { display: flex; flex-wrap: wrap; gap: 8px; }
         .category-tag { display: inline-flex; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 16px; font-size: 14px; }
         .category-tag .delete-btn { margin-left: 8px; padding: 2px 6px; }
-        .notif-badge { background: var(--warning); color: black; padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: bold; }
         .notif-status { font-size: 12px; color: var(--text-secondary); margin-top: 8px; }
         .notif-status.granted { color: var(--success); }
         .notif-status.denied { color: var(--danger); }
+        .export-calendar-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px; margin-top: 12px; background: linear-gradient(135deg, var(--warning), #e67e22); color: black; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -139,7 +138,7 @@
         <div class="quick-numpad"><button class="quick-num-btn" onclick="quickAddDigit('1')">1</button><button class="quick-num-btn" onclick="quickAddDigit('2')">2</button><button class="quick-num-btn" onclick="quickAddDigit('3')">3</button><button class="quick-num-btn" onclick="quickAddDigit('4')">4</button><button class="quick-num-btn" onclick="quickAddDigit('5')">5</button><button class="quick-num-btn" onclick="quickAddDigit('6')">6</button><button class="quick-num-btn" onclick="quickAddDigit('7')">7</button><button class="quick-num-btn" onclick="quickAddDigit('8')">8</button><button class="quick-num-btn" onclick="quickAddDigit('9')">9</button><button class="quick-num-btn" onclick="quickAddDigit('.')">.</button><button class="quick-num-btn" onclick="quickAddDigit('0')">0</button><button class="quick-num-btn" onclick="quickDelete()">⌫</button></div>
         <button id="quick-save-btn" class="quick-save-btn expense" onclick="quickSave()">Guardar Gasto</button>
     </div>
-    <div id="quick-success" class="quick-success">✓ Guardado</div>
+    <div id="quick-success">✓ Guardado</div>
 
     <!-- Main App -->
     <header><h1>💰 FinanzApp</h1><div class="header-actions"><button class="icon-btn" onclick="enterQuickMode()">⚡</button><button class="icon-btn" onclick="toggleTheme()">🌙</button></div></header>
@@ -161,7 +160,7 @@
             <div id="finanzas-ajustes" class="sub-content">
                 <div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🟥 Categorías de Gastos</h3><div id="expense-categories-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="new-expense-cat" placeholder="Nueva categoría..."><button class="btn btn-primary" style="margin-top:8px;" onclick="addCategory('expense')">Añadir</button></div></div>
                 <div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🟩 Categorías de Ingresos</h3><div id="income-categories-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="new-income-cat" placeholder="Nueva categoría..."><button class="btn btn-primary" style="margin-top:8px;" onclick="addCategory('income')">Añadir</button></div></div>
-                <div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🔔 Notificaciones</h3><div id="notif-status" class="notif-status"></div><button class="btn btn-primary" style="margin-top:8px;margin-bottom:12px;" onclick="requestNotificationPermission()">Activar Notificaciones Push</button><div id="notifications-list"></div><button class="btn btn-secondary" style="margin-top:12px;width:100%;" onclick="openNotifModal()">+ Añadir Notificación</button></div>
+                <div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🔔 Notificaciones</h3><div id="notif-status" class="notif-status"></div><button class="btn btn-primary" style="margin-top:8px;margin-bottom:12px;" onclick="requestNotificationPermission()">Activar Notificaciones Push</button><div id="notifications-list"></div><button class="btn btn-secondary" style="margin-top:12px;width:100%;" onclick="openNotifModal()">+ Añadir Notificación</button><button class="btn export-calendar-btn" onclick="exportAllToCalendar()">📅 Exportar Todo a Calendars</button></div>
             </div>
         </section>
 
@@ -183,8 +182,8 @@
         <section id="turnos" class="section">
             <div class="sub-tabs"><button class="sub-tab active" onclick="showTurnosTab('calendario')">Calendario</button><button class="sub-tab" onclick="showTurnosTab('eventos')">Eventos</button><button class="sub-tab" onclick="showTurnosTab('cumples')">Cumpleaños</button><button class="sub-tab" onclick="showTurnosTab('notas')">Notas</button></div>
             <div id="turnos-calendario" class="sub-content active"><div class="card"><h3 id="calendar-month" style="font-size:14px;margin-bottom:12px;"></h3><div id="calendar-grid" class="calendar-grid"></div></div></div>
-            <div id="turnos-eventos" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">📅 Eventos</h3><div id="events-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="event-title" placeholder="Título evento"><input type="date" id="event-date" style="margin-top:8px;"><button class="btn btn-primary" style="margin-top:8px;" onclick="addEvent()">Añadir Evento</button></div></div></div>
-            <div id="turnos-cumples" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🎂 Cumpleaños</h3><div id="birthdays-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="birthday-name" placeholder="Nombre"><input type="date" id="birthday-date" style="margin-top:8px;"><button class="btn btn-primary" style="margin-top:8px;" onclick="addBirthday()">Añadir Cumpleaños</button></div></div></div>
+            <div id="turnos-eventos" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">📅 Eventos</h3><div id="events-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="event-title" placeholder="Título evento"><input type="date" id="event-date" style="margin-top:8px;"><button class="btn btn-primary" style="margin-top:8px;" onclick="addEvent()">Añadir Evento</button></div><button class="btn export-calendar-btn" onclick="exportEventsToCalendar()">📅 Exportar Eventos a Calendars</button></div></div>
+            <div id="turnos-cumples" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🎂 Cumpleaños</h3><div id="birthdays-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="birthday-name" placeholder="Nombre"><input type="date" id="birthday-date" style="margin-top:8px;"><button class="btn btn-primary" style="margin-top:8px;" onclick="addBirthday()">Añadir Cumpleaños</button></div><button class="btn export-calendar-btn" onclick="exportBirthdaysToCalendar()">🎂 Exportar Cumpleaños a Calendars</button></div></div>
             <div id="turnos-notas" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">📝 Notas</h3><div id="notes-list"></div><div class="form-group" style="margin-top:12px;"><textarea id="note-text" placeholder="Escribe tu nota..." style="width:100%;padding:12px;border:1px solid var(--bg-secondary);border-radius:8px;background:var(--bg-secondary);color:var(--text-primary);min-height:80px;"></textarea><button class="btn btn-primary" style="margin-top:8px;" onclick="addNote()">Guardar Nota</button></div></div></div>
         </section>
     </main>
@@ -308,10 +307,7 @@
             document.getElementById('edit-category').value = t.category;
             document.getElementById('edit-modal').classList.add('active');
         }
-        function closeEditModal() {
-            document.getElementById('edit-modal').classList.remove('active');
-            editingIndex = -1;
-        }
+        function closeEditModal() { document.getElementById('edit-modal').classList.remove('active'); editingIndex = -1; }
         function updateEditCategories() {
             const type = document.getElementById('edit-type').value;
             const cats = type === 'expense' ? state.expenseCategories : state.incomeCategories;
@@ -356,10 +352,7 @@
             }
             document.getElementById('notif-modal').classList.add('active');
         }
-        function closeNotifModal() {
-            document.getElementById('notif-modal').classList.remove('active');
-            editingNotifIndex = -1;
-        }
+        function closeNotifModal() { document.getElementById('notif-modal').classList.remove('active'); editingNotifIndex = -1; }
         function saveNotification() {
             const title = document.getElementById('notif-title').value.trim();
             const desc = document.getElementById('notif-desc').value.trim();
@@ -370,7 +363,6 @@
             if (editingNotifIndex >= 0) { state.notifications[editingNotifIndex] = notif; }
             else { state.notifications.push(notif); }
             saveState(); closeNotifModal(); updateUI();
-            scheduleNotification(notif);
         }
         function deleteNotification(index) {
             if (!confirm('¿Eliminar esta notificación?')) return;
@@ -394,14 +386,80 @@
                 else { el.textContent = '⚠️ Permiso pendiente'; el.className = 'notif-status'; }
             } else { el.textContent = 'No soportado'; el.className = 'notif-status'; }
         }
-        function scheduleNotification(notif) {
-            if (!('Notification' in window) || Notification.permission !== 'granted' || !notif.datetime) return;
-            const now = Date.now();
-            const target = new Date(notif.datetime).getTime();
-            const delay = target - now;
-            if (delay > 0) {
-                setTimeout(() => { new Notification(notif.title, { body: notif.description || '' }); }, delay);
-            }
+
+        // Calendar Export Functions (ICS format for Calendars app)
+        function generateICS(events) {
+            let ics = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//FinanzApp//ES\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\n';
+            events.forEach(e => {
+                const uid = 'finanzapp-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+                const dtstart = e.date.replace(/-/g, '');
+                const dtend = dtstart;
+                ics += 'BEGIN:VEVENT\n';
+                ics += 'UID:' + uid + '\n';
+                ics += 'DTSTART;VALUE=DATE:' + dtstart + '\n';
+                ics += 'DTEND;VALUE=DATE:' + dtend + '\n';
+                ics += 'SUMMARY:' + e.title + '\n';
+                if (e.description) ics += 'DESCRIPTION:' + e.description + '\n';
+                if (e.alarm) ics += 'BEGIN:VALARM\nACTION:DISPLAY\nTRIGGER:-P1D\nDESCRIPTION:Recordatorio\nEND:VALARM\n';
+                ics += 'END:VEVENT\n';
+            });
+            ics += 'END:VCALENDAR';
+            return ics;
+        }
+
+        function downloadICS(filename, content) {
+            const blob = new Blob([content], { type: 'text/calendar;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportEventsToCalendar() {
+            if (state.events.length === 0) { alert('No hay eventos para exportar'); return; }
+            const events = state.events.map(e => ({ title: e.title, date: e.date, description: '', alarm: true }));
+            const ics = generateICS(events);
+            downloadICS('finanzapp-eventos.ics', ics);
+        }
+
+        function exportBirthdaysToCalendar() {
+            if (state.birthdays.length === 0) { alert('No hay cumpleaños para exportar'); return; }
+            const currentYear = new Date().getFullYear();
+            const events = state.birthdays.map(b => {
+                const monthDay = b.date.slice(5);
+                return { title: '🎂 Cumpleaños de ' + b.name, date: currentYear + '-' + monthDay, description: 'Cumpleaños de ' + b.name, alarm: true };
+            });
+            const ics = generateICS(events);
+            downloadICS('finanzapp-cumples.ics', ics);
+        }
+
+        function exportAllToCalendar() {
+            let allEvents = [];
+            // Add notifications
+            state.notifications.forEach(n => {
+                if (n.datetime) {
+                    const dateOnly = n.datetime.split('T')[0];
+                    allEvents.push({ title: '🔔 ' + n.title, date: dateOnly, description: n.description || '', alarm: true });
+                }
+            });
+            // Add events
+            state.events.forEach(e => {
+                allEvents.push({ title: '📅 ' + e.title, date: e.date, description: '', alarm: true });
+            });
+            // Add birthdays
+            const currentYear = new Date().getFullYear();
+            state.birthdays.forEach(b => {
+                const monthDay = b.date.slice(5);
+                allEvents.push({ title: '🎂 Cumpleaños: ' + b.name, date: currentYear + '-' + monthDay, description: '', alarm: true });
+            });
+            if (allEvents.length === 0) { alert('No hay nada para exportar'); return; }
+            const ics = generateICS(allEvents);
+            downloadICS('finanzapp-todo.ics', ics);
+            alert('✅ Archivo descargado! \n\nÁbrelo para añadir ' + allEvents.length + ' eventos a Calendars');
         }
 
         // Category Functions
@@ -440,7 +498,6 @@
             document.getElementById('transfer-amount').value = '';
         }
 
-        // Subscription Functions
         function addSubscription() {
             const name = document.getElementById('sub-name').value.trim();
             const amount = parseFloat(document.getElementById('sub-amount').value);
@@ -451,7 +508,6 @@
             document.getElementById('sub-amount').value = '';
         }
 
-        // Event, Birthday, Note Functions
         function addEvent() {
             const title = document.getElementById('event-title').value.trim();
             const date = document.getElementById('event-date').value;
@@ -478,7 +534,6 @@
             document.getElementById('note-text').value = '';
         }
 
-        // Calendar Functions
         function renderCalendar() {
             const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
             document.getElementById('calendar-month').textContent = months[state.currentMonth] + ' ' + state.currentYear;
@@ -497,29 +552,24 @@
             document.getElementById('calendar-grid').innerHTML = html;
         }
 
-        // Main UI Update Function
         function updateUI() {
-            // Balance
             document.getElementById('total-balance').textContent = '€' + state.balance.toFixed(2);
             const income = state.transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
             const expense = state.transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
             document.getElementById('total-income').textContent = '€' + income.toFixed(0);
             document.getElementById('total-expense').textContent = '€' + expense.toFixed(0);
 
-            // IA Recommendation
             let rec = 'Añade transacciones para obtener recomendaciones.';
             if (state.transactions.length > 0) {
                 if (expense > income * 0.8) rec = '⚠️ Tus gastos son altos. Considera reducir gastos no esenciales.';
-                else if (income > expense * 2) rec = '🌟 ¡Excelente! Estás ahorrando bien. Considera invertir el excedente.';
-                else rec = '✅ Tu balance es saludable. Mantén el buen hábito.';
+                else if (income > expense * 2) rec = '🌟 ¡Excelente! Estás ahorrando bien.';
+                else rec = '✅ Tu balance es saludable.';
             }
             document.getElementById('ia-recommendation').textContent = rec;
 
-            // Categories Lists
             document.getElementById('expense-categories-list').innerHTML = '<div class="categories-list">' + state.expenseCategories.map(c => `<span class="category-tag">${c}<button class="delete-btn" onclick="deleteCategory('expense','${c}')">✕</button></span>`).join('') + '</div>';
             document.getElementById('income-categories-list').innerHTML = '<div class="categories-list">' + state.incomeCategories.map(c => `<span class="category-tag">${c}<button class="delete-btn" onclick="deleteCategory('income','${c}')">✕</button></span>`).join('') + '</div>';
 
-            // Notifications List
             updateNotifStatus();
             document.getElementById('notifications-list').innerHTML = state.notifications.map((n, i) => {
                 const dt = n.datetime ? new Date(n.datetime).toLocaleString('es-ES') : 'Sin fecha';
@@ -527,50 +577,36 @@
                 return `<div class="notification-item"><div class="info"><span class="title">${n.title}</span><span class="details">${dt}${repeatText}</span></div><div class="actions"><button class="edit-btn" onclick="openNotifModal(${i})">✏️</button><button class="delete-btn" onclick="deleteNotification(${i})">🗑️</button></div></div>`;
             }).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay notificaciones</p>';
 
-            // Category Breakdown
             const catTotals = {};
             state.transactions.filter(t => t.type === 'expense').forEach(t => { catTotals[t.category] = (catTotals[t.category] || 0) + t.amount; });
             document.getElementById('category-breakdown').innerHTML = Object.entries(catTotals).map(([cat, amt]) => `<div class="transaction-item"><div class="info"><span class="name">${cat}</span></div><span class="amount expense">€${amt.toFixed(2)}</span></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay gastos</p>';
 
-            // Recent Transactions
             document.getElementById('recent-transactions').innerHTML = state.transactions.slice(0, 20).map((t, i) => {
                 const d = new Date(t.date).toLocaleDateString('es-ES');
                 return `<div class="transaction-item"><div class="info"><span class="name">${t.category}</span><span class="details">${t.description || d}</span></div><span class="amount ${t.type}">${t.type === 'expense' ? '-' : '+'}€${t.amount.toFixed(2)}</span><div class="actions"><button class="edit-btn" onclick="openEditModal(${i})">✏️</button><button class="delete-btn" onclick="deleteTransaction(${i})">🗑️</button></div></div>`;
             }).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay transacciones</p>';
 
-            // Subscriptions
-            document.getElementById('subscriptions-list').innerHTML = state.subscriptions.map((s, i) => `<div class="transaction-item"><div class="info"><span class="name">${s.name}</span></div><span class="amount expense">€${s.amount.toFixed(2)}/mes</span></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay suscripciones</p>';
+            document.getElementById('subscriptions-list').innerHTML = state.subscriptions.map(s => `<div class="transaction-item"><div class="info"><span class="name">${s.name}</span></div><span class="amount expense">€${s.amount.toFixed(2)}/mes</span></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay suscripciones</p>';
 
-            // Wallets
             document.getElementById('wallets-list').innerHTML = state.wallets.map(w => `<div class="wallet-item"><div class="info"><span class="name">${w.name}</span><span class="balance">€${w.balance.toFixed(2)}</span></div></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay carteras</p>';
             const walletOpts = state.wallets.map((w, i) => `<option value="${i}">${w.name}</option>`).join('');
             document.getElementById('transfer-from').innerHTML = walletOpts;
             document.getElementById('transfer-to').innerHTML = walletOpts;
 
-            // Events
             document.getElementById('events-list').innerHTML = state.events.map(e => `<div class="transaction-item"><div class="info"><span class="name">${e.title}</span><span class="details">${e.date}</span></div></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay eventos</p>';
-
-            // Birthdays
             document.getElementById('birthdays-list').innerHTML = state.birthdays.map(b => `<div class="transaction-item"><div class="info"><span class="name">${b.name}</span><span class="details">${b.date}</span></div></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay cumpleaños</p>';
-
-            // Notes
             document.getElementById('notes-list').innerHTML = state.notes.map(n => `<div class="card" style="margin-bottom:8px;padding:12px;"><p style="font-size:14px;">${n.text}</p><small style="color:var(--text-secondary);">${new Date(n.date).toLocaleDateString('es-ES')}</small></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay notas</p>';
 
             renderCalendar();
         }
 
-        // Initialization
         document.addEventListener('DOMContentLoaded', () => {
             loadState();
             if (state.theme === 'light') document.body.setAttribute('data-theme', 'light');
             updateUI();
-            // Auto-enter quick mode on load
             enterQuickMode();
-            // Schedule existing notifications
-            state.notifications.forEach(n => scheduleNotification(n));
         });
 
-        // Listen for type change in edit modal
         document.getElementById('edit-type').addEventListener('change', updateEditCategories);
     </script>
 </body>
