@@ -67,6 +67,13 @@
         .quick-success { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--success); color: white; padding: 20px 40px; border-radius: 10px; font-size: 18px; font-weight: 600; z-index: 1001; display: none; }
         .quick-success.show { display: block; animation: fadeInOut 1.5s ease; }
         @keyframes fadeInOut { 0%, 100% { opacity: 0; } 20%, 80% { opacity: 1; } }
+        /* Modal de edición */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-overlay.show { display: flex; }
+        .modal { background: var(--bg-card); border-radius: 12px; padding: 20px; width: 90%; max-width: 400px; }
+        .modal h3 { margin-bottom: 15px; }
+        .modal-actions { display: flex; gap: 10px; margin-top: 15px; }
+        .modal-actions button { flex: 1; }
         /* Main App Styles */
         header { background: var(--bg-secondary); padding: 15px 20px; padding-top: calc(env(safe-area-inset-top, 0px) + 15px); display: flex; justify-content: space-between; align-items: center; }
         header h1 { font-size: 20px; font-weight: 700; }
@@ -99,15 +106,22 @@
         .btn-primary { background: var(--accent); color: white; width: 100%; }
         .btn-danger { background: var(--danger); color: white; }
         .btn-success { background: var(--success); color: white; }
-        .transaction-item, .wallet-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-primary); border-radius: 8px; margin-bottom: 8px; }
-        .transaction-item .info, .wallet-item .info { display: flex; flex-direction: column; }
-        .transaction-item .name, .wallet-item .name { font-weight: 600; }
-        .transaction-item .details, .wallet-item .balance { font-size: 12px; color: var(--text-secondary); }
-        .transaction-item .amount { font-weight: 700; }
+        .btn-secondary { background: var(--bg-primary); color: var(--text-primary); }
+        .transaction-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-primary); border-radius: 8px; margin-bottom: 8px; }
+        .transaction-item .info { display: flex; flex-direction: column; flex: 1; }
+        .transaction-item .name { font-weight: 600; }
+        .transaction-item .details { font-size: 12px; color: var(--text-secondary); }
+        .transaction-item .amount { font-weight: 700; margin-right: 10px; }
         .transaction-item .amount.income { color: var(--success); }
         .transaction-item .amount.expense { color: var(--danger); }
-        .wallet-actions { display: flex; gap: 8px; }
-        .wallet-actions button { padding: 6px 12px; font-size: 12px; }
+        .transaction-item .actions { display: flex; gap: 5px; }
+        .transaction-item .actions button { padding: 5px 8px; font-size: 12px; border: none; border-radius: 4px; cursor: pointer; }
+        .transaction-item .edit-btn { background: var(--accent); color: white; }
+        .transaction-item .delete-btn { background: var(--danger); color: white; }
+        .wallet-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-primary); border-radius: 8px; margin-bottom: 8px; }
+        .wallet-item .info { display: flex; flex-direction: column; }
+        .wallet-item .name { font-weight: 600; }
+        .wallet-item .balance { font-size: 12px; color: var(--text-secondary); }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
         .calendar-grid .day-header { font-size: 12px; color: var(--text-secondary); padding: 8px 0; }
         .calendar-grid .day { padding: 10px 0; border-radius: 8px; font-size: 14px; cursor: pointer; }
@@ -128,6 +142,21 @@
     </style>
 </head>
 <body>
+    <!-- Modal Editar Transacción -->
+    <div id="edit-modal" class="modal-overlay">
+        <div class="modal">
+            <h3>✏️ Editar Transacción</h3>
+            <div class="form-group"><label>Tipo</label><select id="edit-type"><option value="expense">Gasto</option><option value="income">Ingreso</option></select></div>
+            <div class="form-group"><label>Importe</label><input type="number" id="edit-amount" step="0.01"></div>
+            <div class="form-group"><label>Categoría</label><select id="edit-category"></select></div>
+            <div class="form-group"><label>Descripción</label><input type="text" id="edit-description"></div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeEditModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveEditTransaction()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Quick Mode UI -->
     <div id="quick-mode">
         <div class="quick-header">
@@ -178,7 +207,7 @@
         <button class="nav-btn" onclick="showSection('turnos', this)"><span>📅</span>Turnos</button>
     </nav>
     <main>
-        <!-- FINANZAS - Solo IA y Ajustes -->
+        <!-- FINANZAS -->
         <section id="finanzas" class="section">
             <div class="sub-tabs">
                 <button class="sub-tab active" onclick="showFinanzasTab('ia')">IA</button>
@@ -198,7 +227,7 @@
                 <div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🔔 Notificaciones</h3><div id="notifications-list"></div></div>
             </div>
         </section>
-        <!-- TRANSACCIONES - Nueva estructura: Gastos, Últimas, Suscripciones -->
+        <!-- TRANSACCIONES -->
         <section id="transacciones" class="section active">
             <div class="sub-tabs">
                 <button class="sub-tab active" onclick="showTransactionTab('gastos')">Gastos</button>
@@ -283,20 +312,11 @@
     </main>
     <script>
         let state = {
-            balance: 0,
-            totalIncome: 0,
-            totalExpense: 0,
-            transactions: [],
-            wallets: [{name: 'Principal', balance: 0}],
-            subscriptions: [],
-            events: [],
-            birthdays: [],
-            notes: [],
+            balance: 0, totalIncome: 0, totalExpense: 0, transactions: [], wallets: [{name: 'Principal', balance: 0}],
+            subscriptions: [], events: [], birthdays: [], notes: [],
             expenseCategories: ['Comida', 'Transporte', 'Ocio', 'Salud', 'Otros'],
             incomeCategories: ['Salario', 'Freelance', 'Inversiones', 'Otros'],
-            quickType: 'expense',
-            quickAmount: '0',
-            quickCategory: null
+            quickType: 'expense', quickAmount: '0', quickCategory: null, editingIndex: -1
         };
         function loadState() { const saved = localStorage.getItem('finanzAppState'); if (saved) state = {...state, ...JSON.parse(saved)}; }
         function saveState() { localStorage.setItem('finanzAppState', JSON.stringify(state)); }
@@ -304,14 +324,12 @@
         function showSection(id, btn) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            btn.classList.add('active');
+            document.getElementById(id).classList.add('active'); btn.classList.add('active');
         }
         function showFinanzasTab(tab) {
             document.querySelectorAll('#finanzas .sub-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('#finanzas .sub-content').forEach(c => c.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById('finanzas-' + tab).classList.add('active');
+            event.target.classList.add('active'); document.getElementById('finanzas-' + tab).classList.add('active');
         }
         function showTransactionTab(tab) {
             document.querySelectorAll('#transacciones .sub-tab').forEach(t => t.classList.remove('active'));
@@ -326,86 +344,77 @@
             document.getElementById('turnos-' + tab).classList.add('active');
         }
         function toggleExpandable(id) { document.getElementById(id).classList.toggle('active'); }
-        // Quick Mode Functions
-        function enterQuickMode() {
-            document.body.classList.add('quick-mode');
-            state.quickAmount = '0';
-            state.quickCategory = null;
-            state.quickType = 'expense';
-            updateQuickUI();
-        }
-        function exitQuickMode() {
-            document.body.classList.remove('quick-mode');
-            updateUI();
-        }
-        function quickSetType(type) {
-            state.quickType = type;
-            document.querySelectorAll('.quick-type-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector('.quick-type-btn.' + type).classList.add('active');
-            state.quickCategory = null;
-            updateQuickUI();
-        }
-        function quickAddDigit(d) {
-            if (d === '.' && state.quickAmount.includes('.')) return;
-            if (state.quickAmount === '0' && d !== '.') state.quickAmount = d;
-            else state.quickAmount += d;
-            updateQuickUI();
-        }
-        function quickDelete() {
-            state.quickAmount = state.quickAmount.slice(0, -1) || '0';
-            updateQuickUI();
-        }
-        function quickSelectCategory(cat) {
-            state.quickCategory = cat;
-            document.querySelectorAll('.quick-cat-btn').forEach(b => b.classList.toggle('selected', b.textContent === cat));
-        }
+        // Quick Mode
+        function enterQuickMode() { document.body.classList.add('quick-mode'); state.quickAmount = '0'; state.quickCategory = null; state.quickType = 'expense'; updateQuickUI(); }
+        function exitQuickMode() { document.body.classList.remove('quick-mode'); updateUI(); }
+        function quickSetType(type) { state.quickType = type; document.querySelectorAll('.quick-type-btn').forEach(b => b.classList.remove('active')); document.querySelector('.quick-type-btn.' + type).classList.add('active'); state.quickCategory = null; updateQuickUI(); }
+        function quickAddDigit(d) { if (d === '.' && state.quickAmount.includes('.')) return; if (state.quickAmount === '0' && d !== '.') state.quickAmount = d; else state.quickAmount += d; updateQuickUI(); }
+        function quickDelete() { state.quickAmount = state.quickAmount.slice(0, -1) || '0'; updateQuickUI(); }
+        function quickSelectCategory(cat) { state.quickCategory = cat; document.querySelectorAll('.quick-cat-btn').forEach(b => b.classList.toggle('selected', b.textContent === cat)); }
         function updateQuickUI() {
             const amt = parseFloat(state.quickAmount) || 0;
-            const amtEl = document.getElementById('quick-amount');
-            amtEl.textContent = '€' + amt.toFixed(2);
-            amtEl.className = 'amount ' + state.quickType;
-            const saveBtn = document.getElementById('quick-save-btn');
-            saveBtn.textContent = state.quickType === 'expense' ? 'Guardar Gasto' : 'Guardar Ingreso';
-            saveBtn.className = 'quick-save-btn ' + state.quickType;
+            const amtEl = document.getElementById('quick-amount'); amtEl.textContent = '€' + amt.toFixed(2); amtEl.className = 'amount ' + state.quickType;
+            const saveBtn = document.getElementById('quick-save-btn'); saveBtn.textContent = state.quickType === 'expense' ? 'Guardar Gasto' : 'Guardar Ingreso'; saveBtn.className = 'quick-save-btn ' + state.quickType;
             const cats = state.quickType === 'expense' ? state.expenseCategories : state.incomeCategories;
-            document.getElementById('quick-cat-grid').innerHTML = cats.map(c => 
-                `<button class="quick-cat-btn${state.quickCategory === c ? ' selected' : ''}" onclick="quickSelectCategory('${c}')">${c}</button>`
-            ).join('');
+            document.getElementById('quick-cat-grid').innerHTML = cats.map(c => `<button class="quick-cat-btn${state.quickCategory === c ? ' selected' : ''}" onclick="quickSelectCategory('${c}')">${c}</button>`).join('');
         }
         function quickSave() {
-            const amt = parseFloat(state.quickAmount) || 0;
-            if (amt <= 0) return;
+            const amt = parseFloat(state.quickAmount) || 0; if (amt <= 0) return;
             const cat = state.quickCategory || 'Otros';
-            const trans = {
-                type: state.quickType,
-                amount: amt,
-                category: cat,
-                description: state.quickType === 'expense' ? 'Gasto rápido' : 'Ingreso rápido',
-                wallet: state.wallets[0].name,
-                date: new Date().toISOString()
-            };
+            const trans = { type: state.quickType, amount: amt, category: cat, description: state.quickType === 'expense' ? 'Gasto rápido' : 'Ingreso rápido', wallet: state.wallets[0].name, date: new Date().toISOString() };
             state.transactions.unshift(trans);
-            if (state.quickType === 'expense') {
-                state.totalExpense += amt;
-                state.wallets[0].balance -= amt;
-            } else {
-                state.totalIncome += amt;
-                state.wallets[0].balance += amt;
-            }
+            if (state.quickType === 'expense') { state.totalExpense += amt; state.wallets[0].balance -= amt; }
+            else { state.totalIncome += amt; state.wallets[0].balance += amt; }
             state.balance = state.totalIncome - state.totalExpense;
-            saveState();
-            state.quickAmount = '0';
-            state.quickCategory = null;
-            updateQuickUI();
-            const success = document.getElementById('quick-success');
-            success.classList.add('show');
-            setTimeout(() => success.classList.remove('show'), 1500);
+            saveState(); state.quickAmount = '0'; state.quickCategory = null; updateQuickUI();
+            const success = document.getElementById('quick-success'); success.classList.add('show'); setTimeout(() => success.classList.remove('show'), 1500);
+        }
+        // Editar transacciones
+        function openEditModal(index) {
+            state.editingIndex = index;
+            const t = state.transactions[index];
+            document.getElementById('edit-type').value = t.type;
+            document.getElementById('edit-amount').value = t.amount;
+            document.getElementById('edit-description').value = t.description;
+            updateEditCategories();
+            document.getElementById('edit-category').value = t.category;
+            document.getElementById('edit-modal').classList.add('show');
+        }
+        function closeEditModal() { document.getElementById('edit-modal').classList.remove('show'); state.editingIndex = -1; }
+        function updateEditCategories() {
+            const type = document.getElementById('edit-type').value;
+            const cats = type === 'expense' ? state.expenseCategories : state.incomeCategories;
+            document.getElementById('edit-category').innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join('');
+        }
+        function saveEditTransaction() {
+            const i = state.editingIndex; if (i < 0) return;
+            const oldT = state.transactions[i];
+            const newType = document.getElementById('edit-type').value;
+            const newAmt = parseFloat(document.getElementById('edit-amount').value) || 0;
+            const newCat = document.getElementById('edit-category').value;
+            const newDesc = document.getElementById('edit-description').value;
+            // Revertir el balance antiguo
+            if (oldT.type === 'expense') { state.totalExpense -= oldT.amount; state.wallets[0].balance += oldT.amount; }
+            else { state.totalIncome -= oldT.amount; state.wallets[0].balance -= oldT.amount; }
+            // Aplicar nuevo
+            state.transactions[i] = { ...oldT, type: newType, amount: newAmt, category: newCat, description: newDesc };
+            if (newType === 'expense') { state.totalExpense += newAmt; state.wallets[0].balance -= newAmt; }
+            else { state.totalIncome += newAmt; state.wallets[0].balance += newAmt; }
+            state.balance = state.totalIncome - state.totalExpense;
+            saveState(); closeEditModal(); updateUI();
+        }
+        function deleteTransaction(index) {
+            if (!confirm('¿Eliminar esta transacción?')) return;
+            const t = state.transactions[index];
+            if (t.type === 'expense') { state.totalExpense -= t.amount; state.wallets[0].balance += t.amount; }
+            else { state.totalIncome -= t.amount; state.wallets[0].balance -= t.amount; }
+            state.transactions.splice(index, 1);
+            state.balance = state.totalIncome - state.totalExpense;
+            saveState(); updateUI();
         }
         // Category Functions
         function addCategory(type) {
-            const input = document.getElementById('new-' + type + '-category');
-            const name = input.value.trim();
-            if (!name) return;
+            const input = document.getElementById('new-' + type + '-category'); const name = input.value.trim(); if (!name) return;
             if (type === 'expense' && !state.expenseCategories.includes(name)) state.expenseCategories.push(name);
             else if (type === 'income' && !state.incomeCategories.includes(name)) state.incomeCategories.push(name);
             input.value = ''; saveState(); updateUI();
@@ -415,80 +424,48 @@
             else state.incomeCategories = state.incomeCategories.filter(c => c !== cat);
             saveState(); updateUI();
         }
-        // Wallet Functions
         function addWallet() {
             const name = document.getElementById('wallet-name').value.trim();
             const balance = parseFloat(document.getElementById('wallet-balance').value) || 0;
             if (!name || state.wallets.find(w => w.name === name)) return;
-            state.wallets.push({name, balance});
-            document.getElementById('wallet-name').value = '';
-            document.getElementById('wallet-balance').value = '0';
-            saveState(); updateUI();
+            state.wallets.push({name, balance}); document.getElementById('wallet-name').value = ''; document.getElementById('wallet-balance').value = '0'; saveState(); updateUI();
         }
         function makeTransfer() {
-            const from = document.getElementById('transfer-from').value;
-            const to = document.getElementById('transfer-to').value;
+            const from = document.getElementById('transfer-from').value; const to = document.getElementById('transfer-to').value;
             const amount = parseFloat(document.getElementById('transfer-amount').value) || 0;
             if (!from || !to || from === to || amount <= 0) return;
-            const fromWallet = state.wallets.find(w => w.name === from);
-            const toWallet = state.wallets.find(w => w.name === to);
+            const fromWallet = state.wallets.find(w => w.name === from); const toWallet = state.wallets.find(w => w.name === to);
             if (fromWallet && toWallet) { fromWallet.balance -= amount; toWallet.balance += amount; }
-            document.getElementById('transfer-amount').value = '';
-            saveState(); updateUI();
+            document.getElementById('transfer-amount').value = ''; saveState(); updateUI();
         }
         function addSubscription() {
-            const name = document.getElementById('sub-name').value.trim();
-            const amount = parseFloat(document.getElementById('sub-amount').value) || 0;
-            const date = document.getElementById('sub-date').value;
-            if (!name || amount <= 0) return;
-            state.subscriptions.push({name, amount, date});
-            document.getElementById('sub-name').value = '';
-            document.getElementById('sub-amount').value = '';
-            document.getElementById('sub-date').value = '';
-            saveState(); updateUI();
+            const name = document.getElementById('sub-name').value.trim(); const amount = parseFloat(document.getElementById('sub-amount').value) || 0;
+            const date = document.getElementById('sub-date').value; if (!name || amount <= 0) return;
+            state.subscriptions.push({name, amount, date}); document.getElementById('sub-name').value = ''; document.getElementById('sub-amount').value = ''; document.getElementById('sub-date').value = ''; saveState(); updateUI();
         }
         function addEvent() {
-            const title = document.getElementById('event-title').value.trim();
-            const date = document.getElementById('event-date').value;
-            if (!title || !date) return;
-            state.events.push({title, date});
-            document.getElementById('event-title').value = '';
-            document.getElementById('event-date').value = '';
-            saveState(); updateUI();
+            const title = document.getElementById('event-title').value.trim(); const date = document.getElementById('event-date').value; if (!title || !date) return;
+            state.events.push({title, date}); document.getElementById('event-title').value = ''; document.getElementById('event-date').value = ''; saveState(); updateUI();
         }
         function addBirthday() {
-            const name = document.getElementById('birthday-name').value.trim();
-            const date = document.getElementById('birthday-date').value;
-            if (!name || !date) return;
-            state.birthdays.push({name, date});
-            document.getElementById('birthday-name').value = '';
-            document.getElementById('birthday-date').value = '';
-            saveState(); updateUI();
+            const name = document.getElementById('birthday-name').value.trim(); const date = document.getElementById('birthday-date').value; if (!name || !date) return;
+            state.birthdays.push({name, date}); document.getElementById('birthday-name').value = ''; document.getElementById('birthday-date').value = ''; saveState(); updateUI();
         }
         function addNote() {
-            const title = document.getElementById('note-title').value.trim();
-            const content = document.getElementById('note-content').value.trim();
-            if (!title) return;
-            state.notes.push({title, content, date: new Date().toISOString()});
-            document.getElementById('note-title').value = '';
-            document.getElementById('note-content').value = '';
-            saveState(); updateUI();
+            const title = document.getElementById('note-title').value.trim(); const content = document.getElementById('note-content').value.trim(); if (!title) return;
+            state.notes.push({title, content, date: new Date().toISOString()}); document.getElementById('note-title').value = ''; document.getElementById('note-content').value = ''; saveState(); updateUI();
         }
         function renderCalendar() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth();
+            const now = new Date(); const year = now.getFullYear(); const month = now.getMonth();
             const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
             document.getElementById('calendar-month').textContent = monthNames[month] + ' ' + year;
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const firstDay = new Date(year, month, 1).getDay(); const daysInMonth = new Date(year, month + 1, 0).getDate();
             const dayHeaders = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
             let html = dayHeaders.map(d => `<div class="day-header">${d}</div>`).join('');
             for (let i = 0; i < firstDay; i++) html += '<div class="day"></div>';
             for (let d = 1; d <= daysInMonth; d++) {
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                const hasEvent = state.events.some(e => e.date === dateStr);
-                const isToday = d === now.getDate();
+                const hasEvent = state.events.some(e => e.date === dateStr); const isToday = d === now.getDate();
                 html += `<div class="day${isToday ? ' today' : ''}${hasEvent ? ' has-event' : ''}">${d}</div>`;
             }
             document.getElementById('calendar-grid').innerHTML = html;
@@ -497,43 +474,31 @@
             document.getElementById('total-balance').textContent = '€' + state.balance.toFixed(2);
             document.getElementById('total-income').textContent = '€' + state.totalIncome.toFixed(0);
             document.getElementById('total-expense').textContent = '€' + state.totalExpense.toFixed(0);
-            // Wallet selects
             const walletOptions = state.wallets.map(w => `<option value="${w.name}">${w.name}</option>`).join('');
             document.getElementById('transfer-from').innerHTML = walletOptions;
             document.getElementById('transfer-to').innerHTML = walletOptions;
-            // Wallets list
-            document.getElementById('wallets-list').innerHTML = state.wallets.map(w => 
-                `<div class="wallet-item"><div class="info"><span class="name">${w.name}</span><span class="balance">€${w.balance.toFixed(2)}</span></div></div>`
-            ).join('');
-            // Recent transactions
-            document.getElementById('recent-transactions').innerHTML = state.transactions.slice(0, 10).map(t => 
-                `<div class="transaction-item"><div class="info"><span class="name">${t.description}</span><span class="details">${t.category} • ${new Date(t.date).toLocaleDateString()}</span></div><span class="amount ${t.type}">${t.type === 'income' ? '+' : '-'}€${t.amount.toFixed(2)}</span></div>`
+            document.getElementById('wallets-list').innerHTML = state.wallets.map(w => `<div class="wallet-item"><div class="info"><span class="name">${w.name}</span><span class="balance">€${w.balance.toFixed(2)}</span></div></div>`).join('');
+            // Transacciones con botones de editar/eliminar
+            document.getElementById('recent-transactions').innerHTML = state.transactions.slice(0, 20).map((t, i) => 
+                `<div class="transaction-item">
+                    <div class="info"><span class="name">${t.description}</span><span class="details">${t.category} • ${new Date(t.date).toLocaleDateString()}</span></div>
+                    <span class="amount ${t.type}">${t.type === 'income' ? '+' : '-'}€${t.amount.toFixed(2)}</span>
+                    <div class="actions">
+                        <button class="edit-btn" onclick="openEditModal(${i})">✏️</button>
+                        <button class="delete-btn" onclick="deleteTransaction(${i})">🗑️</button>
+                    </div>
+                </div>`
             ).join('') || '<p style="color:var(--text-secondary);font-size:13px;">Sin transacciones</p>';
-            // Category breakdown
             const expenseByCategory = {};
             state.transactions.filter(t => t.type === 'expense').forEach(t => { expenseByCategory[t.category] = (expenseByCategory[t.category] || 0) + t.amount; });
             document.getElementById('category-breakdown').innerHTML = Object.entries(expenseByCategory).map(([cat, amt]) => 
                 `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bg-primary);"><span>${cat}</span><span>€${amt.toFixed(2)}</span></div>`
             ).join('') || '<p style="color:var(--text-secondary);font-size:13px;">Sin gastos</p>';
-            // Categories lists in Ajustes
-            document.getElementById('expense-categories-list').innerHTML = '<div class="categories-list">' + state.expenseCategories.map(c => 
-                `<span class="category-tag">${c}<button class="delete-btn" onclick="deleteCategory('expense', '${c}')">x</button></span>`
-            ).join('') + '</div>';
-            document.getElementById('income-categories-list').innerHTML = '<div class="categories-list">' + state.incomeCategories.map(c => 
-                `<span class="category-tag">${c}<button class="delete-btn" onclick="deleteCategory('income', '${c}')">x</button></span>`
-            ).join('') + '</div>';
-            // Subscriptions
-            document.getElementById('subscriptions-list').innerHTML = state.subscriptions.map(s => 
-                `<div class="transaction-item"><div class="info"><span class="name">${s.name}</span><span class="details">${s.date || 'Sin fecha'}</span></div><span class="amount expense">€${s.amount.toFixed(2)}/mes</span></div>`
-            ).join('') || '<p style="color:var(--text-secondary);font-size:13px;">Sin suscripciones</p>';
-            // Birthdays
-            document.getElementById('birthdays-list').innerHTML = state.birthdays.map(b => 
-                `<div class="transaction-item"><div class="info"><span class="name">${b.name}</span><span class="details">${b.date}</span></div></div>`
-            ).join('') || '<p style="color:var(--text-secondary);font-size:13px;">Sin cumpleaños</p>';
-            // Notes
-            document.getElementById('notes-list').innerHTML = state.notes.map(n => 
-                `<div class="card" style="margin-bottom:8px;padding:10px;"><strong>${n.title}</strong><p style="font-size:13px;color:var(--text-secondary);margin-top:4px;">${n.content}</p></div>`
-            ).join('') || '<p style="color:var(--text-secondary);font-size:13px;">Sin notas</p>';
+            document.getElementById('expense-categories-list').innerHTML = '<div class="categories-list">' + state.expenseCategories.map(c => `<span class="category-tag">${c}<button class="delete-btn" onclick="deleteCategory('expense', '${c}')">x</button></span>`).join('') + '</div>';
+            document.getElementById('income-categories-list').innerHTML = '<div class="categories-list">' + state.incomeCategories.map(c => `<span class="category-tag">${c}<button class="delete-btn" onclick="deleteCategory('income', '${c}')">x</button></span>`).join('') + '</div>';
+            document.getElementById('subscriptions-list').innerHTML = state.subscriptions.map(s => `<div class="transaction-item"><div class="info"><span class="name">${s.name}</span><span class="details">${s.date || 'Sin fecha'}</span></div><span class="amount expense">€${s.amount.toFixed(2)}/mes</span></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">Sin suscripciones</p>';
+            document.getElementById('birthdays-list').innerHTML = state.birthdays.map(b => `<div class="transaction-item"><div class="info"><span class="name">${b.name}</span><span class="details">${b.date}</span></div></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">Sin cumpleaños</p>';
+            document.getElementById('notes-list').innerHTML = state.notes.map(n => `<div class="card" style="margin-bottom:8px;padding:10px;"><strong>${n.title}</strong><p style="font-size:13px;color:var(--text-secondary);margin-top:4px;">${n.content}</p></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">Sin notas</p>';
             document.getElementById('notifications-list').innerHTML = '<p style="color:var(--text-secondary);font-size:13px;">Sin notificaciones activas</p>';
             renderCalendar();
             if (state.transactions.length > 0) {
@@ -541,13 +506,8 @@
                 document.getElementById('ia-recommendation').textContent = `Tu gasto promedio es de €${avgExpense.toFixed(2)}. ${state.totalExpense > state.totalIncome ? 'Cuidado: tus gastos superan tus ingresos.' : 'Buen trabajo manteniendo el balance positivo.'}`;
             }
         }
-        // Initialize - ABRE DIRECTAMENTE EL MODO RÁPIDO
-        document.addEventListener('DOMContentLoaded', () => {
-            loadState();
-            if (localStorage.getItem('theme') === 'light') document.body.dataset.theme = 'light';
-            updateUI();
-            enterQuickMode(); // Abrir modo rápido al iniciar
-        });
+        document.getElementById('edit-type').addEventListener('change', updateEditCategories);
+        document.addEventListener('DOMContentLoaded', () => { loadState(); if (localStorage.getItem('theme') === 'light') document.body.dataset.theme = 'light'; updateUI(); enterQuickMode(); });
     </script>
 </body>
 </html>
