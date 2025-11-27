@@ -660,7 +660,8 @@
         </section>
     </main>
     <script>
-        let state = {
+        // DEFAULT STATE - will be merged with saved data
+        const defaultState = {
             balance: 0,
             transactions: [],
             wallets: [],
@@ -677,16 +678,45 @@
             selectedIncomeCategory: '',
             darkMode: true
         };
+        
+        let state = JSON.parse(JSON.stringify(defaultState));
+        
+        // IMPROVED loadState - preserves ALL existing data
         function loadState() {
-            const saved = localStorage.getItem('finanzAppState');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                state = { ...state, ...parsed };
+            try {
+                const saved = localStorage.getItem('finanzAppState');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    // Merge: keep all saved data, only add missing fields from default
+                    Object.keys(defaultState).forEach(key => {
+                        if (parsed.hasOwnProperty(key)) {
+                            // Use saved value if it exists
+                            state[key] = parsed[key];
+                        }
+                        // If key doesn't exist in saved, keep default
+                    });
+                    // Also preserve any extra fields from saved data
+                    Object.keys(parsed).forEach(key => {
+                        if (!state.hasOwnProperty(key)) {
+                            state[key] = parsed[key];
+                        }
+                    });
+                    console.log('State loaded successfully:', state);
+                }
+            } catch (e) {
+                console.error('Error loading state:', e);
             }
         }
+        
         function saveState() {
-            localStorage.setItem('finanzAppState', JSON.stringify(state));
+            try {
+                localStorage.setItem('finanzAppState', JSON.stringify(state));
+                console.log('State saved successfully');
+            } catch (e) {
+                console.error('Error saving state:', e);
+            }
         }
+        
         function toggleTheme() {
             state.darkMode = !state.darkMode;
             document.body.classList.toggle('light-mode', !state.darkMode);
@@ -701,7 +731,7 @@
         function showFinanzasTab(tab) {
             document.querySelectorAll('#finanzas .sub-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('#finanzas .sub-content').forEach(c => c.classList.remove('active'));
-            event.target.classList.add('active');
+            if(event && event.target) event.target.classList.add('active');
             document.getElementById('finanzas-' + tab).classList.add('active');
         }
         function showTransactionTab(tab) {
@@ -714,12 +744,11 @@
         function showTurnosTab(tab) {
             document.querySelectorAll('#turnos .sub-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('#turnos .sub-content').forEach(c => c.classList.remove('active'));
-            event.target.classList.add('active');
+            if(event && event.target) event.target.classList.add('active');
             document.getElementById('turnos-' + tab).classList.add('active');
         }
         function toggleExpandable(id) {
-            const el = document.getElementById(id);
-            el.classList.toggle('active');
+            document.getElementById(id).classList.toggle('active');
         }
         function addQuickAmount(type, amount) {
             if (type === 'expense') {
@@ -750,13 +779,9 @@
             const name = input.value.trim();
             if (!name) return;
             if (type === 'expense') {
-                if (!state.expenseCategories.includes(name)) {
-                    state.expenseCategories.push(name);
-                }
+                if (!state.expenseCategories.includes(name)) state.expenseCategories.push(name);
             } else {
-                if (!state.incomeCategories.includes(name)) {
-                    state.incomeCategories.push(name);
-                }
+                if (!state.incomeCategories.includes(name)) state.incomeCategories.push(name);
             }
             input.value = '';
             saveState();
@@ -776,19 +801,14 @@
             const name = document.getElementById('expense-name').value || 'Gasto';
             const category = state.selectedExpenseCategory || 'Otros';
             state.transactions.push({
-                id: Date.now(),
-                type: 'expense',
-                amount: state.currentExpenseAmount,
-                name: name,
-                category: category,
-                date: new Date().toISOString()
+                id: Date.now(), type: 'expense', amount: state.currentExpenseAmount,
+                name: name, category: category, date: new Date().toISOString()
             });
             state.balance -= state.currentExpenseAmount;
             state.currentExpenseAmount = 0;
             state.selectedExpenseCategory = '';
             document.getElementById('expense-amount').textContent = '€0.00';
             document.getElementById('expense-name').value = '';
-            document.getElementById('expense-category').value = '';
             saveState();
             updateUI();
         }
@@ -797,19 +817,14 @@
             const name = document.getElementById('income-name').value || 'Ingreso';
             const category = state.selectedIncomeCategory || 'Otros';
             state.transactions.push({
-                id: Date.now(),
-                type: 'income',
-                amount: state.currentIncomeAmount,
-                name: name,
-                category: category,
-                date: new Date().toISOString()
+                id: Date.now(), type: 'income', amount: state.currentIncomeAmount,
+                name: name, category: category, date: new Date().toISOString()
             });
             state.balance += state.currentIncomeAmount;
             state.currentIncomeAmount = 0;
             state.selectedIncomeCategory = '';
             document.getElementById('income-amount').textContent = '€0.00';
             document.getElementById('income-name').value = '';
-            document.getElementById('income-category').value = '';
             saveState();
             updateUI();
         }
@@ -870,11 +885,6 @@
             saveState();
             updateUI();
         }
-        function deleteNotification(id) {
-            state.notifications = state.notifications.filter(n => n.id !== id);
-            saveState();
-            updateUI();
-        }
         function addEvent() {
             const title = document.getElementById('event-title').value;
             const date = document.getElementById('event-date').value;
@@ -932,68 +942,66 @@
             document.getElementById('total-balance').textContent = '€' + state.balance.toFixed(2);
             document.getElementById('total-income').textContent = '€' + totalIncome.toFixed(0);
             document.getElementById('total-expense').textContent = '€' + totalExpense.toFixed(0);
-            // Category buttons for expense
+            // Category buttons
             const expCatBtns = document.getElementById('expense-category-buttons');
-            expCatBtns.innerHTML = state.expenseCategories.map(c => 
-                `<div class="category-btn ${state.selectedExpenseCategory===c?'selected':''}" onclick="selectCategory('expense','${c}')">${c}</div>`
+            if(expCatBtns) expCatBtns.innerHTML = (state.expenseCategories || []).map(c => 
+                `<div class="category-btn" onclick="selectCategory('expense','${c}')">${c}</div>`
             ).join('');
-            // Category buttons for income
             const incCatBtns = document.getElementById('income-category-buttons');
-            incCatBtns.innerHTML = state.incomeCategories.map(c => 
-                `<div class="category-btn ${state.selectedIncomeCategory===c?'selected':''}" onclick="selectCategory('income','${c}')">${c}</div>`
+            if(incCatBtns) incCatBtns.innerHTML = (state.incomeCategories || []).map(c => 
+                `<div class="category-btn" onclick="selectCategory('income','${c}')">${c}</div>`
             ).join('');
             // Categories list in Ajustes
-            document.getElementById('expense-categories-list').innerHTML = state.expenseCategories.map(c => 
+            document.getElementById('expense-categories-list').innerHTML = (state.expenseCategories || []).map(c => 
                 `<div class="category-item"><span>${c}</span><div class="category-item-actions"><button style="background:var(--danger);color:white;" onclick="deleteCategory('expense','${c}')">Borrar</button></div></div>`
             ).join('') || '<p style="color:var(--text-secondary);font-size:12px;">Sin categorías</p>';
-            document.getElementById('income-categories-list').innerHTML = state.incomeCategories.map(c => 
+            document.getElementById('income-categories-list').innerHTML = (state.incomeCategories || []).map(c => 
                 `<div class="category-item"><span>${c}</span><div class="category-item-actions"><button style="background:var(--danger);color:white;" onclick="deleteCategory('income','${c}')">Borrar</button></div></div>`
             ).join('') || '<p style="color:var(--text-secondary);font-size:12px;">Sin categorías</p>';
-            // Notifications list
-            document.getElementById('notifications-list').innerHTML = state.notifications.map(n => 
+            // Notifications
+            document.getElementById('notifications-list').innerHTML = (state.notifications || []).map(n => 
                 `<div class="notification-item"><div class="info"><h4>${n.title}</h4><small>${n.time || 'Sin hora'}</small></div><div class="toggle-switch ${n.active?'active':''}" onclick="toggleNotification(${n.id})"></div></div>`
             ).join('') || '<p style="color:var(--text-secondary);font-size:12px;">Sin notificaciones</p>';
             // Recent transactions
-            const recent = state.transactions.slice(-5).reverse();
+            const recent = (state.transactions || []).slice(-5).reverse();
             document.getElementById('recent-transactions').innerHTML = recent.map(t => 
                 `<div class="transaction-item"><div class="transaction-info"><h4>${t.name}</h4><small>${t.category} • ${new Date(t.date).toLocaleDateString('es')}</small></div><span class="transaction-amount ${t.type}">${t.type==='expense'?'-':'+'}$${t.amount.toFixed(2)}</span></div>`
             ).join('') || '<div class="empty-state"><span>💸</span><p>Sin transacciones</p></div>';
             // Category breakdown
             const expenseByCategory = {};
-            state.transactions.filter(t => t.type === 'expense').forEach(t => {
+            (state.transactions || []).filter(t => t.type === 'expense').forEach(t => {
                 expenseByCategory[t.category] = (expenseByCategory[t.category] || 0) + t.amount;
             });
             document.getElementById('category-breakdown').innerHTML = Object.entries(expenseByCategory).map(([cat, amt]) => 
                 `<div class="transaction-item"><span>${cat}</span><span class="transaction-amount expense">-€${amt.toFixed(2)}</span></div>`
             ).join('') || '<div class="empty-state"><span>📊</span><p>Sin datos</p></div>';
             // Wallets
-            document.getElementById('wallets-list').innerHTML = state.wallets.map(w => 
+            document.getElementById('wallets-list').innerHTML = (state.wallets || []).map(w => 
                 `<div class="wallet-card"><h4>${w.name}</h4><h3>€${w.balance.toFixed(2)}</h3></div>`
             ).join('') || '<div class="empty-state"><span>💳</span><p>Sin carteras</p></div>';
             // Transfer selects
-            const walletOptions = state.wallets.map(w => `<option value="${w.id}">${w.name}</option>`).join('');
+            const walletOptions = (state.wallets || []).map(w => `<option value="${w.id}">${w.name}</option>`).join('');
             document.getElementById('transfer-from').innerHTML = '<option value="">Seleccionar...</option>' + walletOptions;
             document.getElementById('transfer-to').innerHTML = '<option value="">Seleccionar...</option>' + walletOptions;
             // Subscriptions
-            document.getElementById('subscriptions-list').innerHTML = state.subscriptions.map(s => 
-                `<div class="transaction-item"><div class="transaction-info"><h4>${s.name}</h4><small>Día ${s.day} de cada mes</small></div><span class="transaction-amount expense">-€${s.amount.toFixed(2)}</span></div>`
+            document.getElementById('subscriptions-list').innerHTML = (state.subscriptions || []).map(s => 
+                `<div class="transaction-item"><div class="transaction-info"><h4>${s.name}</h4><small>Día ${s.day}</small></div><span class="transaction-amount expense">-€${s.amount.toFixed(2)}</span></div>`
             ).join('') || '<div class="empty-state"><span>🔄</span><p>Sin suscripciones</p></div>';
             // Birthdays
-            document.getElementById('birthdays-list').innerHTML = state.birthdays.map(b => 
+            document.getElementById('birthdays-list').innerHTML = (state.birthdays || []).map(b => 
                 `<div class="transaction-item"><div class="transaction-info"><h4>🎂 ${b.name}</h4><small>${new Date(b.date).toLocaleDateString('es', {day:'numeric',month:'long'})}</small></div></div>`
             ).join('') || '<div class="empty-state"><span>🎂</span><p>Sin cumpleaños</p></div>';
             // Notes
-            document.getElementById('notes-list').innerHTML = state.notes.map(n => 
+            document.getElementById('notes-list').innerHTML = (state.notes || []).map(n => 
                 `<div class="card" style="padding:12px;margin-bottom:8px;"><h4 style="font-size:13px;margin-bottom:4px;">${n.title}</h4><p style="font-size:12px;color:var(--text-secondary);">${n.content}</p></div>`
             ).join('') || '<div class="empty-state"><span>📝</span><p>Sin notas</p></div>';
             renderCalendar();
         }
-        // Initialize app - DEFAULT TO GASTO TAB
+        // Initialize - DEFAULT TO GASTO TAB
         document.addEventListener('DOMContentLoaded', function() {
             loadState();
             document.body.classList.toggle('light-mode', !state.darkMode);
             updateUI();
-            // Set default to Transacciones > Gasto
             showSection('transacciones', document.querySelectorAll('.nav-btn')[1]);
             showTransactionTab('gasto');
         });
