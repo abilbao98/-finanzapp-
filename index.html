@@ -135,7 +135,7 @@
         <div class="quick-type-tabs"><button class="quick-type-btn expense active" onclick="quickSetType('expense')">Gasto</button><button class="quick-type-btn income" onclick="quickSetType('income')">Ingreso</button></div>
         <div class="quick-amount-display"><div id="quick-amount" class="amount expense">€0.00</div></div>
         <div class="quick-categories"><h4>Categoría</h4><div id="quick-cat-grid" class="quick-cat-grid"></div></div>
-        <div class="quick-numpad"><button class="quick-num-btn" onclick="quickAddDigit('1')">1</button><button class="quick-num-btn" onclick="quickAddDigit('2')">2</button><button class="quick-num-btn" onclick="quickAddDigit('3')">3</button><button class="quick-num-btn" onclick="quickAddDigit('4')">4</button><button class="quick-num-btn" onclick="quickAddDigit('5')">5</button><button class="quick-num-btn" onclick="quickAddDigit('6')">6</button><button class="quick-num-btn" onclick="quickAddDigit('7')">7</button><button class="quick-num-btn" onclick="quickAddDigit('8')">8</button><button class="quick-num-btn" onclick="quickAddDigit('9')">9</button><button class="quick-num-btn" onclick="quickAddDigit('.')">.</button><button class="quick-num-btn" onclick="quickAddDigit('0')">0</button><button class="quick-num-btn" onclick="quickDelete()">⌫</button></div>
+        <div class="quick-numpad"><button class="quick-num-btn" onclick="quickSetAmount(1)">€1</button><button class="quick-num-btn" onclick="quickSetAmount(2)">€2</button><button class="quick-num-btn" onclick="quickSetAmount(5)">€5</button><button class="quick-num-btn" onclick="quickSetAmount(10)">€10</button><button class="quick-num-btn" onclick="quickSetAmount(20)">€20</button><button class="quick-num-btn" onclick="quickSetAmount(50)">€50</button><button class="quick-num-btn" onclick="quickSetAmount(100)">€100</button><button class="quick-num-btn" onclick="quickSetAmount(200)">€200</button><button class="quick-num-btn" onclick="quickClear()">C</button></div><button class="quick-num-btn" onclick="quickAddDigit('1')">1</button><button class="quick-num-btn" onclick="quickAddDigit('2')">2</button><button class="quick-num-btn" onclick="quickAddDigit('3')">3</button><button class="quick-num-btn" onclick="quickAddDigit('4')">4</button><button class="quick-num-btn" onclick="quickAddDigit('5')">5</button><button class="quick-num-btn" onclick="quickAddDigit('6')">6</button><button class="quick-num-btn" onclick="quickAddDigit('7')">7</button><button class="quick-num-btn" onclick="quickAddDigit('8')">8</button><button class="quick-num-btn" onclick="quickAddDigit('9')">9</button><button class="quick-num-btn" onclick="quickAddDigit('.')">.</button><button class="quick-num-btn" onclick="quickAddDigit('0')">0</button><button class="quick-num-btn" onclick="quickDelete()">⌫</button></div>
         <button id="quick-save-btn" class="quick-save-btn expense" onclick="quickSave()">Guardar Gasto</button>
     </div>
     <div id="quick-success">✓ Guardado</div>
@@ -263,11 +263,11 @@
             document.querySelectorAll('.quick-type-btn').forEach(b => { b.classList.remove('active'); if (b.classList.contains(type)) b.classList.add('active'); });
             updateQuickUI();
         }
-        function quickAddDigit(d) {
-            if (d === '.' && quickAmount.includes('.')) return;
-            if (quickAmount.length < 10) { quickAmount += d; updateQuickUI(); }
+        function quickSetAmount(amt) {
+        quickAmount = amt.toString(); updateQuickUI();
         }
-        function quickDelete() { quickAmount = quickAmount.slice(0, -1); updateQuickUI(); }
+            function quickClear() { quickAmount = ''; updateQuickUI(); 
+        
         function quickSelectCategory(cat) {
             quickCategory = cat;
             document.querySelectorAll('.quick-cat-btn').forEach(b => b.classList.remove('active'));
