@@ -2,7 +2,8 @@
   "name": "FinanzApp",
   "short_name": "FinanzApp",
   "description": "Aplicacion de finanzas personales",
-  "start_url": "/",
+  "start_url": "/-finanzapp-/",
+  "scope": "/-finanzapp-/"
   "display": "standalone",
   "background_color": "#1a1a2e",
   "theme_color": "#1a1a2e",
