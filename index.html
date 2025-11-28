@@ -268,10 +268,11 @@
         }
             function quickClear() { quickAmount = ''; updateQuickUI();  }
         
-        function quickSelectCategory(cat) {
+      function quickSelectCategory(cat, el) {
             quickCategory = cat;
-            document.querySelectorAll('.quick-cat-btn').forEach(b => b.classList.remove('active')); }
-            event.target.classList.add('active');
+            document.querySelectorAll('.quick-cat-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+}
         }
         function updateQuickUI() {
             const amt = parseFloat(quickAmount) || 0;
@@ -283,7 +284,7 @@
             saveBtn.textContent = 'Guardar ' + (quickType === 'expense' ? 'Gasto' : 'Ingreso');
             const cats = quickType === 'expense' ? state.expenseCategories : state.incomeCategories;
             const grid = document.getElementById('quick-cat-grid');
-            grid.innerHTML = cats.map(c => `<button class="quick-cat-btn${quickCategory === c ? ' active' : ''}" onclick="quickSelectCategory('${c}')">${c}</button>`).join('');
+            grid.innerHTML = cats.map(c => `<button class="quick-cat-btn${quickCategory === c ? ' active' : ''}" onclick="quickSelectCategory('${c}',this)</button>`).join('');
         }
         function quickSave() {
             const amt = parseFloat(quickAmount);
