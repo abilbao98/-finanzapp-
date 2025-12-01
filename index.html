@@ -283,8 +283,7 @@
         function enterQuickMode() {
             document.body.classList.add('quick-mode');
             quickType = 'expense'; quickAmount = ''; quickCategory = '';
-            updateQuickUI();
-        }
+    setTimeout(() => updateQuickUI(), 50);        }
         function exitQuickMode() { document.body.classList.remove('quick-mode'); updateUI(); }
         function quickSetType(type) {
             quickType = type;
