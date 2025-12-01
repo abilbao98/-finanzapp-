@@ -310,7 +310,7 @@
             saveBtn.textContent = 'Guardar ' + (quickType === 'expense' ? 'Gasto' : 'Ingreso');
             const cats = quickType === 'expense' ? state.expenseCategories : state.incomeCategories;
             const grid = document.getElementById('quick-cat-grid');
-            grid.innerHTML = cats.map(c => `<button class="quick-cat-btn${quickCategory === c ? ' active' : ''}" onclick="quickSelectCategory('${c}',this)</button>`).join('');
+            grid.innerHTML = cats.map(c => `<button class="quick-cat-btn${quickCategory === c ? ' active' : ''}" onclick="quickSelectCategory('${c}',this)">${c}</button>`).join('');
               // Control de botones de céntimos
             const centBtns = document.getElementById('quick-cent-btns');
             if (centBtns) centBtns.style.display = (quickType === 'expense') ? 'flex' : 'none';
