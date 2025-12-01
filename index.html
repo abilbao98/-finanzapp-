@@ -154,16 +154,12 @@
     <div id="quick-mode"><div class="quick-header"><h2>Entrada Rápida</h2><button class="quick-close" onclick="exitQuickMode()">✕</button></div>
         <div class="quick-type-tabs"><button class="quick-type-btn expense active" onclick="quickSetType('expense')">Gasto</button><button class="quick-type-btn income" onclick="quickSetType('income')">Ingreso</button></div>
         <div class="quick-amount-display"><div id="quick-amount" class="amount expense">€0.00</div></div>
-                        <!-- Botones rapidos de centimos (solo para gastos) -->
-            <div class="quick-cent-btns" id="quick-cent-btns" style="display:none;">
-                <button class="quick-cent-btn" onclick="quickAddCents(0.01)">+0.01€</button>
-                <button class="quick-cent-btn" onclick="quickAddCents(0.10)">+0.10€</button>
-                <button class="quick-cent-btn" onclick="quickAddCents(0.20)">+0.20€</button>
-                <button class="quick-cent-btn" onclick="quickAddCents(0.50)">+0.50€</button>
-                      </div>
-
         <div class="quick-categories"><h4>Categoría</h4><div id="quick-cat-grid" class="quick-cat-grid"></div></div>
-            <div class="quick-numpad"><button class="quick-num-btn" onclick="quickSetAmount(1)">€1</button><button class="quick-num-btn" onclick="quickSetAmount(2)">€2</button><button class="quick-num-btn" onclick="quickSetAmount(5)">€5</button><button class="quick-num-btn" onclick="quickSetAmount(10)">€10</button><button class="quick-num-btn" onclick="quickSetAmount(20)">€20</button><button class="quick-num-btn" onclick="quickSetAmount(50)">€50</button><button class="quick-num-btn" onclick="quickSetAmount(100)">€100</button><button class="quick-num-btn" onclick="quickSetAmount(200)">€200</button><button class="quick-num-btn" onclick="quickClear()">C</button></div>
+            <div class="quick-numpad">
+                      <button class="quick-num-btn" onclick="quickAddCents(0.01)">+0.01€</button>
+                      <button class="quick-num-btn" onclick="quickAddCents(0.10)">+0.10€</button>
+                      <button class="quick-num-btn" onclick="quickAddCents(0.20)">+0.20€</button>
+                      <button class="quick-num-btn" onclick="quickAddCents(0.50)">+0.50€</button><button class="quick-num-btn" onclick="quickSetAmount(1)">€1</button><button class="quick-num-btn" onclick="quickSetAmount(2)">€2</button><button class="quick-num-btn" onclick="quickSetAmount(5)">€5</button><button class="quick-num-btn" onclick="quickSetAmount(10)">€10</button><button class="quick-num-btn" onclick="quickSetAmount(20)">€20</button><button class="quick-num-btn" onclick="quickSetAmount(50)">€50</button><button class="quick-num-btn" onclick="quickSetAmount(100)">€100</button><button class="quick-num-btn" onclick="quickSetAmount(200)">€200</button><button class="quick-num-btn" onclick="quickClear()">C</button></div>
         <button id="quick-save-btn" class="quick-save-btn expense" onclick="quickSave()">Guardar Gasto</button>
     </div>
     <div id="quick-success">✓ Guardado</div>
@@ -313,9 +309,6 @@
             const cats = quickType === 'expense' ? state.expenseCategories : state.incomeCategories;
             const grid = document.getElementById('quick-cat-grid');
             grid.innerHTML = cats.map(c => `<button class="quick-cat-btn${quickCategory === c ? ' active' : ''}" onclick="quickSelectCategory('${c}',this)">${c}</button>`).join('');
-              // Control de botones de céntimos
-            const centBtns = document.getElementById('quick-cent-btns');
-            if (centBtns) centBtns.style.display = (quickType === 'expense') ? 'flex' : 'none';
         }
             function quickAddCents(cents) {
             const currentAmt = parseFloat(quickAmount) || 0;
