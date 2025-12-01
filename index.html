@@ -40,6 +40,26 @@
         .quick-save-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer; }
         .quick-save-btn.expense { background: var(--danger); color: white; }
         .quick-save-btn.income { background: var(--success); color: white; }
+
+                /* Botones de centimos */
+        .quick-cent-btns { display: flex; gap: 8px; margin-bottom: 15px; justify-content: space-around; }
+        .quick-cent-btn { flex: 1; padding: 10px 5px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; background: var(--bg-secondary); color: var(--text-secondary); }
+        .quick-cent-btn:active { background: var(--warning); color: black; }
+        
+        /* Turnos con colores */
+        .turnos-selector { margin-bottom: 15px; }
+        .turnos-selector h4 { margin-bottom: 10px; color: var(--text-secondary); font-size: 14px; }
+        .turno-btns { display: flex; gap: 8px; }
+        .turno-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: var(--bg-card); color: var(--text-secondary); border: 2px solid transparent; }
+        .turno-btn.active.manana { background: #3b82f6; color: white; border-color: #2563eb; }
+        .turno-btn.active.tarde { background: #10b981; color: white; border-color: #059669; }
+        .turno-btn.active.noche { background: #ef4444; color: white; border-color: #dc2626; }
+        
+        /* Indicadores de calendario mejorados */
+        .calendar-grid .day.has-turno::before { content: ''; position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; border-radius: 50%; }
+        .calendar-grid .day.has-turno.manana::before { background: #3b82f6; }
+        .calendar-grid .day.has-turno.tarde::before { background: #10b981; }
+        .calendar-grid .day.has-turno.noche::before { background: #ef4444; }
         #quick-success { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--success); color: white; padding: 20px 40px; border-radius: 12px; font-size: 18px; font-weight: 600; z-index: 1001; }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
@@ -139,6 +159,14 @@
         <button id="quick-save-btn" class="quick-save-btn expense" onclick="quickSave()">Guardar Gasto</button>
     </div>
     <div id="quick-success">✓ Guardado</div>
+                <!-- Botones rapidos de centimos (solo para gastos) -->
+            <div class="quick-cent-btns" id="quick-cent-btns" style="display:none;">
+                <button class="quick-cent-btn" onclick="quickAddCents(0.01)">+0.01€</button>
+                <button class="quick-cent-btn" onclick="quickAddCents(0.10)">+0.10€</button>
+                <button class="quick-cent-btn" onclick="quickAddCents(0.20)">+0.20€</button>
+                <button class="quick-cent-btn" onclick="quickAddCents(0.50)">+0.50€</button>
+            </div>
+
 
     <!-- Main App -->
     <header><h1>💰 FinanzApp</h1><div class="header-actions"><button class="icon-btn" onclick="enterQuickMode()">⚡</button><button class="icon-btn" onclick="toggleTheme()">🌙</button></div></header>
@@ -656,6 +684,99 @@
             solicitarPermisoNotificaciones();
         }, 3000);
     }
+
+// ============ NUEVAS FUNCIONES PARA CENTIMOS Y TURNOS ============
+
+// Funcion para agregar centimos al monto rapido
+function quickAddCents(cents) {
+    const currentAmt = parseFloat(quickAmount) || 0;
+    quickAmount = (currentAmt + cents).toFixed(2);
+    updateQuickUI();
+}
+
+// Modificar quickSetType para mostrar/ocultar botones de centimos
+const originalQuickSetType = quickSetType;
+quickSetType = function(type) {
+    originalQuickSetType(type);
+    // Mostrar botones de centimos solo para gastos
+    const centBtns = document.getElementById('quick-cent-btns');
+    if (centBtns) {
+        centBtns.style.display = (type === 'expense') ? 'flex' : 'none';
+    }
+};
+
+// Agregar turnos al state
+if (!state.turnos) {
+    state.turnos = {}; // formato: { '2025-12-01': 'manana', '2025-12-02': 'tarde', ... }
+}
+
+// Funcion para agregar/cambiar turno de un dia
+function setTurno(dateStr, turno) {
+    if (!turno || turno === 'none') {
+        delete state.turnos[dateStr];
+    } else {
+        state.turnos[dateStr] = turno;
+    }
+    saveState();
+    renderCalendar();
+}
+
+// Selector de turno para el dia actual (agregar en calendar interface)
+let selectedCalendarDate = null;
+function showTurnoSelector(dateStr) {
+    selectedCalendarDate = dateStr;
+    const currentTurno = state.turnos[dateStr] || 'none';
+    
+    // Crear modal simple para seleccionar turno
+    const turnoHtml = `
+        <div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:2000;display:flex;align-items:center;justify-content:center;" onclick="this.remove()">
+            <div class="card" style="min-width:280px;padding:20px;" onclick="event.stopPropagation()">
+                <h3 style="margin-bottom:16px;">Turno del ${dateStr}</h3>
+                <div class="turno-btns" style="display:flex;gap:8px;margin-bottom:12px;">
+                    <button class="turno-btn ${currentTurno === 'manana' ? 'active manana' : ''}" onclick="setTurno('${dateStr}', 'manana'); this.closest('div[style*=fixed]').remove();">🌅 Mañana</button>
+                    <button class="turno-btn ${currentTurno === 'tarde' ? 'active tarde' : ''}" onclick="setTurno('${dateStr}', 'tarde'); this.closest('div[style*=fixed]').remove();">☀️ Tarde</button>
+                    <button class="turno-btn ${currentTurno === 'noche' ? 'active noche' : ''}" onclick="setTurno('${dateStr}', 'noche'); this.closest('div[style*=fixed]').remove();">🌙 Noche</button>
+                </div>
+                <button class="btn btn-secondary" style="width:100%;" onclick="setTurno('${dateStr}', 'none'); this.closest('div[style*=fixed]').remove();">Borrar</button>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', turnoHtml);
+}
+
+
+// Mejorar renderCalendar para agregar indicadores de turnos y onclick
+const originalRenderCalendar = renderCalendar;
+renderCalendar = function() {
+    const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    document.getElementById('calendar-month').textContent = months[state.currentMonth] + ' ' + state.currentYear;
+    
+    const firstDay = new Date(state.currentYear, state.currentMonth, 1).getDay();
+    const daysInMonth = new Date(state.currentYear, state.currentMonth + 1, 0).getDate();
+    const today = new Date();
+    
+    let html = '<div class="day-header">L</div><div class="day-header">M</div><div class="day-header">X</div><div class="day-header">J</div><div class="day-header">V</div><div class="day-header">S</div><div class="day-header">D</div>';
+    
+    const startDay = firstDay === 0 ? 6 : firstDay - 1;
+    for (let i = 0; i < startDay; i++) html += '<div class="day"></div>';
+    
+    for (let d = 1; d <= daysInMonth; d++) {
+        const isToday = d === today.getDate() && state.currentMonth === today.getMonth() && state.currentYear === today.getFullYear();
+        const dateStr = `${state.currentYear}-${String(state.currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const hasEvent = state.events.some(e => e.date === dateStr) || state.birthdays.some(b => b.date.slice(5) === dateStr.slice(5));
+        const hasTurno = state.turnos && state.turnos[dateStr];
+        
+        let dayClasses = 'day';
+        if (isToday) dayClasses += ' today';
+        if (hasEvent) dayClasses += ' has-event';
+        if (hasTurno) dayClasses += ` has-turno ${hasTurno}`;
+        
+        html += `<div class="${dayClasses}" onclick="showTurnoSelector('${dateStr}')">${d}</div>`;
+    }
+    
+    document.getElementById('calendar-grid').innerHTML = html;
+};
+
     </script>
 </body>
 </html>
