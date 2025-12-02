@@ -547,6 +547,11 @@
             saveState(); updateUI();
             document.getElementById('transfer-amount').value = '';
         }
+        // Initialize calendar date if not set
+        const now = new Date();
+            if (!state.currentMonth && state.currentMonth !== 0) state.currentMonth = now.getMonth();
+            if (!state.currentYear) state.currentYear = now.getFullYear();
+            if (!state.shifts) state.shifts = {};
 
         function addSubscription() {
             const name = document.getElementById('sub-name').value.trim();
