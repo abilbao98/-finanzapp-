@@ -130,6 +130,24 @@
         .notif-status.denied { color: var(--danger); }
         .export-calendar-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px; margin-top: 12px; background: linear-gradient(135deg, var(--warning), #e67e22); color: black; font-weight: 700; }
     </style>
+
+            /* Turnos Calendar Styles */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 15px; }
+        .calendar-day { background: var(--bg-card); border-radius: 8px; padding: 8px; text-align: center; min-height: 60px; position: relative; cursor: pointer; }
+        .calendar-day:hover { background: var(--bg-secondary); }
+        .calendar-day.other-month { opacity: 0.3; }
+        .calendar-day.today { border: 2px solid var(--accent); }
+        .calendar-day-header { font-weight: 600; padding: 8px; text-align: center; color: var(--text-secondary); }
+        .shift-indicator { width: 8px; height: 8px; border-radius: 50%; position: absolute; top: 5px; right: 5px; }
+        .shift-morning { background: #3b82f6; }
+        .shift-afternoon { background: #10b981; }
+        .shift-night { background: #ef4444; }
+        .shift-controls { display: flex; gap: 10px; margin: 15px 0; justify-content: center; }
+        .shift-btn { padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; color: white; }
+        .shift-btn.morning { background: #3b82f6; }
+        .shift-btn.afternoon { background: #10b981; }
+        .shift-btn.night { background: #ef4444; }
+        .shift-btn.clear { background: var(--text-secondary); }
 </head>
 <body>
     <!-- Modal Editar Transaccion -->
@@ -629,6 +647,103 @@
             document.getElementById('birthdays-list').innerHTML = state.birthdays.map(b => `<div class="transaction-item"><div class="info"><span class="name">${b.name}</span><span class="details">${b.date}</span></div></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay cumpleaños</p>';
             document.getElementById('notes-list').innerHTML = state.notes.map(n => `<div class="card" style="margin-bottom:8px;padding:12px;"><p style="font-size:14px;">${n.text}</p><small style="color:var(--text-secondary);">${new Date(n.date).toLocaleDateString('es-ES')}</small></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay notas</p>';
 
+
+                // Calendar and Shifts Functions
+    function renderCalendar() {
+        const grid = document.getElementById('calendar-grid');
+        const monthDisplay = document.getElementById('calendar-month');
+        if (!grid || !monthDisplay) return;
+        
+        const year = state.currentYear;
+        const month = state.currentMonth;
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const daysInMonth = lastDay.getDate();
+        const startDayOfWeek = firstDay.getDay();
+        
+        monthDisplay.textContent = firstDay.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+        
+        grid.innerHTML = '';
+        
+        // Days headers
+        const dayHeaders = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+        dayHeaders.forEach(day => {
+            const header = document.createElement('div');
+            header.className = 'calendar-day-header';
+            header.textContent = day;
+            grid.appendChild(header);
+        });
+        
+        // Previous month empty cells
+        for (let i = 0; i < startDayOfWeek; i++) {
+            const emptyDay = document.createElement('div');
+            emptyDay.className = 'calendar-day other-month';
+            grid.appendChild(emptyDay);
+        }
+        
+        // Current month days
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day';
+            const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            
+            const today = new Date();
+            if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                dayElement.classList.add('today');
+            }
+            
+            dayElement.innerHTML = `<div>${day}</div>`;
+            
+            // Add shift indicator if exists
+            if (state.shifts && state.shifts[dateKey]) {
+                const indicator = document.createElement('div');
+                indicator.className = `shift-indicator shift-${state.shifts[dateKey]}`;
+                dayElement.appendChild(indicator);
+            }
+            
+            dayElement.onclick = () => selectDay(dateKey);
+            grid.appendChild(dayElement);
+        }
+    }
+    
+    let selectedDay = null;
+    
+    function selectDay(dateKey) {
+        selectedDay = dateKey;
+        document.querySelectorAll('.calendar-day').forEach(d => d.style.border = '');
+        event.target.closest('.calendar-day').style.border = '2px solid var(--accent)';
+    }
+    
+    function setShift(type) {
+        if (!selectedDay) {
+            alert('Por favor selecciona un día primero');
+            return;
+        }
+        
+        if (!state.shifts) state.shifts = {};
+        
+        if (type === 'clear') {
+            delete state.shifts[selectedDay];
+        } else {
+            state.shifts[selectedDay] = type;
+        }
+        
+        saveState();
+        renderCalendar();
+    }
+    
+    function changeMonth(direction) {
+        state.currentMonth += direction;
+        if (state.currentMonth > 11) {
+            state.currentMonth = 0;
+            state.currentYear++;
+        } else if (state.currentMonth < 0) {
+            state.currentMonth = 11;
+            state.currentYear--;
+        }
+        saveState();
+        renderCalendar();
+    
             renderCalendar();
         }
 
