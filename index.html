@@ -653,6 +653,7 @@
             document.getElementById('birthdays-list').innerHTML = state.birthdays.map(b => `<div class="transaction-item"><div class="info"><span class="name">${b.name}</span><span class="details">${b.date}</span></div></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay cumpleaños</p>';
             document.getElementById('notes-list').innerHTML = state.notes.map(n => `<div class="card" style="margin-bottom:8px;padding:12px;"><p style="font-size:14px;">${n.text}</p><small style="color:var(--text-secondary);">${new Date(n.date).toLocaleDateString('es-ES')}</small></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay notas</p>';
 
+            }
 
                 // Calendar and Shifts Functions
     function renderCalendar() {
