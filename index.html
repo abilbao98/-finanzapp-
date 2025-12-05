@@ -744,11 +744,7 @@ const name = document.getElementById('sub-name').value.trim();
         dayElement.onclick = () => selectDayForShift(dateKey, dayElement);
         grid.appendChild(dayElement);
     }            
-            dayElement.onclick = () => selectDay(dateKey);
-            grid.appendChild(dayElement);
-        }
-    }
-    
+            
     let selectedDay = null;
     
 function selectDayForShift(dateKey, dayElement) {
