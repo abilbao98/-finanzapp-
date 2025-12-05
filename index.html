@@ -559,7 +559,8 @@
             if (!state.shifts) state.shifts = {};
 
 
-            const name = document.getElementById('sub-name').value.trim();
+                function addSubscription() {
+const name = document.getElementById('sub-name').value.trim();
             const amount = parseFloat(document.getElementById('sub-amount').value);
             if (!name || !amount) return;
             state.subscriptions.push({ name, amount });
@@ -572,7 +573,13 @@
             const title = document.getElementById('event-title').value.trim();
             const date = document.getElementById('event-date').value;
             if (!title || !date) return;
-                notifDate > new Date()) {
+                    
+        // Crear notificación para el día anterior
+        const eventDate = new Date(date);
+        const notifDate = new Date(eventDate);
+        notifDate.setDate(notifDate.getDate() - 1);
+        
+        if (notifDate > new Date()) {
                 const notif = {
                     title: `Recordatorio: ${title}`,
                     description: `Mañana es: ${title}`,
@@ -582,12 +589,17 @@
                 };
                 state.notifications.push(notif);
             }
-        }
-        
+                    
+        state.events.push({ title, date });
         saveState(); updateUI();
         document.getElementById('event-title').value = '';
         document.getElementById('event-date').value = '';
-    }if (!name || !date) return;
+        }
+        
+    function addBirthday() {
+        const name = document.getElementById('birthday-name').value.trim();
+        const date = document.getElementById('birthday-date').value;
+        if (!name || !date) return;
             state.birthdays.push({ name, date });
             saveState(); updateUI();
             document.getElementById('birthday-name').value = '';
