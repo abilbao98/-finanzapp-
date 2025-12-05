@@ -804,7 +804,6 @@ function setShift(type) {
         });
 
         document.getElementById('edit-type').addEventListener('change', updateEditCategories);
-
         // Cuando vuelves a la app (sin haberla cerrado), mostrar modo rapido
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible') {
