@@ -201,7 +201,7 @@
     <main>
         <!-- Finanzas Section -->
         <section id="finanzas" class="section">
-            <div class="sub-tabs"><button class="sub-tab active" onclick="showFinanzasTab('ia')">IA</button><button class="sub-tab" onclick="showFinanzasTab('ajustes')">Ajustes</button></div>
+            <div class="sub-tabs"><button class="sub-tab active" onclick="showFinanzasTab(event, 'ia')">IA</button><button class="sub-tab" onclick="showFinanzasTab(event, 'ajustes')">Ajustes</button></div>
             <div id="finanzas-ia" class="sub-content active">
                 <div class="card balance-card"><small>Balance Total</small><h2 id="total-balance">€0.00</h2></div>
                 <div class="stats-grid"><div class="card stat-card income"><h3 id="total-income">€0</h3><small>Ingresos</small></div><div class="card stat-card expense"><h3 id="total-expense">€0</h3><small>Gastos</small></div></div>
@@ -216,7 +216,7 @@
 
         <!-- Transacciones Section -->
         <section id="transacciones" class="section active">
-            <div class="sub-tabs"><button class="sub-tab active" onclick="showTransactionTab('gastos')">Gastos</button><button class="sub-tab" onclick="showTransactionTab('ultimas')">Ultimas</button><button class="sub-tab" onclick="showTransactionTab('suscripciones')">Suscripciones</button></div>
+            <div class="sub-tabs"><button class="sub-tab active" onclick="showTransactionTab(event, 'gastos')">Gastos</button><button class="sub-tab" onclick="showTransactionTab(event, 'ultimas')">Ultimas</button><button class="sub-tab" onclick="showTransactionTab(event, 'suscripciones')">Suscripciones</button></div>
             <div id="trans-gastos" class="sub-content active"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">📊 Gastos por Categoría</h3><div id="category-breakdown"></div></div></div>
             <div id="trans-ultimas" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🕒 Últimas Transacciones</h3><div id="recent-transactions"></div></div></div>
             <div id="trans-suscripciones" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🔄 Suscripciones Activas</h3><div id="subscriptions-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="sub-name" placeholder="Nombre"><input type="number" id="sub-amount" placeholder="Importe" style="margin-top:8px;"><button class="btn btn-primary" style="margin-top:8px;" onclick="addSubscription()">Añadir Suscripción</button></div></div></div>
@@ -230,7 +230,7 @@
 
         <!-- Turnos Section -->
         <section id="turnos" class="section">
-            <div class="sub-tabs"><button class="sub-tab active" onclick="showTurnosTab('calendario')">Calendario</button><button class="sub-tab" onclick="showTurnosTab('eventos')">Eventos</button><button class="sub-tab" onclick="showTurnosTab('cumples')">Cumpleaños</button><button class="sub-tab" onclick="showTurnosTab('notas')">Notas</button></div>
+            <div class="sub-tabs"><button class="sub-tab active" onclick="showTurnosTab(event, 'calendario')">Calendario</button><button class="sub-tab" onclick="showTurnosTab(event, 'eventos')">Eventos</button><button class="sub-tab" onclick="showTurnosTab('cumples')">Cumpleaños</button><button class="sub-tab" onclick="showTurnosTab(event, 'notas')">Notas</button></div>
             <div id="turnos-calendario" class="sub-content active"><div class="card"><h3 id="calendar-month" style="font-size:14px;margin-bottom:12px;"></h3><div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0;"><button onclick="changeMonth(-1)" style="padding:5px 15px;border:none;background:var(--accent);color:white;border-radius:5px;cursor:pointer;">◀</button><button onclick="changeMonth(1)" style="padding:5px 15px;border:none;background:var(--accent);color:white;border-radius:5px;cursor:pointer;">▶</button></div><div class="shift-controls"><button class="shift-btn morning" onclick="setShift('morning')">Mañana</button><button class="shift-btn afternoon" onclick="setShift('afternoon')">Tarde</button><button class="shift-btn night" onclick="setShift('night')">Noche</button><button class="shift-btn clear" onclick="setShift('clear')">Limpiar</button></div></div><div id="calendar-grid"
                  class="calendar-grid"></div></div></div>
             <div id="turnos-eventos" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">📅 Eventos</h3><div id="events-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="event-title" placeholder="Título evento"><input type="date" id="event-date" style="margin-top:8px;"><button class="btn btn-primary" style="margin-top:8px;" onclick="addEvent()">Añadir Evento</button></div><button class="btn export-calendar-btn" onclick="exportEventsToCalendar()">📅 Exportar Eventos a Calendars</button></div></div>
