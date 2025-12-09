@@ -280,25 +280,25 @@
             btn.classList.add('active');
         }
 
-        function showFinanzasTab(tab) {
+        function showFinanzasTab(event, tab) {
             document.querySelectorAll('#finanzas .sub-content').forEach(c => c.classList.remove('active'));
             document.getElementById('finanzas-' + tab).classList.add('active');
             document.querySelectorAll('#finanzas .sub-tab').forEach(t => t.classList.remove('active'));
-            
+            event.target.classList.add('active');
         }
 
-        function showTransactionTab(tab) {
+        function showTransactionTab(event, tab) {
             document.querySelectorAll('#transacciones .sub-content').forEach(c => c.classList.remove('active'));
             document.getElementById('trans-' + tab).classList.add('active');
             document.querySelectorAll('#transacciones .sub-tab').forEach(t => t.classList.remove('active'));
-            
+            event.target.classList.add('active');
         }
 
-        function showTurnosTab(tab) {
+        function showTurnosTab(event, tab) {
             document.querySelectorAll('#turnos .sub-content').forEach(c => c.classList.remove('active'));
             document.getElementById('turnos-' + tab).classList.add('active');
             document.querySelectorAll('#turnos .sub-tab').forEach(t => t.classList.remove('active'));
-            
+            event.target.classList.add('active');
             if (tab === 'calendario') renderCalendar();
         }
 
