@@ -531,3 +531,388 @@
       bottom: 0;
       background: rgba(0, 0, 0, 0.8);
       z-index: 2000
+;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 30px;
+        border-radius: 24px;
+        width: 90%;
+        max-width: 500px;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+        margin: 0;
+        font-size: 24px;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
+        color: var(--text-primary);
+        opacity: 0.6;
+        transition: opacity 0.3s;
+    }
+
+    .close-btn:hover {
+        opacity: 1;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--text-secondary);
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        color: var(--text-primary);
+        font-size: 14px;
+        font-family: inherit;
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+    }
+
+    .modal-actions .btn {
+        padding: 12px 24px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .quick-actions {
+            grid-template-columns: 1fr;
+        }
+
+        .calendar-navigation h2 {
+            font-size: 18px;
+        }
+    }
+</style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>💰 FinanzApp Pro</h1>
+        <div class="header-actions">
+            <button class="btn btn-secondary" onclick="showSettings()">⚙️</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <!-- Stats Grid -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">💵</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="totalIncome">€0</div>
+                    <div class="stat-label">Ingresos Totales</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💸</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="totalExpenses">€0</div>
+                    <div class="stat-label">Gastos Totales</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="balance">€0</div>
+                    <div class="stat-label">Balance</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏦</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="savings">€0</div>
+                    <div class="stat-label">Ahorros</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions">
+            <button class="btn btn-primary" onclick="addIncome()">➕ Añadir Ingreso</button>
+            <button class="btn btn-danger" onclick="addExpense()">➖ Añadir Gasto</button>
+            <button class="btn btn-success" onclick="addSavings()">💰 Añadir Ahorro</button>
+        </section>
+
+        <!-- Calendar -->
+        <section class="calendar-container">
+            <div class="calendar-navigation">
+                <button class="btn btn-secondary" onclick="previousMonth()">←</button>
+                <h2 id="currentMonth"></h2>
+                <button class="btn btn-secondary" onclick="nextMonth()">→</button>
+            </div>
+            <div class="calendar" id="calendar"></div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Añadir Evento</h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <form id="eventForm">
+                <div class="form-group">
+                    <label for="shiftType">Tipo de Turno</label>
+                    <select id="shiftType">
+                        <option value="">Ninguno</option>
+                        <option value="turno-manana">🌅 Mañana</option>
+                        <option value="turno-tarde">🌆 Tarde</option>
+                        <option value="turno-noche">🌙 Noche</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="note">Nota</label>
+                    <textarea id="note" placeholder="Añade una nota..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEvent()">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<script>
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+let selectedDate = null;
+let events = {};
+let finances = {
+    income: 0,
+    expenses: 0,
+    savings: 0
+};
+
+// Load data from localStorage
+function loadData() {
+    const savedEvents = localStorage.getItem('finanzapp_events');
+    const savedFinances = localStorage.getItem('finanzapp_finances');
+    
+    if (savedEvents) events = JSON.parse(savedEvents);
+    if (savedFinances) finances = JSON.parse(savedFinances);
+    
+    updateStats();
+}
+
+// Save data to localStorage
+function saveData() {
+    localStorage.setItem('finanzapp_events', JSON.stringify(events));
+    localStorage.setItem('finanzapp_finances', JSON.stringify(finances));
+}
+
+// Initialize calendar
+function initCalendar() {
+    const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+    
+    document.getElementById('currentMonth').textContent = 
+        `${monthNames[currentMonth]} ${currentYear}`;
+    
+    const calendar = document.getElementById('calendar');
+    calendar.innerHTML = '';
+    
+    // Add day headers
+    const dayHeaders = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+    dayHeaders.forEach(day => {
+        const header = document.createElement('div');
+        header.className = 'calendar-day-header';
+        header.textContent = day;
+        calendar.appendChild(header);
+    });
+    
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const prevDays = new Date(currentYear, currentMonth, 0).getDate();
+    
+    // Adjust for Monday start
+    const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1;
+    
+    // Previous month days
+    for (let i = adjustedFirstDay - 1; i >= 0; i--) {
+        const day = document.createElement('div');
+        day.className = 'calendar-day other-month';
+        day.textContent = prevDays - i;
+        calendar.appendChild(day);
+    }
+    
+    // Current month days
+    for (let i = 1; i <= daysInMonth; i++) {
+        const day = document.createElement('div');
+        day.className = 'calendar-day';
+        day.textContent = i;
+        
+        const dateKey = `${currentYear}-${currentMonth + 1}-${i}`;
+        const today = new Date();
+        
+        if (i === today.getDate() && currentMonth === today.getMonth() && 
+            currentYear === today.getFullYear()) {
+            day.classList.add('today');
+        }
+        
+        if (events[dateKey]) {
+            if (events[dateKey].shift) {
+                day.classList.add(events[dateKey].shift);
+            }
+            if (events[dateKey].note) {
+                day.classList.add('has-note');
+            }
+        }
+        
+        day.onclick = () => openModal(i);
+        calendar.appendChild(day);
+    }
+    
+    // Next month days
+    const totalCells = calendar.children.length - 7; // Subtract headers
+    const remainingCells = 42 - totalCells - 7; // 6 rows * 7 days
+    
+    for (let i = 1; i <= remainingCells; i++) {
+        const day = document.createElement('div');
+        day.className = 'calendar-day other-month';
+        day.textContent = i;
+        calendar.appendChild(day);
+    }
+}
+
+function previousMonth() {
+    currentMonth--;
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    }
+    initCalendar();
+}
+
+function nextMonth() {
+    currentMonth++;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+    initCalendar();
+}
+
+function openModal(day) {
+    selectedDate = `${currentYear}-${currentMonth + 1}-${day}`;
+    const event = events[selectedDate] || {};
+    
+    document.getElementById('modalTitle').textContent = `Evento - ${day}/${currentMonth + 1}/${currentYear}`;
+    document.getElementById('shiftType').value = event.shift || '';
+    document.getElementById('note').value = event.note || '';
+    document.getElementById('modal').style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+    selectedDate = null;
+}
+
+function saveEvent() {
+    const shift = document.getElementById('shiftType').value;
+    const note = document.getElementById('note').value;
+    
+    if (shift || note) {
+        events[selectedDate] = { shift, note };
+    } else {
+        delete events[selectedDate];
+    }
+    
+    saveData();
+    closeModal();
+    initCalendar();
+}
+
+function addIncome() {
+    const amount = parseFloat(prompt('Ingresa el monto del ingreso (€):'));
+    if (amount && !isNaN(amount)) {
+        finances.income += amount;
+        saveData();
+        updateStats();
+    }
+}
+
+function addExpense() {
+    const amount = parseFloat(prompt('Ingresa el monto del gasto (€):'));
+    if (amount && !isNaN(amount)) {
+        finances.expenses += amount;
+        saveData();
+        updateStats();
+    }
+}
+
+function addSavings() {
+    const amount = parseFloat(prompt('Ingresa el monto del ahorro (€):'));
+    if (amount && !isNaN(amount)) {
+        finances.savings += amount;
+        saveData();
+        updateStats();
+    }
+}
+
+function updateStats() {
+    document.getElementById('totalIncome').textContent = '€' + finances.income.toFixed(2);
+    document.getElementById('totalExpenses').textContent = '€' + finances.expenses.toFixed(2);
+    const balance = finances.income - finances.expenses;
+    document.getElementById('balance').textContent = '€' + balance.toFixed(2);
+    document.getElementById('savings').textContent = '€' + finances.savings.toFixed(2);
+}
+
+function showSettings() {
+    alert('Configuración - Próximamente');
+}
+
+// Initialize app
+loadData();
+initCalendar();
+</script>
+</body>
+</html>
