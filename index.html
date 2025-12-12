@@ -281,8 +281,7 @@
             btn.classList.add('active');
         }
 
-        287
-            (event, tab) {
+            function showFinanzasTab(event, tab) {
             document.querySelectorAll('#finanzas .sub-content').forEach(c => c.classList.remove('active'));
             document.getElementById('finanzas-' + tab).classList.add('active');
             document.querySelectorAll('#finanzas .sub-tab').forEach(t => t.classList.remove('active'));
