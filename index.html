@@ -666,7 +666,37 @@ const name = document.getElementById('sub-name').value.trim();
    // Variables globales para manejo de turnos  
 let selectedDay = null;
 
+function selectDayForShift(dateKey, dayElement) {
+    selectedDay = dateKey;
+    // Remove previous selection border
+    document.querySelectorAll('.calendar-day').forEach(d => d.style.border = '');
+    // Add border to selected day
+    dayElement.style.border = '3px solid var(--accent)';
+    // Show shift controls
+    document.querySelector('.shift-controls').style.display = 'flex';
+}
 
+function setShift(type) {
+    if (!selectedDay) {
+        alert('Por favor selecciona un día primero');
+        return;
+    }
+    
+    if (!state.shifts) state.shifts = {};
+    
+    if (type === 'clear') {
+        delete state.shifts[selectedDay];
+    } else {
+        state.shifts[selectedDay] = type;
+    }
+    
+    saveState();
+    renderCalendar();
+    
+    // Hide shift controls after selection
+    document.querySelector('.shift-controls').style.display = 'none';
+    selectedDay = null;
+}
         function renderCalendar() {
         const grid = document.getElementById('calendar-grid');
         const monthDisplay = document.getElementById('calendar-month');
