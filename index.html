@@ -49,6 +49,13 @@
         /* Turnos con colores */
         .turnos-selector { margin-bottom: 15px; }
         .turnos-selector h4 { margin-bottom: 10px; color: var(--text-secondary); font-size: 14px; }
+                .turno-selector { display: flex; gap: 10px; flex-wrap: wrap; }
+                .turno-btn { padding: 8px 15px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; background: var(--bg-card); color: var(--text-primary); transition: all 0.2s; }
+                .turno-btn:hover { transform: scale(1.05); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+                .turno-btn.active { background: var(--accent); color: white; }
+                .calendar-day.shift-morning { background: linear-gradient(135deg, #4dabf7 0%, #74c0fc 100%); color: white; }
+                .calendar-day.shift-afternoon { background: linear-gradient(135deg, #51cf66 0%, #8ce99a 100%); color: white; }
+                .calendar-day.shift-night { background: linear-gradient(135deg, #862e9c 0%, #be4bdb 100%); color: white; }
         .turno-btns { display: flex; gap: 8px; }
         .turno-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: var(--bg-card); color: var(--text-secondary); border: 2px solid transparent; }
         .turno-btn.active.manana { background: #3b82f6; color: white; border-color: #2563eb; }
