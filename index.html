@@ -609,8 +609,7 @@
                             const turno = state.turnos && state.turnos[dateStr] ? state.turnos[dateStr] : null;
             }
             document.getElementById('calendar-grid').innerHTML = html;
-        }
-
+            html += `<div class="day${isToday ? ' today' : ''}${hasEvent ? ' has-event' : ''}${turno ? ' shift-' + turno : ''}"><span>${d}</span></div>`;
         function updateUI() {
             document.getElementById('total-balance').textContent = '€' + state.balance.toFixed(2);
             const income = state.transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
@@ -800,8 +799,7 @@ renderCalendar = function() {
         let dayClasses = 'day';
         if (isToday) dayClasses += ' today';
         if (hasEvent) dayClasses += ' has-event';
-        if (hasTurno) dayClasses += ` has-turno ${hasTurno}`;
-        
+            if (hasTurno) dayClasses += ' shift-' + hasTurno;        
         html += `<div class="${dayClasses}" onclick="showTurnoSelector('${dateStr}')">${d}</div>`;
     }
     
