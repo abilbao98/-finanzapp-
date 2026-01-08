@@ -827,13 +827,6 @@ function setShift(type) {
     }
 
     // Solicitar permiso automaticamente al cargar (solo si no se ha pedido antes)
-    if ('Notification' in window && Notification.permission === 'default') {
-        // Esperar 3 segundos antes de pedir permiso para mejor UX
-        setTimeout(() => {
-            solicitarPermisoNotificaciones();
-                enterQuickMode();
-        }, 3000);
-    }
 
     </script>
 </body>
