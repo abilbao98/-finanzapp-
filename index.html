@@ -295,6 +295,7 @@
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+    if (id === 'turnos') renderCalendar();
         }
 
             function showFinanzasTab(event, tab) {
