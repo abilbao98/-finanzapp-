@@ -217,6 +217,15 @@
         <section id="turnos" class="section">
             <div class="sub-tabs"><button class="sub-tab active" onclick="showTurnosTab('calendario')">Calendario</button><button class="sub-tab" onclick="showTurnosTab('eventos')">Eventos</button><button class="sub-tab" onclick="showTurnosTab('cumples')">Cumpleaños</button><button class="sub-tab" onclick="showTurnosTab('notas')">Notas</button></div>
             <div id="turnos-calendario" class="sub-content active"><div class="card"><h3 id="calendar-month" style="font-size:14px;margin-bottom:12px;"></h3><div id="calendar-grid" class="calendar-grid"></div></div></div>
+                            <div class="card" style="margin-bottom:15px;">
+                                                    <h3 style="font-size:14px;margin-bottom:10px;">⚙️ Seleccionar Turno</h3>
+                                                    <div class="turno-selector">
+                                                                                <button class="turno-btn" onclick="selectShiftType('morning')">🌅 Mañana</button>
+                                                                                <button class="turno-btn" onclick="selectShiftType('afternoon')">🌇 Tarde</button>
+                                                                                <button class="turno-btn" onclick="selectShiftType('night')">🌃 Noche</button>
+                                                                                <button class="turno-btn" onclick="clearShiftSelection()">❌ Limpiar</button>
+                                                                            </div>
+                                                </div>
             <div id="turnos-eventos" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">📅 Eventos</h3><div id="events-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="event-title" placeholder="Título evento"><input type="date" id="event-date" style="margin-top:8px;"><button class="btn btn-primary" style="margin-top:8px;" onclick="addEvent()">Añadir Evento</button></div><button class="btn export-calendar-btn" onclick="exportEventsToCalendar()">📅 Exportar Eventos a Calendars</button></div></div>
             <div id="turnos-cumples" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🎂 Cumpleaños</h3><div id="birthdays-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="birthday-name" placeholder="Nombre"><input type="date" id="birthday-date" style="margin-top:8px;"><button class="btn btn-primary" style="margin-top:8px;" onclick="addBirthday()">Añadir Cumpleaños</button></div><button class="btn export-calendar-btn" onclick="exportBirthdaysToCalendar()">🎂 Exportar Cumpleaños a Calendars</button></div></div>
             <div id="turnos-notas" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">📝 Notas</h3><div id="notes-list"></div><div class="form-group" style="margin-top:12px;"><textarea id="note-text" placeholder="Escribe tu nota..." style="width:100%;padding:12px;border:1px solid var(--bg-secondary);border-radius:8px;background:var(--bg-secondary);color:var(--text-primary);min-height:80px;"></textarea><button class="btn btn-primary" style="margin-top:8px;" onclick="addNote()">Guardar Nota</button></div></div></div>
@@ -235,10 +244,13 @@
             events: [],
             birthdays: [],
             notes: [],
+                turnos: {},
+                dayNotes: {},
             notifications: [],
             currentMonth: new Date().getMonth(),
             currentYear: new Date().getFullYear()
         };
+        let selectedShift = null;
         let editingIndex = -1;
         let editingNotifIndex = -1;
         let quickType = 'expense';
@@ -256,6 +268,17 @@
             document.body.setAttribute('data-theme', state.theme);
             saveState();
         }
+
+        function selectShiftType(type) {
+                selectedShift = type;
+                document.querySelectorAll('.turno-btn').forEach(btn => btn.classList.remove('active'));
+                if (type) event.target.classList.add('active');
+            }
+
+        function clearShiftSelection() {
+                selectedShift = null;
+                document.querySelectorAll('.turno-btn').forEach(btn => btn.classList.remove('active'));
+            }
 
         function showSection(id, btn) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -583,6 +606,7 @@
                 const dateStr = `${state.currentYear}-${String(state.currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
                 const hasEvent = state.events.some(e => e.date === dateStr) || state.birthdays.some(b => b.date.slice(5) === dateStr.slice(5));
                 html += `<div class="day${isToday ? ' today' : ''}${hasEvent ? ' has-event' : ''}">${d}</div>`;
+                            const turno = state.turnos && state.turnos[dateStr] ? state.turnos[dateStr] : null;
             }
             document.getElementById('calendar-grid').innerHTML = html;
         }
