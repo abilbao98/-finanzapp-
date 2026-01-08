@@ -663,41 +663,7 @@ const name = document.getElementById('sub-name').value.trim();
             }
 
                 // Calendar and Shifts Functions
-   // Variables globales para manejo de turnos  
-let selectedDay = null;
-
-function selectDayForShift(dateKey, dayElement) {
-    selectedDay = dateKey;
-    // Remove previous selection border
-    document.querySelectorAll('.calendar-day').forEach(d => d.style.border = '');
-    // Add border to selected day
-    dayElement.style.border = '3px solid var(--accent)';
-    // Show shift controls
-    document.querySelector('.shift-controls').style.display = 'flex';
-}
-
-function setShift(type) {
-    if (!selectedDay) {
-        alert('Por favor selecciona un día primero');
-        return;
-    }
-    
-    if (!state.shifts) state.shifts = {};
-    
-    if (type === 'clear') {
-        delete state.shifts[selectedDay];
-    } else {
-        state.shifts[selectedDay] = type;
-    }
-    
-    saveState();
-    renderCalendar();
-    
-    // Hide shift controls after selection
-    document.querySelector('.shift-controls').style.display = 'none';
-    selectedDay = null;
-}
-        function renderCalendar() {
+    function renderCalendar() {
         const grid = document.getElementById('calendar-grid');
         const monthDisplay = document.getElementById('calendar-month');
         if (!grid || !monthDisplay) return;
@@ -729,7 +695,42 @@ function setShift(type) {
             grid.appendChild(emptyDay);
         }
         
-      
+        // Current month days
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayElement = document.createElement('div');
+        dayElement.className = 'calendar-day';
+        
+        const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        
+        const today = new Date();
+        if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+            dayElement.classList.add('today');
+        }
+        
+        // Add shift color to full day
+        if (state.shifts && state.shifts[dateKey]) {
+            dayElement.classList.add(`shift-${state.shifts[dateKey]}`);
+        }
+        
+        dayElement.innerHTML = `<div>${day}</div>`;
+        
+        // Count events for this day
+        const eventCount = state.events.filter(e => e.date === dateKey).length + 
+                          state.birthdays.filter(b => b.date.slice(5) === dateKey.slice(5)).length;
+        
+        if (eventCount > 0) {
+            const countBadge = document.createElement('div');
+            countBadge.className = 'event-count';
+            countBadge.textContent = eventCount;
+            dayElement.appendChild(countBadge);
+        }
+        
+        dayElement.onclick = () => selectDayForShift(dateKey, dayElement);
+        grid.appendChild(dayElement);
+    }            
+            
+    let selectedDay = null;
+    
 function selectDayForShift(dateKey, dayElement) {
     selectedDay = dateKey;
     
@@ -782,7 +783,7 @@ function setShift(type) {
             loadState();
             if (state.theme === 'light') document.body.setAttribute('data-theme', 'light');
             updateUI();
-//             enterQuickMode();
+            enterQuickMode();
         });
 
         document.getElementById('edit-type').addEventListener('change', updateEditCategories);
