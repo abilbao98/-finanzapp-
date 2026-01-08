@@ -831,6 +831,7 @@ function setShift(type) {
         // Esperar 3 segundos antes de pedir permiso para mejor UX
         setTimeout(() => {
             solicitarPermisoNotificaciones();
+                enterQuickMode();
         }, 3000);
     }
 
