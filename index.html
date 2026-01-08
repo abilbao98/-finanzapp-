@@ -232,7 +232,22 @@
         <!-- Turnos Section -->
         <section id="turnos" class="section">
             <div class="sub-tabs"><button class="sub-tab active" onclick="showTurnosTab(event, 'calendario')">Calendario</button><button class="sub-tab" onclick="showTurnosTab(event, 'eventos')">Eventos</button><button class="sub-tab" onclick="showTurnosTab('cumples')">Cumpleaños</button><button class="sub-tab" onclick="showTurnosTab(event, 'notas')">Notas</button></div>
-            <div id="turnos-calendario" class="sub-content active"><div class="card"><h3 id="calendar-month" style="font-size:14px;margin-bottom:12px;"></h3><div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0;"><button onclick="changeMonth(-1)" style="padding:5px 15px;border:none;background:var(--accent);color:white;border-radius:5px;cursor:pointer;">◀</button><button onclick="changeMonth(1)" style="padding:5px 15px;border:none;background:var(--accent);color:white;border-radius:5px;cursor:pointer;">▶</button></div><div class="shift-controls"><button class="shift-btn morning" onclick="setShift('morning')">Mañana</button><button class="shift-btn afternoon" onclick="setShift('afternoon')">Tarde</button><button class="shift-btn night" onclick="setShift('night')">Noche</button><button class="shift-btn clear" onclick="setShift('clear')">Limpiar</button></div></div><div id="calendar-grid"
+            <div id="turnos-calendario" class="sub-content active">
+                <div class="card">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                        <button onclick="changeMonth(-1)" style="background:var(--bg-primary);border:none;color:var(--text-primary);font-size:20px;cursor:pointer;">◀</button>
+                        <h3 id="calendar-month" style="font-size:16px;margin:0;"></h3>
+                        <button onclick="changeMonth(1)" style="background:var(--bg-primary);border:none;color:var(--text-primary);font-size:20px;cursor:pointer;">▶</button>
+                    </div>
+                    <div class="shift-controls" style="display:none;gap:10px;margin-bottom:15px;">
+                        <button class="shift-btn morning" onclick="setShift('morning')">Mañana</button>
+                        <button class="shift-btn afternoon" onclick="setShift('afternoon')">Tarde</button>
+                        <button class="shift-btn night" onclick="setShift('night')">Noche</button>
+                        <button class="shift-btn clear" onclick="setShift('clear')">Limpiar</button>
+                    </div>
+                    <div id="calendar-grid" class="calendar-grid"></div>
+                </div>
+            </div>
                  class="calendar-grid"></div></div></div>
             <div id="turnos-eventos" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">📅 Eventos</h3><div id="events-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="event-title" placeholder="Título evento"><input type="date" id="event-date" style="margin-top:8px;"><button class="btn btn-primary" style="margin-top:8px;" onclick="addEvent()">Añadir Evento</button></div><button class="btn export-calendar-btn" onclick="exportEventsToCalendar()">📅 Exportar Eventos a Calendars</button></div></div>
             <div id="turnos-cumples" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🎂 Cumpleaños</h3><div id="birthdays-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="birthday-name" placeholder="Nombre"><input type="date" id="birthday-date" style="margin-top:8px;"><button class="btn btn-primary" style="margin-top:8px;" onclick="addBirthday()">Añadir Cumpleaños</button></div><button class="btn export-calendar-btn" onclick="exportBirthdaysToCalendar()">🎂 Exportar Cumpleaños a Calendars</button></div></div>
