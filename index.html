@@ -632,7 +632,7 @@
             loadState();
             if (state.theme === 'light') document.body.setAttribute('data-theme', 'light');
             updateUI();
-//             enterQuickMode();
+            enterQuickMode();
         });
 
         document.getElementById('edit-type').addEventListener('change', updateEditCategories);
@@ -640,7 +640,7 @@
         // Cuando vuelves a la app (sin haberla cerrado), mostrar modo rapido
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible') {
-//                 enterQuickMode();
+                enterQuickMode();
             }
         });
 
