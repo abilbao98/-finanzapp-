@@ -803,11 +803,11 @@ function setShift(type) {
 
         document.getElementById('edit-type').addEventListener('change', updateEditCategories);
         // Cuando vuelves a la app (sin haberla cerrado), mostrar modo rapido
-        document.addEventListener('visibilitychange', () => {
+/*        document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible') {
                 enterQuickMode();
             }
-        });
+        }); */
 
     // ============ SERVICE WORKER Y NOTIFICACIONES ============
     // Registrar Service Worker para notificaciones push en iOS
