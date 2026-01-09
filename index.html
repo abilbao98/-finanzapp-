@@ -33,7 +33,6 @@
         .quick-numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
         .quick-num-btn { padding: 20px; border: none; border-radius: 10px; font-size: 24px; font-weight: 600; cursor: pointer; background: var(--bg-card); color: var(--text-primary); }
         .quick-num-btn:active { background: var(--accent); }
-717
         .quick-categories { margin-bottom: 15px; }
         .quick-categories h4 { margin-bottom: 10px; color: var(--text-secondary); font-size: 14px; }
         .quick-cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
@@ -744,11 +743,11 @@ function setShift(type) {
             const emptyDay = document.createElement('div');
             emptyDay.className = 'calendar-day other-month';
             grid.appendChild(emptyDay);
+                    }
             
         // Days of the month
         for (let day = 1; day <= daysInMonth; day++) {
             const dayElement = document.createElement('div');
-                }
             dayElement.className = 'calendar-day';
             const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             
