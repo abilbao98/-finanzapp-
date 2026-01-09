@@ -667,10 +667,7 @@ const name = document.getElementById('sub-name').value.trim();
 
             document.getElementById('subscriptions-list').innerHTML = state.subscriptions.map(s => `<div class="transaction-item"><div class="info"><span class="name">${s.name}</span></div><span class="amount expense">€${s.amount.toFixed(2)}/mes</span></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay suscripciones</p>';
 
-            document.getElementById('wallets-list').innerHTML = state.wallets.map(w => `<div class="wallet-item"><div class="info"><span class="name">${w.name}</span><span class="balance">€${w.balance.toFixed(2)}</span></div></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay carteras</p>';
-            const walletOpts = state.wallets.map((w, i) => `<option value="${i}">${w.name}</option>`).join('');
-            document.getElementById('transfer-from').innerHTML = walletOpts;
-            document.getElementById('transfer-to').innerHTML = walletOpts;
+    renderWalletCards();
 
             document.getElementById('events-list').innerHTML = state.events.map(e => `<div class="transaction-item"><div class="info"><span class="name">${e.title}</span><span class="details">${e.date}</span></div></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay eventos</p>';
             document.getElementById('birthdays-list').innerHTML = state.birthdays.map(b => `<div class="transaction-item"><div class="info"><span class="name">${b.name}</span><span class="details">${b.date}</span></div></div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px;">No hay cumpleaños</p>';
