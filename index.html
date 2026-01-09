@@ -121,6 +121,13 @@
         .calendar-grid .day-header { font-size: 12px; color: var(--text-secondary); padding: 8px 0; }
         .calendar-grid .day { padding: 10px 0; border-radius: 8px; font-size: 14px; cursor: pointer; }
         .calendar-grid .day.today { background: var(--accent); color: white; }
+                /* Wallet Cards Styles */
+        .wallet-card { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%); border-radius: 16px; padding: 20px; margin-bottom: 12px; color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .wallet-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+        .wallet-icon { font-size: 28px; }
+        .wallet-card h4 { font-size: 18px; margin: 0; font-weight: 600; }
+        .wallet-balance small { display: block; font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
+        .wallet-balance h3 { font-size: 32px; margin: 0; font-weight: 700; }
         .calendar-grid .day.has-event { position: relative; }
         .calendar-grid .day.has-event::after { content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: var(--warning); border-radius: 50%; }
         .categories-list { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -569,6 +576,39 @@
             saveState(); updateUI();
             document.getElementById('transfer-amount').value = '';
         }
+
+            // Render Wallet Cards
+    function renderWalletCards() {
+        const walletsContainer = document.getElementById('wallets-list');
+        const transferFrom = document.getElementById('transfer-from');
+        const transferTo = document.getElementById('transfer-to');
+        
+        if (!walletsContainer) return;
+        
+        if (state.wallets.length === 0) {
+            walletsContainer.innerHTML = '<p style="color:var(--text-secondary);font-size:13px;">No hay carteras. Añade una para empezar.</p>';
+        } else {
+            walletsContainer.innerHTML = state.wallets.map((w, i) => `
+                <div class="wallet-card">
+                    <div class="wallet-card-header">
+                        <span class="wallet-icon">💳</span>
+                        <h4>${w.name}</h4>
+                    </div>
+                    <div class="wallet-balance">
+                        <small>Balance</small>
+                        <h3>€${w.balance.toFixed(2)}</h3>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Update transfer dropdowns
+        if (transferFrom && transferTo) {
+            const options = state.wallets.map((w, i) => `<option value="${i}">${w.name} (€${w.balance.toFixed(2)})</option>`).join('');
+            transferFrom.innerHTML = options;
+            transferTo.innerHTML = options;
+        }
+    }
         // Initialize calendar date if not set
         const now = new Date();
             if (!state.currentMonth && state.currentMonth !== 0) state.currentMonth = now.getMonth();
