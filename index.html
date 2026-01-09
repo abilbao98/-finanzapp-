@@ -232,8 +232,21 @@
 
         <!-- Carteras Section -->
         <section id="carteras" class="section">
-            <div class="card"><h3 style="font-size:14px;margin-bottom:12px;">💳 Mis Carteras</h3><div id="wallets-list"></div><div class="form-group" style="margin-top:12px;"><input type="text" id="wallet-name" placeholder="Nombre cartera"><input type="number" id="wallet-balance" placeholder="Balance inicial" style="margin-top:8px;"><button class="btn btn-primary" style="margin-top:8px;" onclick="addWallet()">Añadir Cartera</button></div></div>
-            <div class="card"><h3 style="font-size:14px;margin-bottom:12px;">🔄 Transferir</h3><div class="form-group"><select id="transfer-from"></select><select id="transfer-to" style="margin-top:8px;"></select><input type="number" id="transfer-amount" placeholder="Importe" style="margin-top:8px;"><button class="btn btn-primary" style="margin-top:8px;" onclick="makeTransfer()">Transferir</button></div></div>
+                      <div class="card"><h3 style="font-size:14px;margin-bottom:12px;">💳 Mis Carteras</h3><div id="wallets-list"></div></div>
+            <button class="btn btn-primary" style="margin-bottom:12px;" onclick="toggleAddWalletForm()">➕ Añadir Cartera</button>
+            <div id="add-wallet-form" class="card" style="display:none;">
+                <div class="form-group"><input type="text" id="wallet-name" placeholder="Nombre cartera"></div>
+                <div class="form-group"><input type="number" id="wallet-balance" placeholder="Balance inicial"></div>
+                <button class="btn btn-primary" onclick="addWallet()">Guardar Cartera</button>
+            </div>
+            <button class="btn btn-secondary" onclick="toggleTransferForm()">🔄 Transferir</button>
+            <div id="transfer-form" class="card" style="display:none;margin-top:12px;">
+                <h3 style="font-size:14px;margin-bottom:12px;">🔄 Transferir</h3>
+                <div class="form-group"><select id="transfer-from"></select></div>
+                <div class="form-group"><select id="transfer-to"></select></div>
+                <div class="form-group"><input type="number" id="transfer-amount" placeholder="Importe"></div>
+                <button class="btn btn-primary" onclick="makeTransfer()">Transferir</button>
+            </div>
         </section>
 
         <!-- Turnos Section -->
@@ -576,6 +589,17 @@
             saveState(); updateUI();
             document.getElementById('transfer-amount').value = '';
         }
+
+                                            // Toggle Wallet Form Functions
+    function toggleAddWalletForm() {
+        const form = document.getElementById('add-wallet-form');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+    
+    function toggleTransferForm() {
+        const form = document.getElementById('transfer-form');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
 
             // Render Wallet Cards
     function renderWalletCards() {
