@@ -273,8 +273,7 @@
             <div id="turnos-notas" class="sub-content"><div class="card"><h3 style="font-size:14px;margin-bottom:12px;">📝 Notas</h3><div id="notes-list"></div><div class="form-group" style="margin-top:12px;"><textarea id="note-text" placeholder="Escribe tu nota..." style="width:100%;padding:12px;border:1px solid var(--bg-secondary);border-radius:8px;background:var(--bg-secondary);color:var(--text-primary);min-height:80px;"></textarea><button class="btn btn-primary" style="margin-top:8px;" onclick="addNote()">Guardar Nota</button></div></div></div>
         </section>
     </main>
-
-    <script>
+id="turnos-cumples"    <script>
         let state = {
             theme: 'dark',
             balance: 0,
@@ -815,6 +814,20 @@ function setShift(type) {
             // Check if this day has a shift
             if (state.shifts && state.shifts[dateKey]) {
                 dayElement.classList.add('shift-' + state.shifts[dateKey]);
+            }
+            
+            // Check if there's a birthday on this day
+            const birthdaysOnDay = state.birthdays.filter(b => {
+                const bDate = new Date(b.date);
+                return bDate.getDate() === day && bDate.getMonth() === month;
+            });
+            
+            if (birthdaysOnDay.length > 0) {
+                const birthdayIcon = document.createElement('span');
+                birthdayIcon.textContent = '🎂';
+                birthdayIcon.style.fontSize = '20px';
+                birthdayIcon.title = birthdaysOnDay.map(b => b.name).join(', ');
+                dayElement.appendChild(birthdayIcon);
             }
             
             // Check if it's today
